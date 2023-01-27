@@ -6,6 +6,8 @@ import {
 } from './infra/repository/typeorm/candidate.model';
 import CandidateMongoRepository from './infra/repository/typeorm/candidate.repository';
 import CreateCandidateUseCase from './usecase/create/create.candidate.usecase';
+import FindCandidateUsecase from './usecase/find/find.candidate.usecase';
+import ListCandidateUseCase from './usecase/list/list.candidate.usecase';
 
 export namespace CANDIDATE_PROVIDERS {
   export namespace REPOSITORIES {
@@ -22,6 +24,20 @@ export namespace CANDIDATE_PROVIDERS {
       provide: CreateCandidateUseCase,
       useFactory: (candidateRepo: CandidateMongoRepository) => {
         return new CreateCandidateUseCase(candidateRepo);
+      },
+      inject: [CandidateMongoRepository],
+    };
+    export const FIND_CANDIDATE_USECASE = {
+      provide: FindCandidateUsecase,
+      useFactory: (candidateRepo: CandidateMongoRepository) => {
+        return new FindCandidateUsecase(candidateRepo);
+      },
+      inject: [CandidateMongoRepository],
+    };
+    export const FIND_ALL_CANDIDATE_USECASE = {
+      provide: ListCandidateUseCase,
+      useFactory: (candidateRepo: CandidateMongoRepository) => {
+        return new ListCandidateUseCase(candidateRepo);
       },
       inject: [CandidateMongoRepository],
     };
