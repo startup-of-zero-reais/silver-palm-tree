@@ -1,5 +1,3 @@
-import { randomUUID } from 'crypto';
-
 import Techs from '../value-object/techs-value-object';
 import Entity from '../../../@shared/entity/entity.abstract';
 import CandidateValidatorFactory from '../factory/candidate.validator.factory';
@@ -12,6 +10,8 @@ type Props = {
   image: string;
   phone: string;
   techs?: Techs[];
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export default class Candidate extends Entity {
@@ -22,8 +22,7 @@ export default class Candidate extends Entity {
   private _techs: Techs[];
 
   constructor(props: Props) {
-    super();
-    this._id = props.id || randomUUID();
+    super(props.id, props.createdAt, props.updatedAt);
     this._name = props.name;
     this._email = props.email;
     this._image = props.image;
