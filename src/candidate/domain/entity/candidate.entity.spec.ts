@@ -7,7 +7,6 @@ describe('Domain > Candidate', () => {
       email: 'foo@bar.com',
       name: 'foo',
       image: 'https://www.github.com/Vicenteefenequis',
-      github: 'https://www.github.com/Vicenteefenequis',
       phone: 'any_phone',
       techs: [
         new Techs({
@@ -21,7 +20,6 @@ describe('Domain > Candidate', () => {
     expect(candidate.name).toBe('foo');
     expect(candidate.image).toBe('https://www.github.com/Vicenteefenequis');
     expect(candidate.email).toBe('foo@bar.com');
-    expect(candidate.github).toBe('https://www.github.com/Vicenteefenequis');
     expect(candidate.phone).toBe('any_phone');
     expect(candidate.techs.length).toBe(1);
     expect(candidate.techs[0].knowledge_level).toBe(KnowledgeLevel.ADVANCED);
@@ -34,7 +32,6 @@ describe('Domain > Candidate', () => {
         email: '',
         name: '',
         image: '',
-        github: '',
         phone: '',
         techs: [],
       });
