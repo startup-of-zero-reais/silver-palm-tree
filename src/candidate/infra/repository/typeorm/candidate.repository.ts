@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { CandidateRepositoryInterface } from '../../../../candidate/domain/repository/candidate.repository.interface';
 import Entity from '../../../../candidate/domain/entity/candidate.entity';
@@ -7,6 +7,8 @@ import Candidate from '../../../../candidate/domain/entity/candidate.entity';
 import { Model } from 'mongoose';
 import { CandidateDocument } from './candidate.model';
 import Techs from '../../../../candidate/domain/value-object/techs-value-object';
+import PaginationPresenter from '../presenter/pagination.presenter';
+import { PaginationInterface } from 'src/@shared/repository/pagination-interface';
 
 @Injectable()
 export default class CandidateMongoRepository
@@ -16,6 +18,29 @@ export default class CandidateMongoRepository
     @InjectModel(Candidate.name)
     private candidateModel: Model<CandidateDocument>,
   ) {}
+
+  async paginate(
+    per_page = 10,
+    page = 1,
+  ): Promise<PaginationInterface<Candidate>> {
+    const candidatesDb = this.candidateModel;
+
+    const [countCandidates, candidates] = await Promise.all([
+      await candidatesDb.find().countDocuments().exec(),
+      await candidatesDb
+        .find()
+        .limit(per_page)
+        .skip((page - 1) * per_page)
+        .exec(),
+    ]);
+
+    return new PaginationPresenter(
+      candidates.map((candidate) => this.toDomain(candidate)),
+      per_page,
+      page,
+      countCandidates,
+    );
+  }
 
   async create(entity: Entity): Promise<void> {
     await this.candidateModel.create({
@@ -28,6 +53,8 @@ export default class CandidateMongoRepository
         tech: tech.tech,
         knowledge_level: tech.knowledge_level,
       })),
+      createdAt: entity.createdAt,
+      updatedAt: entity.updatedAt,
     });
   }
 
@@ -38,13 +65,10 @@ export default class CandidateMongoRepository
     const candidate = await this.candidateModel.findOne({ _id: id }).exec();
     return this.toDomain(candidate);
   }
-  async findAll(): Promise<Entity[]> {
-    const candidateDb = await this.candidateModel.find().exec();
 
-    return candidateDb.map((candidate) => this.toDomain(candidate));
-  }
+  private toDomain(object?: any): Entity {
+    if (!object) throw new BadRequestException(`Candidate not found`);
 
-  private toDomain(object: any): Entity {
     return new Entity({
       id: object._id,
       name: object.name,
