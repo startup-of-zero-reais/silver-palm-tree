@@ -12,14 +12,12 @@ type Props = {
   image: string;
   phone: string;
   techs?: Techs[];
-  github: string;
 };
 
 export default class Candidate extends Entity {
   private _name: string;
   private _email: string;
   private _image: string;
-  private _github: string;
   private _phone: string;
   private _techs: Techs[];
 
@@ -31,7 +29,6 @@ export default class Candidate extends Entity {
     this._image = props.image;
     this._phone = props.phone;
     this._techs = props.techs;
-    this._github = props.github;
 
     this.validate();
 
@@ -65,9 +62,5 @@ export default class Candidate extends Entity {
 
   get techs(): Techs[] {
     return this._techs;
-  }
-
-  get github(): string {
-    return this._github;
   }
 }
