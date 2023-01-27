@@ -16,7 +16,10 @@ export class Candidate {
   email: string;
 
   @Prop()
-  photo: string;
+  image: string;
+
+  @Prop()
+  phone: string;
 
   @Prop([Techs])
   techs: Techs[];
