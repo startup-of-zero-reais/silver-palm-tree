@@ -14,7 +14,6 @@ export default class CandidateYupValidator
           email: yup.string().email().required(),
           image: yup.string().url().required(),
           phone: yup.string().required(),
-          github: yup.string().url().required(),
         })
         .validateSync(
           {
@@ -22,7 +21,6 @@ export default class CandidateYupValidator
             email: entity.email,
             image: entity.image,
             phone: entity.phone,
-            github: entity.github,
           },
           { abortEarly: false },
         );
