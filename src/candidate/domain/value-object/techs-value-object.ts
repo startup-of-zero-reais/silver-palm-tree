@@ -1,7 +1,7 @@
 export enum KnowledgeLevel {
-  BEGINNER,
-  INTERMEDIATE,
-  ADVANCED,
+  BEGINNER = 'BEGINNER',
+  INTERMEDIATE = 'INTERMEDIATE',
+  ADVANCED = 'ADVANCED',
 }
 
 type Props = {
