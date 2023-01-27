@@ -5,6 +5,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Query,
   Response,
 } from '@nestjs/common';
 import CreateCandidateUseCase from './usecase/create/create.candidate.usecase';
@@ -31,14 +32,20 @@ export class CandidateController {
       if (error instanceof NotificationError) {
         return response.status(HttpStatus.UNPROCESSABLE_ENTITY).json(error);
       }
-      return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(error);
+
+      return response.status(error.response.statusCode).json({
+        message: error.response.message,
+      });
     }
   }
 
   @Get()
-  async list(@Response() response: eResponse) {
+  async list(@Response() response: eResponse, @Query() query) {
     try {
-      const output = await this.listCandidateUseCase.execute();
+      const output = await this.listCandidateUseCase.execute({
+        page: query.page,
+        page_size: query.page_size,
+      });
       return response.status(HttpStatus.OK).json(output);
     } catch (error) {
       if (error instanceof NotificationError) {
