@@ -29,7 +29,6 @@ describe('Unit test create candidate use case', () => {
       name: 'test',
       phone: 'any_phone',
       email: 'test@example.com',
-      github: 'http://example.com',
       image: 'http://example.com',
       techs: [{ knowledge_level: KnowledgeLevel.ADVANCED, tech: 'PHP' }],
     });
@@ -39,7 +38,6 @@ describe('Unit test create candidate use case', () => {
       name: input.name,
       phone: input.phone,
       email: input.email,
-      github: input.github,
       image: input.image,
       techs: input.techs,
     });

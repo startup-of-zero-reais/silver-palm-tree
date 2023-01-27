@@ -26,7 +26,7 @@ describe('Domain > Candidate', () => {
     expect(candidate.techs[0].tech).toBe('any_tech');
   });
 
-  it('Should Canidate throws error', () => {
+  it('Should Candidate throws error', () => {
     expect(() => {
       new Candidate({
         email: '',
@@ -36,7 +36,7 @@ describe('Domain > Candidate', () => {
         techs: [],
       });
     }).toThrowError(
-      'Canidate: name must be at least 2 characters,Canidate: name is a required field,Canidate: email is a required field,Canidate: image is a required field,Canidate: phone is a required field,Canidate: github is a required field',
+      'name must be at least 2 characters,name is a required field,email is a required field,image is a required field,phone is a required field,techs field must have at least 1 items',
     );
   });
 });
