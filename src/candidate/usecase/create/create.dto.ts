@@ -6,8 +6,10 @@ export namespace Create {
     email: string;
     image: string;
     phone: string;
-    techs?: Techs[];
-    github: string;
+    techs?: {
+      knowledge_level: KnowledgeLevel;
+      tech: string;
+    }[];
   };
   export type Output = {
     id: string;
@@ -15,12 +17,9 @@ export namespace Create {
     email: string;
     image: string;
     phone: string;
-    techs?: Techs[];
-    github: string;
+    techs?: {
+      knowledge_level: KnowledgeLevel;
+      tech: string;
+    }[];
   };
 }
-
-type Techs = {
-  knowledge_level: KnowledgeLevel;
-  tech: string;
-};
