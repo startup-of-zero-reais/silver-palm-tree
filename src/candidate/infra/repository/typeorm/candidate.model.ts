@@ -23,6 +23,12 @@ export class Candidate {
 
   @Prop([Techs])
   techs: Techs[];
+
+  @Prop()
+  createdAt: Date;
+
+  @Prop()
+  updatedAt: Date;
 }
 
 export const CandidateSchema = SchemaFactory.createForClass(Candidate);
