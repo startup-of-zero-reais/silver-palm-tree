@@ -12,7 +12,7 @@ const input = {
 const MockRepository = () => {
   return {
     find: jest.fn(),
-    findAll: jest.fn(),
+    paginate: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
   };
@@ -40,6 +40,8 @@ describe('Unit test create candidate use case', () => {
       email: input.email,
       image: input.image,
       techs: input.techs,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
     });
   });
 });

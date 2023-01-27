@@ -21,5 +21,7 @@ export namespace Create {
       knowledge_level: KnowledgeLevel;
       tech: string;
     }[];
+    createdAt: Date;
+    updatedAt: Date;
   };
 }

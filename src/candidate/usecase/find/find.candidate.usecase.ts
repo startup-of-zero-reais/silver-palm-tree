@@ -21,6 +21,8 @@ export default class FindCandidateUsecase {
         tech: tech.tech,
         knowledge_level: tech.knowledge_level,
       })),
+      createdAt: candidate.createdAt,
+      updatedAt: candidate.updatedAt,
     };
   }
 }

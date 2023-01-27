@@ -21,7 +21,7 @@ const candidate = new Candidate({
 const MockRepository = () => {
   return {
     find: jest.fn().mockReturnValue(candidate),
-    findAll: jest.fn(),
+    paginate: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
   };
@@ -46,6 +46,8 @@ describe('Unit test find candidate usecase', () => {
           tech: techs.tech,
         },
       ],
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
     });
   });
 });

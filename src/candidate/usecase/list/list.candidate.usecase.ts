@@ -6,19 +6,30 @@ export default class ListCandidateUseCase {
     private readonly candidateRepository: CandidateRepositoryInterface,
   ) {}
 
-  async execute(): Promise<List.Output> {
-    const candidates = await this.candidateRepository.findAll();
+  async execute(input: List.Input): Promise<List.Output> {
+    const candidates = await this.candidateRepository.paginate(
+      input.page_size,
+      input.page,
+    );
 
-    return candidates.map((candidate) => ({
-      id: candidate.id,
-      email: candidate.email,
-      name: candidate.name,
-      image: candidate.image,
-      phone: candidate.phone,
-      techs: candidate.techs.map((tech) => ({
-        knowledge_level: tech.knowledge_level,
-        tech: tech.tech,
+    return {
+      data: candidates.items().map((candidate) => ({
+        id: candidate.id,
+        name: candidate.name,
+        email: candidate.email,
+        phone: candidate.phone,
+        image: candidate.image,
+        techs: candidate.techs,
+        createdAt: candidate.createdAt,
+        updatedAt: candidate.updatedAt,
       })),
-    }));
+      meta: {
+        total: candidates.total(),
+        currentPage: candidates.currentPage(),
+        firstPage: candidates.firstPage(),
+        lastPage: candidates.lastPage(),
+        perPage: candidates.perPage(),
+      },
+    };
   }
 }

@@ -35,6 +35,8 @@ export default class CreateCandidateUseCase {
         knowledge_level: tech.knowledge_level,
         tech: tech.tech,
       })),
+      createdAt: candidate.createdAt,
+      updatedAt: candidate.updatedAt,
     };
   }
 }

@@ -14,5 +14,7 @@ export namespace Find {
       knowledge_level: KnowledgeLevel;
       tech: string;
     }[];
+    createdAt: Date;
+    updatedAt: Date;
   };
 }
