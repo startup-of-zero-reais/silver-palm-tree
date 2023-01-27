@@ -13,11 +13,13 @@ export default class CreateCandidateUseCase {
       email: input.email,
       name: input.name,
       phone: input.phone,
-      github: input.github,
       image: input.image,
       techs: input.techs.map(
         (tech) =>
-          new Techs({ knowledge_level: tech.knowledge_level, tech: tech.tech }),
+          new Techs({
+            knowledge_level: tech.knowledge_level,
+            tech: tech.tech,
+          }),
       ),
     });
 
@@ -26,7 +28,6 @@ export default class CreateCandidateUseCase {
     return {
       id: candidate.id,
       email: candidate.email,
-      github: candidate.github,
       image: candidate.image,
       name: candidate.name,
       phone: candidate.phone,
