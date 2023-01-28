@@ -29,7 +29,9 @@ import UpdateCandidateUseCase from './usecase/update/update.candidate.usecase';
     UpdateCandidateUseCase,
     ListCandidateUseCase,
     CreateCandidateUseCase,
+    // facade
     CandidateFacade,
   ],
+  exports: [FindCandidateByEmailUsecase, CandidateFacade],
 })
 export class CandidateModule {}
