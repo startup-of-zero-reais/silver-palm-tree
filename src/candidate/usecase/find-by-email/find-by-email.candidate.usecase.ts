@@ -1,15 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { Inject, Injectable } from '@nestjs/common';
 import UseCaseInterface from '@/@shared/usecase/use-case.interface';
 import Candidate from '@/candidate/domain/entity/candidate.entity';
-import { Candidate as CandidateModel } from '@/candidate/infra/repository/mongo/candidate.model';
 import { CandidateRepositoryInterface } from '@/candidate/domain/repository/candidate.repository.interface';
 import { FindByEmailInputDto } from './find-by-email.dto';
+import CandidateMongoRepository from '@/candidate/infra/repository/mongo/candidate.repository';
 
 @Injectable()
 export default class FindCandidateByEmailUsecase implements UseCaseInterface {
   constructor(
-    @InjectModel(CandidateModel.name)
+    @Inject(CandidateMongoRepository)
     private readonly candidateRepository: CandidateRepositoryInterface,
   ) {}
 
