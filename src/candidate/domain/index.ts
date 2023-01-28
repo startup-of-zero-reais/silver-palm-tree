@@ -1,5 +1,5 @@
 export { default as Candidate } from './entity/candidate.entity';
-export * from './factory/candidate.factory';
+export { default as CandidateFactory } from './factory/candidate.factory';
 export * from './factory/candidate.validator.factory';
 export * from './repository/candidate.repository.interface';
 export * from './validator/candidate.validator.factory';
