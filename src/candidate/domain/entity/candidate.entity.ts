@@ -83,6 +83,7 @@ export default class Candidate extends Entity {
     this._image = image;
     this._phone = phone;
     this._techs = techs;
+    this._updatedAt = new Date();
     this.validate();
   }
 }
