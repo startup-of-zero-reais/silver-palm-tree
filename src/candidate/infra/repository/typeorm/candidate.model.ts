@@ -21,6 +21,9 @@ export class Candidate {
   @Prop()
   phone: string;
 
+  @Prop()
+  password: string;
+
   @Prop([Techs])
   techs: Techs[];
 

@@ -31,5 +31,7 @@ export class CreateCandidateInputDto {
   @IsNotEmpty()
   phone: string;
   @IsNotEmpty()
+  password: string;
+  @IsNotEmpty()
   techs: Techs[];
 }

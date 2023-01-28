@@ -1,21 +1,24 @@
 import Candidate from './candidate.entity';
 import Techs, { KnowledgeLevel } from '../value-object/techs-value-object';
 
-const candidate = new Candidate({
-  email: 'foo@bar.com',
-  name: 'foo',
-  image: 'https://www.github.com/Vicenteefenequis',
-  phone: 'any_phone',
-  techs: [
-    new Techs({
-      knowledge_level: KnowledgeLevel.ADVANCED,
-      tech: 'any_tech',
-    }),
-  ],
-});
+const makeEntity = () =>
+  new Candidate({
+    email: 'foo@bar.com',
+    name: 'foo',
+    image: 'https://www.github.com/Vicenteefenequis',
+    phone: 'any_phone',
+    password: 'any_password',
+    techs: [
+      new Techs({
+        knowledge_level: KnowledgeLevel.ADVANCED,
+        tech: 'any_tech',
+      }),
+    ],
+  });
 
 describe('Domain > Candidate', () => {
-  test('Should create a candidate', () => {
+  it('Should create a candidate', () => {
+    const candidate = makeEntity();
     expect(candidate.id).toBeDefined();
     expect(candidate.name).toBe('foo');
     expect(candidate.image).toBe('https://www.github.com/Vicenteefenequis');
@@ -33,6 +36,7 @@ describe('Domain > Candidate', () => {
         name: '',
         image: '',
         phone: '',
+        password: '',
         techs: [],
       });
     }).toThrowError(
@@ -40,6 +44,41 @@ describe('Domain > Candidate', () => {
         'name must be at least 2 characters',
         'name is a required field',
         'email is a required field',
+        'image is a required field',
+        'phone is a required field',
+        'techs field must have at least 1 items',
+      ].join(','),
+    );
+  });
+
+  it('Should Candidate update', () => {
+    const candidate = makeEntity();
+    candidate.update('bar', 'http://localhost.com', '00000000', [
+      new Techs({ knowledge_level: KnowledgeLevel.ADVANCED, tech: 'PHP' }),
+      new Techs({
+        knowledge_level: KnowledgeLevel.INTERMEDIATE,
+        tech: 'TYPESCRIPT',
+      }),
+    ]);
+
+    expect(candidate.name).toBe('bar');
+    expect(candidate.image).toBe('http://localhost.com');
+    expect(candidate.phone).toBe('00000000');
+    expect(candidate.techs.length).toBe(2);
+    expect(candidate.techs[0].knowledge_level).toBe(KnowledgeLevel.ADVANCED);
+    expect(candidate.techs[0].tech).toBe('PHP');
+    expect(candidate.techs[1].knowledge_level).toBe(
+      KnowledgeLevel.INTERMEDIATE,
+    );
+    expect(candidate.techs[1].tech).toBe('TYPESCRIPT');
+  });
+
+  it('Should Candidate update throws when missing param', () => {
+    const candidate = makeEntity();
+    expect(() => candidate.update('', '', '', [])).toThrowError(
+      [
+        'name must be at least 2 characters',
+        'name is a required field',
         'image is a required field',
         'phone is a required field',
         'techs field must have at least 1 items',

@@ -49,6 +49,7 @@ export default class CandidateMongoRepository
       name: entity.name,
       email: entity.email,
       image: entity.image,
+      password: entity.password,
       phone: entity.phone,
       techs: entity.techs.map((tech) => ({
         tech: tech.tech,
@@ -74,6 +75,7 @@ export default class CandidateMongoRepository
       id: object._id,
       name: object.name,
       email: object.email,
+      password: object.password,
       image: object.image,
       phone: object.phone,
       techs: object.techs.map(
