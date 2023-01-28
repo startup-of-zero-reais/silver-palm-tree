@@ -7,6 +7,4 @@ export class FindByEmailInputDto {
   email: string;
 }
 
-export class FindByEmailOutputDto extends FindOutputDto {
-  public password: string;
-}
+export class FindByEmailOutputDto extends FindOutputDto {}
