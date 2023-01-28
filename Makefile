@@ -12,6 +12,7 @@ usage:
 start:
 	@echo -e "$(OK_COLOR)==> Wait, starting application...$(NO_COLOR)"
 	@docker-compose up -d
+	@docker logs -f vacancies-app -n 30
 
 stop:
 	@echo -e "$(OK_COLOR)==> Wait, stopping application...$(NO_COLOR)"
