@@ -1,14 +1,19 @@
 import Candidate from '../../../candidate/domain/entity/candidate.entity';
 import { CandidateRepositoryInterface } from '../../../candidate/domain/repository/candidate.repository.interface';
 import Techs from '../../../candidate/domain/value-object/techs-value-object';
-import { Create } from './create.dto';
+import {
+  CreateCandidateInputDto,
+  CreateCandidateOutputDto,
+} from './create.dto';
 
 export default class CreateCandidateUseCase {
   constructor(
     private readonly candidateRepository: CandidateRepositoryInterface,
   ) {}
 
-  async execute(input: Create.Input): Promise<Create.Output> {
+  async execute(
+    input: CreateCandidateInputDto,
+  ): Promise<CreateCandidateOutputDto> {
     const candidate = new Candidate({
       email: input.email,
       name: input.name,
@@ -25,18 +30,18 @@ export default class CreateCandidateUseCase {
 
     await this.candidateRepository.create(candidate);
 
-    return {
-      id: candidate.id,
-      email: candidate.email,
-      image: candidate.image,
-      name: candidate.name,
-      phone: candidate.phone,
-      techs: candidate.techs.map((tech) => ({
+    return new CreateCandidateOutputDto(
+      candidate.id,
+      candidate.name,
+      candidate.email,
+      candidate.image,
+      candidate.phone,
+      candidate.techs.map((tech) => ({
         knowledge_level: tech.knowledge_level,
         tech: tech.tech,
       })),
-      createdAt: candidate.createdAt,
-      updatedAt: candidate.updatedAt,
-    };
+      candidate.createdAt,
+      candidate.updatedAt,
+    );
   }
 }

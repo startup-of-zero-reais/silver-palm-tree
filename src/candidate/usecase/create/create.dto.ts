@@ -1,27 +1,35 @@
+import { IsEmail, IsNotEmpty, IsUrl } from 'class-validator';
 import { KnowledgeLevel } from '../../../candidate/domain/value-object/techs-value-object';
 
-export namespace Create {
-  export type Input = {
-    name: string;
-    email: string;
-    image: string;
-    phone: string;
-    techs?: {
-      knowledge_level: KnowledgeLevel;
-      tech: string;
-    }[];
-  };
-  export type Output = {
-    id: string;
-    name: string;
-    email: string;
-    image: string;
-    phone: string;
-    techs?: {
-      knowledge_level: KnowledgeLevel;
-      tech: string;
-    }[];
-    createdAt: Date;
-    updatedAt: Date;
-  };
+type Techs = {
+  knowledge_level: KnowledgeLevel;
+  tech: string;
+};
+
+export class CreateCandidateOutputDto {
+  constructor(
+    public id: string,
+    public name: string,
+    public email: string,
+    public image: string,
+    public phone: string,
+    public techs: Techs[],
+    public createdAt: Date,
+    public updatedAt: Date,
+  ) {}
+}
+
+export class CreateCandidateInputDto {
+  @IsNotEmpty()
+  name: string;
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+  @IsUrl()
+  @IsNotEmpty()
+  image: string;
+  @IsNotEmpty()
+  phone: string;
+  @IsNotEmpty()
+  techs: Techs[];
 }

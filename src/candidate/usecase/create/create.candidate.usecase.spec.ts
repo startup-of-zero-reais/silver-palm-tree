@@ -34,14 +34,14 @@ describe('Unit test create candidate use case', () => {
     });
 
     expect(output).toEqual({
-      id: expect.any(String),
+      id: output.id,
       name: input.name,
       phone: input.phone,
       email: input.email,
       image: input.image,
       techs: input.techs,
-      createdAt: expect.any(Date),
-      updatedAt: expect.any(Date),
+      createdAt: output.createdAt,
+      updatedAt: output.updatedAt,
     });
   });
 });

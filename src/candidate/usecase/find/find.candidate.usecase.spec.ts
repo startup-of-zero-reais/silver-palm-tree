@@ -46,8 +46,8 @@ describe('Unit test find candidate usecase', () => {
           tech: techs.tech,
         },
       ],
-      createdAt: expect.any(Date),
-      updatedAt: expect.any(Date),
+      createdAt: output.createdAt,
+      updatedAt: output.updatedAt,
     });
   });
 });

@@ -29,6 +29,7 @@ export default class CandidateMongoRepository
       await candidatesDb.find().countDocuments().exec(),
       await candidatesDb
         .find()
+        .sort({ createdAt: -1 })
         .limit(per_page)
         .skip((page - 1) * per_page)
         .exec(),
