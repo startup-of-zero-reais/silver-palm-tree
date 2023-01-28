@@ -21,6 +21,7 @@ type Props = {
 type UpdateProps = Partial<
   Omit<Props, 'createdAt' | 'id' | 'email' | 'password'>
 >;
+
 export default class Candidate extends Entity {
   private _name: string;
   private _email: string;
