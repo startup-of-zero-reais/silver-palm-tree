@@ -22,7 +22,7 @@ export default class CandidateYupValidator
               }),
             )
             .min(1),
-          professionalExperience: yup.array().min(1),
+          professionalExperiences: yup.array().min(1),
         })
         .validateSync(
           {
@@ -31,7 +31,7 @@ export default class CandidateYupValidator
             image: entity.image,
             phone: entity.phone,
             techs: entity.techs,
-            professionalExperience: entity.professionalExperiences,
+            professionalExperiences: entity.professionalExperiences,
           },
           { abortEarly: false },
         );

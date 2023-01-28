@@ -27,6 +27,8 @@ export default class CandidateFactory {
   static mapToProfessionalExperience(
     professionalExperience: ProfessionalExperienceProps[],
   ): ProfessionalExperience[] {
+    if (!professionalExperience) return [];
+
     return professionalExperience.map(
       (experience) =>
         new ProfessionalExperience({
@@ -40,6 +42,8 @@ export default class CandidateFactory {
   }
 
   static mapToTechs(techs: TechsProps[]): Techs[] {
+    if (!techs) return [];
+
     return techs.map(
       (tech) =>
         new Techs({ knowledge_level: tech.knowledge_level, tech: tech.tech }),
@@ -52,6 +56,7 @@ export default class CandidateFactory {
     professionalExperiences: ProfessionalExperienceProps[],
   ) {
     const { email, image, password, name, phone } = props;
+
     return new Candidate({
       email,
       image,
