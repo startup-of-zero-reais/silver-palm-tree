@@ -3,11 +3,12 @@ import { Model } from 'mongoose';
 import {
   Candidate,
   CandidateDocument,
-} from './infra/repository/typeorm/candidate.model';
-import CandidateMongoRepository from './infra/repository/typeorm/candidate.repository';
+} from './infra/repository/mongo/candidate.model';
+import CandidateMongoRepository from './infra/repository/mongo/candidate.repository';
 import CreateCandidateUseCase from './usecase/create/create.candidate.usecase';
 import FindCandidateUsecase from './usecase/find/find.candidate.usecase';
 import ListCandidateUseCase from './usecase/list/list.candidate.usecase';
+import UpdateCandidateUseCase from './usecase/update/update.candidate.usecase';
 
 export namespace CANDIDATE_PROVIDERS {
   export namespace REPOSITORIES {
@@ -38,6 +39,14 @@ export namespace CANDIDATE_PROVIDERS {
       provide: ListCandidateUseCase,
       useFactory: (candidateRepo: CandidateMongoRepository) => {
         return new ListCandidateUseCase(candidateRepo);
+      },
+      inject: [CandidateMongoRepository],
+    };
+
+    export const UPDATE_CANDIDATE_USECASE = {
+      provide: UpdateCandidateUseCase,
+      useFactory: (candidateRepo: CandidateMongoRepository) => {
+        return new UpdateCandidateUseCase(candidateRepo);
       },
       inject: [CandidateMongoRepository],
     };
