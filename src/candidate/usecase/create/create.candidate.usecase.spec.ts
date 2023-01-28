@@ -1,4 +1,4 @@
-import { KnowledgeLevel } from '../../../candidate/domain/value-object/techs-value-object';
+import { KnowledgeLevel } from '@/candidate/domain/value-object/techs-value-object';
 import CreateCandidateUseCase from './create.candidate.usecase';
 
 const input = {
@@ -12,6 +12,7 @@ const input = {
 const MockRepository = () => {
   return {
     find: jest.fn(),
+    findByEmail: jest.fn(),
     paginate: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),

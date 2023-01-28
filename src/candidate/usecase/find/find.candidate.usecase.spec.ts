@@ -1,7 +1,7 @@
-import Candidate from '../../../candidate/domain/entity/candidate.entity';
+import Candidate from '@/candidate/domain/entity/candidate.entity';
 import Techs, {
   KnowledgeLevel,
-} from '../../../candidate/domain/value-object/techs-value-object';
+} from '@/candidate/domain/value-object/techs-value-object';
 import FindCandidateUsecase from './find.candidate.usecase';
 
 const techs = new Techs({
@@ -21,6 +21,7 @@ const candidate = new Candidate({
 const MockRepository = () => {
   return {
     find: jest.fn().mockReturnValue(candidate),
+    findByEmail: jest.fn(),
     paginate: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),

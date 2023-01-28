@@ -1,14 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-
-import { CandidateRepositoryInterface } from '../../../../candidate/domain/repository/candidate.repository.interface';
-import Entity from '../../../../candidate/domain/entity/candidate.entity';
 import { InjectModel } from '@nestjs/mongoose';
-import Candidate from '../../../../candidate/domain/entity/candidate.entity';
 import { Model } from 'mongoose';
+
+import { CandidateRepositoryInterface } from '@/candidate/domain/repository/candidate.repository.interface';
+import Entity from '@/candidate/domain/entity/candidate.entity';
+import Candidate from '@/candidate/domain/entity/candidate.entity';
+import Techs from '@/candidate/domain/value-object/techs-value-object';
+import { PaginationInterface } from '@/@shared/repository/pagination-interface';
 import { CandidateDocument } from './candidate.model';
-import Techs from '../../../../candidate/domain/value-object/techs-value-object';
 import PaginationPresenter from '../presenter/pagination.presenter';
-import { PaginationInterface } from 'src/@shared/repository/pagination-interface';
 
 @Injectable()
 export default class CandidateMongoRepository
@@ -62,6 +62,12 @@ export default class CandidateMongoRepository
   async update(entity: Entity): Promise<void> {
     throw new Error('Not implemented');
   }
+
+  async findByEmail(email: string): Promise<Entity> {
+    const candidate = await this.candidateModel.findOne({ email }).exec();
+    return this.toDomain(candidate);
+  }
+
   async find(id: string): Promise<Entity> {
     const candidate = await this.candidateModel.findOne({ _id: id }).exec();
     return this.toDomain(candidate);
