@@ -8,6 +8,7 @@ import {
 import CandidateFacade from './facade/candidate.facade';
 import CandidateMongoRepository from './infra/repository/mongo/candidate.repository';
 import CreateCandidateUseCase from './usecase/create/create.candidate.usecase';
+import FindCandidateByEmailUsecase from './usecase/find-by-email/find-by-email.candidate.usecase';
 import FindCandidateUsecase from './usecase/find/find.candidate.usecase';
 import ListCandidateUseCase from './usecase/list/list.candidate.usecase';
 import UpdateCandidateUseCase from './usecase/update/update.candidate.usecase';
@@ -24,6 +25,7 @@ import UpdateCandidateUseCase from './usecase/update/update.candidate.usecase';
     CandidateMongoRepository,
     //usecase
     FindCandidateUsecase,
+    FindCandidateByEmailUsecase,
     UpdateCandidateUseCase,
     ListCandidateUseCase,
     CreateCandidateUseCase,
