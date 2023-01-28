@@ -1,21 +1,21 @@
 import Candidate from './candidate.entity';
 import Techs, { KnowledgeLevel } from '../value-object/techs-value-object';
 
+const candidate = new Candidate({
+  email: 'foo@bar.com',
+  name: 'foo',
+  image: 'https://www.github.com/Vicenteefenequis',
+  phone: 'any_phone',
+  techs: [
+    new Techs({
+      knowledge_level: KnowledgeLevel.ADVANCED,
+      tech: 'any_tech',
+    }),
+  ],
+});
+
 describe('Domain > Candidate', () => {
   test('Should create a candidate', () => {
-    const candidate = new Candidate({
-      email: 'foo@bar.com',
-      name: 'foo',
-      image: 'https://www.github.com/Vicenteefenequis',
-      phone: 'any_phone',
-      techs: [
-        new Techs({
-          knowledge_level: KnowledgeLevel.ADVANCED,
-          tech: 'any_tech',
-        }),
-      ],
-    });
-
     expect(candidate.id).toBeDefined();
     expect(candidate.name).toBe('foo');
     expect(candidate.image).toBe('https://www.github.com/Vicenteefenequis');
