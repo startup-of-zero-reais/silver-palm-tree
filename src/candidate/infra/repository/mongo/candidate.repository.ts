@@ -4,11 +4,11 @@ import { Model } from 'mongoose';
 
 import { CandidateRepositoryInterface } from '@/candidate/domain/repository/candidate.repository.interface';
 import Candidate from '@/candidate/domain/entity/candidate.entity';
-import Techs from '@/candidate/domain/value-object/techs-value-object';
-import { ProfessionalExperience } from '@/candidate/domain/value-object/professional-experience';
 import { PaginationInterface } from '@/@shared/repository/pagination-interface';
 import { Candidate as Entity, CandidateDocument } from './candidate.model';
 import PaginationPresenter from '../presenter/pagination.presenter';
+import { TechsMapper } from './techs.mapper';
+import { ProfessionalExperienceMapper } from './professional-experience.mapper';
 
 @Injectable()
 export default class CandidateMongoRepository
@@ -51,18 +51,9 @@ export default class CandidateMongoRepository
       image: entity.image,
       password: entity.password,
       phone: entity.phone,
-      techs: entity.techs.map((tech) => ({
-        tech: tech.tech,
-        knowledge_level: tech.knowledge_level,
-      })),
-      professionalExperiences: entity.professionalExperiences.map(
-        (experience) => ({
-          acting_time: experience.acting_time,
-          company: experience.company,
-          description: experience.description,
-          qualification: experience.qualification,
-          role: experience.role,
-        }),
+      techs: TechsMapper.ToObject(entity.techs),
+      professionalExperiences: ProfessionalExperienceMapper.ToObject(
+        entity.professionalExperiences,
       ),
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
@@ -75,10 +66,7 @@ export default class CandidateMongoRepository
         name: entity.name,
         image: entity.image,
         phone: entity.phone,
-        techs: entity.techs.map((tech) => ({
-          tech: tech.tech,
-          knowledge_level: tech.knowledge_level,
-        })),
+        techs: TechsMapper.ToObject(entity.techs),
       })
       .populate('techs');
   }
@@ -103,35 +91,12 @@ export default class CandidateMongoRepository
       password: object.password,
       image: object.image,
       phone: object.phone,
-      techs: this.mapToTechs(object.techs),
-      professionalExperiences: this.mapToExperienceProfessional(
+      techs: TechsMapper.ToDomain(object.techs),
+      professionalExperiences: ProfessionalExperienceMapper.ToDomain(
         object.professionalExperiences,
       ),
       createdAt: object.createdAt,
       updatedAt: object.updatedAt,
     });
-  }
-
-  private mapToTechs(techs) {
-    return techs.map(
-      (tech) =>
-        new Techs({
-          tech: tech.tech,
-          knowledge_level: tech.knowledge_level,
-        }),
-    );
-  }
-
-  private mapToExperienceProfessional(experiences) {
-    return experiences.map(
-      (experience) =>
-        new ProfessionalExperience({
-          acting_time: experience.acting_time,
-          company: experience.company,
-          description: experience.description,
-          qualification: experience.qualification,
-          role: experience.role,
-        }),
-    );
   }
 }
