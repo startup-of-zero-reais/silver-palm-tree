@@ -5,6 +5,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Put,
   Query,
   Response,
 } from '@nestjs/common';
@@ -14,6 +15,8 @@ import { Response as eResponse } from 'express';
 import NotificationError from 'src/@shared/notification/notification.error';
 import FindCandidateUsecase from './usecase/find/find.candidate.usecase';
 import ListCandidateUseCase from './usecase/list/list.candidate.usecase';
+import { UpdateCandidateInputDto } from './usecase/update/update.candidate.dto';
+import UpdateCandidateUseCase from './usecase/update/update.candidate.usecase';
 
 @Controller('candidates')
 export class CandidateController {
@@ -21,6 +24,7 @@ export class CandidateController {
     private readonly createCandidateUseCase: CreateCandidateUseCase,
     private readonly findCandidateUseCase: FindCandidateUsecase,
     private readonly listCandidateUseCase: ListCandidateUseCase,
+    private readonly updateCandidateUseCase: UpdateCandidateUseCase,
   ) {}
 
   @Get(':id')
@@ -65,6 +69,29 @@ export class CandidateController {
         createCandidateDto,
       );
       return response.status(HttpStatus.CREATED).json(output);
+    } catch (error) {
+      if (error instanceof NotificationError) {
+        return response.status(HttpStatus.UNPROCESSABLE_ENTITY).json(error);
+      }
+      return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(error);
+    }
+  }
+
+  @Put(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateCandidateDto: UpdateCandidateInputDto,
+    @Response() response: eResponse,
+  ) {
+    try {
+      const output = await this.updateCandidateUseCase.execute({
+        id: id,
+        image: updateCandidateDto.image,
+        name: updateCandidateDto.name,
+        phone: updateCandidateDto.phone,
+        techs: updateCandidateDto.techs,
+      });
+      return response.status(HttpStatus.OK).json(output);
     } catch (error) {
       if (error instanceof NotificationError) {
         return response.status(HttpStatus.UNPROCESSABLE_ENTITY).json(error);
