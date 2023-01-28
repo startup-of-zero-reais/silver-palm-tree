@@ -27,6 +27,10 @@ export default class CreateCandidateUseCase {
       professionalExperiences,
     } = input;
 
+    if (await this.candidateAlreadyExists(email)) {
+      throw new Error('Candidate with this email already registered');
+    }
+
     const candidate = CandidateFactory.create(
       { email, image, name, password, phone },
       techs,
@@ -59,5 +63,13 @@ export default class CreateCandidateUseCase {
       updatedAt: candidate.updatedAt,
       createdAt: candidate.createdAt,
     };
+  }
+
+  private async candidateAlreadyExists(email: string): Promise<boolean> {
+    const result = await this.candidateRepository
+      .findByEmail(email)
+      .catch(() => undefined);
+
+    return Boolean(result);
   }
 }

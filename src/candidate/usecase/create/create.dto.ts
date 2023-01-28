@@ -31,18 +31,24 @@ export class CreateCandidateOutputDto {
 export class CreateCandidateInputDto {
   @IsNotEmpty()
   name: string;
+
   @IsNotEmpty()
   @IsEmail()
   email: string;
+
   @IsUrl()
   @IsNotEmpty()
   image: string;
+
   @IsNotEmpty()
   phone: string;
+
   @IsNotEmpty()
   password: string;
+
   @IsNotEmpty()
   techs: Techs[];
+
   @IsNotEmpty()
   @IsOptional()
   professionalExperiences: ProfessionalExperience[];
