@@ -1,8 +1,9 @@
-import CandidateFactory from '@/candidate/domain/factory/candidate.factory';
-import { ProfessionalExperience } from '@/candidate/domain/value-object/professional-experience';
-import Techs, {
+import {
+  Tech as Techs,
+  ProfessionalExperience,
+  CandidateFactory,
   KnowledgeLevel,
-} from '@/candidate/domain/value-object/techs-value-object';
+} from '@/candidate/domain';
 import FindCandidateUsecase from './find.candidate.usecase';
 
 const techs = new Techs({

@@ -1,23 +1,36 @@
-import Candidate from '@/candidate/domain/entity/candidate.entity';
-import Techs, {
+import {
+  Tech,
   KnowledgeLevel,
-} from '@/candidate/domain/value-object/techs-value-object';
+  CandidateFactory,
+  ProfessionalExperience,
+} from '@/candidate/domain';
 import FindCandidateByEmailUsecase from '../usecase/find-by-email/find-by-email.candidate.usecase';
 import CandidateFacade from './candidate.facade';
 
-const techs = new Techs({
+const tech = new Tech({
   knowledge_level: KnowledgeLevel.ADVANCED,
   tech: 'PHP',
 });
 
-const candidate = new Candidate({
-  id: 'any_id',
-  email: 'foo@bar.com',
-  image: 'http://image.com',
-  name: 'foo',
-  phone: '123',
-  techs: [techs],
+const professionalExperiences = new ProfessionalExperience({
+  acting_time: '1 year',
+  company: 'any_company',
+  description: 'any_description',
+  qualification: 'any_qualification',
+  role: 'any_role',
 });
+
+const candidate = CandidateFactory.create(
+  {
+    email: 'foo@bar.com',
+    image: 'http://image.com',
+    name: 'foo',
+    phone: '123',
+    password: '123',
+  },
+  [tech],
+  [professionalExperiences],
+);
 
 const MockRepository = () => {
   return {
@@ -45,20 +58,6 @@ describe('Candidate test', () => {
 
     const output = await candidateFacade.getByEmail(input);
 
-    expect(output).toEqual({
-      id: candidate.id,
-      email: candidate.email,
-      image: candidate.image,
-      name: candidate.name,
-      phone: candidate.phone,
-      techs: [
-        {
-          knowledge_level: techs.knowledge_level,
-          tech: techs.tech,
-        },
-      ],
-      createdAt: output.createdAt,
-      updatedAt: output.updatedAt,
-    });
+    expect(output).toEqual(candidate);
   });
 });

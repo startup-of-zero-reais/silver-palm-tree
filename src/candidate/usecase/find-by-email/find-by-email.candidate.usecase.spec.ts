@@ -1,7 +1,11 @@
-import Candidate from '@/candidate/domain/entity/candidate.entity';
-import Techs, {
+import {
+  Candidate,
+  Tech as Techs,
   KnowledgeLevel,
-} from '@/candidate/domain/value-object/techs-value-object';
+  CandidateRepositoryInterface,
+  ProfessionalExperience,
+  CandidateFactory,
+} from '@/candidate/domain';
 import FindCandidateByEmailUsecase from './find-by-email.candidate.usecase';
 
 const techs = new Techs({
@@ -9,17 +13,27 @@ const techs = new Techs({
   tech: 'PHP',
 });
 
-const candidate = new Candidate({
-  id: 'any_id',
-  email: 'foo@bar.com',
-  image: 'http://image.com',
-  name: 'foo',
-  password: '123',
-  phone: '123',
-  techs: [techs],
+const professionalExperiences = new ProfessionalExperience({
+  acting_time: '1 year',
+  company: 'any_company',
+  description: 'any_description',
+  qualification: 'any_qualification',
+  role: 'any_role',
 });
 
-const MockRepository = () => {
+const candidate = CandidateFactory.create(
+  {
+    email: 'foo@bar.com',
+    image: 'http://image.com',
+    name: 'foo',
+    phone: '123',
+    password: '123',
+  },
+  [techs],
+  [professionalExperiences],
+);
+
+const MockRepository = (): CandidateRepositoryInterface => {
   return {
     findByEmail: jest.fn().mockReturnValue(candidate),
     find: jest.fn(),
@@ -30,26 +44,12 @@ const MockRepository = () => {
 };
 
 describe('Unit test find candidate usecase', () => {
-  it('should find candidate usecase', async () => {
+  it('should find candidate by email usecase', async () => {
     const repository = MockRepository();
     const usecase = new FindCandidateByEmailUsecase(repository);
 
     const output = await usecase.execute({ email: candidate.email });
 
-    expect(output).toEqual({
-      id: candidate.id,
-      email: candidate.email,
-      image: candidate.image,
-      name: candidate.name,
-      phone: candidate.phone,
-      techs: [
-        {
-          knowledge_level: techs.knowledge_level,
-          tech: techs.tech,
-        },
-      ],
-      createdAt: output.createdAt,
-      updatedAt: output.updatedAt,
-    });
+    expect(output).toEqual(candidate);
   });
 });
