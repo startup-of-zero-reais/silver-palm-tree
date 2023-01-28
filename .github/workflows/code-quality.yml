@@ -1,0 +1,24 @@
+name: code-quality
+run-name: ${{ github.actor }} was pushed
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm install
+      - run: ./node_modules/typescript/bin/tsc --noEmit
+      - run: npm build
+   
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm install
+      - run: make unit_test
