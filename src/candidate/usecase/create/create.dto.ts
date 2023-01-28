@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsUrl } from 'class-validator';
+import { Expose } from 'class-transformer';
+import { IsEmail, IsNotEmpty, IsOptional, IsUrl } from 'class-validator';
 import { KnowledgeLevel } from '../../../candidate/domain/value-object/techs-value-object';
 
 type Techs = {
@@ -6,17 +7,25 @@ type Techs = {
   tech: string;
 };
 
+type ProfessionalExperience = {
+  company: string;
+  role: string;
+  acting_time: string;
+  description: string;
+  qualification: string;
+};
+
+@Expose()
 export class CreateCandidateOutputDto {
-  constructor(
-    public id: string,
-    public name: string,
-    public email: string,
-    public image: string,
-    public phone: string,
-    public techs: Techs[],
-    public createdAt: Date,
-    public updatedAt: Date,
-  ) {}
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+  phone: string;
+  techs: Techs[];
+  professionalExperiences: ProfessionalExperience[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export class CreateCandidateInputDto {
@@ -34,4 +43,7 @@ export class CreateCandidateInputDto {
   password: string;
   @IsNotEmpty()
   techs: Techs[];
+  @IsNotEmpty()
+  @IsOptional()
+  professionalExperiences: ProfessionalExperience[];
 }

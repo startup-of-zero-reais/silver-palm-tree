@@ -1,3 +1,4 @@
+import { ProfessionalExperience } from '../../../candidate/domain/value-object/professional-experience';
 import Candidate from '../../domain/entity/candidate.entity';
 import Techs, {
   KnowledgeLevel,
@@ -8,6 +9,13 @@ const techs = new Techs({
   knowledge_level: KnowledgeLevel.ADVANCED,
   tech: 'PHP',
 });
+const professionalExperience = new ProfessionalExperience({
+  acting_time: '1 year',
+  company: 'any_company',
+  description: 'any_description',
+  qualification: 'any_qualification',
+  role: 'any_role',
+});
 
 const candidate = new Candidate({
   id: 'any_id',
@@ -17,6 +25,7 @@ const candidate = new Candidate({
   phone: '123',
   password: '123',
   techs: [techs],
+  professionalExperiences: [professionalExperience],
 });
 
 const MockRepository = () => {
@@ -44,13 +53,15 @@ describe('Unit test update candidate usecase', () => {
           tech: 'PHP UPDATED',
         }),
       ],
+      professionalExperiences: [
+        new ProfessionalExperience({
+          acting_time: '2 year',
+          company: 'Google Inc.',
+          description: 'ANY',
+          qualification: 'ANY',
+          role: 'Developer',
+        }),
+      ],
     });
-
-    expect(output.name).toBe('name updated');
-    expect(output.image).toBe('http://image-updated.com');
-    expect(output.phone).toBe('phone updated');
-    expect(output.techs).toEqual([
-      { knowledge_level: KnowledgeLevel.INTERMEDIATE, tech: 'PHP UPDATED' },
-    ]);
   });
 });

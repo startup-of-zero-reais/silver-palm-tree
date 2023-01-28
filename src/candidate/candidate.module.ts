@@ -1,11 +1,15 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CandidateController } from './candidate.controller';
-import { CANDIDATE_PROVIDERS } from './candidate.provider';
 import {
   Candidate,
   CandidateSchema,
 } from './infra/repository/mongo/candidate.model';
+import CandidateMongoRepository from './infra/repository/mongo/candidate.repository';
+import CreateCandidateUseCase from './usecase/create/create.candidate.usecase';
+import FindCandidateUsecase from './usecase/find/find.candidate.usecase';
+import ListCandidateUseCase from './usecase/list/list.candidate.usecase';
+import UpdateCandidateUseCase from './usecase/update/update.candidate.usecase';
 
 @Module({
   imports: [
@@ -15,8 +19,13 @@ import {
   ],
   controllers: [CandidateController],
   providers: [
-    ...Object.values(CANDIDATE_PROVIDERS.REPOSITORIES),
-    ...Object.values(CANDIDATE_PROVIDERS.USE_CASES),
+    //repository
+    CandidateMongoRepository,
+    //usecase
+    FindCandidateUsecase,
+    UpdateCandidateUseCase,
+    ListCandidateUseCase,
+    CreateCandidateUseCase,
   ],
 })
 export class CandidateModule {}

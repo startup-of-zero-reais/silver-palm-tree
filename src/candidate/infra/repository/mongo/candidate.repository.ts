@@ -3,26 +3,26 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CandidateRepositoryInterface } from '../../../domain/repository/candidate.repository.interface';
 import Entity from '../../../domain/entity/candidate.entity';
 import { InjectModel } from '@nestjs/mongoose';
-import Candidate from '../../../domain/entity/candidate.entity';
 import { Model } from 'mongoose';
 import { CandidateDocument } from './candidate.model';
 import Techs from '../../../domain/value-object/techs-value-object';
 import PaginationPresenter from '../presenter/pagination.presenter';
-import { PaginationInterface } from 'src/@shared/repository/pagination-interface';
+import { PaginationInterface } from '../../../../@shared/repository/pagination-interface';
+import { ProfessionalExperience } from '../../../../candidate/domain/value-object/professional-experience';
 
 @Injectable()
 export default class CandidateMongoRepository
   implements CandidateRepositoryInterface
 {
   constructor(
-    @InjectModel(Candidate.name)
+    @InjectModel(Entity.name)
     private candidateModel: Model<CandidateDocument>,
   ) {}
 
   async paginate(
     per_page = 10,
     page = 1,
-  ): Promise<PaginationInterface<Candidate>> {
+  ): Promise<PaginationInterface<Entity>> {
     const candidatesDb = this.candidateModel;
 
     const [countCandidates, candidates] = await Promise.all([
@@ -55,6 +55,15 @@ export default class CandidateMongoRepository
         tech: tech.tech,
         knowledge_level: tech.knowledge_level,
       })),
+      professionalExperiences: entity.professionalExperiences.map(
+        (experience) => ({
+          acting_time: experience.acting_time,
+          company: experience.company,
+          description: experience.description,
+          qualification: experience.qualification,
+          role: experience.role,
+        }),
+      ),
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
     });
@@ -88,15 +97,35 @@ export default class CandidateMongoRepository
       password: object.password,
       image: object.image,
       phone: object.phone,
-      techs: object.techs.map(
-        (tech) =>
-          new Techs({
-            tech: tech.tech,
-            knowledge_level: tech.knowledge_level,
-          }),
+      techs: this.mapToTechs(object.techs),
+      professionalExperiences: this.mapToExperienceProfessional(
+        object.professionalExperiences,
       ),
       createdAt: object.createdAt,
       updatedAt: object.updatedAt,
     });
+  }
+
+  private mapToTechs(techs) {
+    return techs.map(
+      (tech) =>
+        new Techs({
+          tech: tech.tech,
+          knowledge_level: tech.knowledge_level,
+        }),
+    );
+  }
+
+  private mapToExperienceProfessional(experiences) {
+    return experiences.map(
+      (experience) =>
+        new ProfessionalExperience({
+          acting_time: experience.acting_time,
+          company: experience.company,
+          description: experience.description,
+          qualification: experience.qualification,
+          role: experience.role,
+        }),
+    );
   }
 }

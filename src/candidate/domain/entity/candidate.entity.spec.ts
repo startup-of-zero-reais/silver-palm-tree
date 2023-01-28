@@ -1,5 +1,6 @@
 import Candidate from './candidate.entity';
 import Techs, { KnowledgeLevel } from '../value-object/techs-value-object';
+import { ProfessionalExperience } from '../value-object/professional-experience';
 
 const makeEntity = () =>
   new Candidate({
@@ -8,6 +9,15 @@ const makeEntity = () =>
     image: 'https://www.github.com/Vicenteefenequis',
     phone: 'any_phone',
     password: 'any_password',
+    professionalExperiences: [
+      new ProfessionalExperience({
+        acting_time: '1 year',
+        company: 'Vacancies',
+        description: 'any_description',
+        qualification: 'any_qualitifation',
+        role: 'Developer Frontend',
+      }),
+    ],
     techs: [
       new Techs({
         knowledge_level: KnowledgeLevel.ADVANCED,
@@ -38,6 +48,7 @@ describe('Domain > Candidate', () => {
         phone: '',
         password: '',
         techs: [],
+        professionalExperiences: [],
       });
     }).toThrowError(
       [

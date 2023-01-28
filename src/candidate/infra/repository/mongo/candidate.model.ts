@@ -1,5 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
+import { ProfessionalExperience } from './professional-experience.model';
 import { Techs } from './techs.model';
 
 export type CandidateDocument = HydratedDocument<Candidate>;
@@ -26,6 +27,9 @@ export class Candidate {
 
   @Prop([Techs])
   techs: Techs[];
+
+  @Prop([ProfessionalExperience])
+  professionalExperiences: ProfessionalExperience[];
 
   @Prop()
   createdAt: Date;

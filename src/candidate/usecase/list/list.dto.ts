@@ -4,7 +4,8 @@ export class ListCandidateInputDto {
 }
 
 export class ListCandidateOutputDto {
-  constructor(public data = [], public meta: Meta) {}
+  data = [];
+  meta: Meta;
 }
 
 type Meta = {

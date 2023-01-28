@@ -8,6 +8,15 @@ const input = {
   github: 'http://example.com',
   image: 'http://example.com',
   techs: [{ knowledge_level: KnowledgeLevel.ADVANCED, tech: 'PHP' }],
+  professionalExperiences: [
+    {
+      acting_time: '1 year',
+      company: 'any_company',
+      description: 'any_description',
+      qualification: 'any_qualification',
+      role: 'any_role',
+    },
+  ],
 };
 const MockRepository = () => {
   return {
@@ -32,6 +41,15 @@ describe('Unit test create candidate use case', () => {
       image: 'http://example.com',
       password: 'any_password',
       techs: [{ knowledge_level: KnowledgeLevel.ADVANCED, tech: 'PHP' }],
+      professionalExperiences: [
+        {
+          acting_time: '1 year',
+          company: 'any_company',
+          description: 'any_description',
+          qualification: 'any_qualification',
+          role: 'any_role',
+        },
+      ],
     });
 
     expect(output).toEqual({
@@ -41,6 +59,7 @@ describe('Unit test create candidate use case', () => {
       email: input.email,
       image: input.image,
       techs: input.techs,
+      professionalExperiences: input.professionalExperiences,
       createdAt: output.createdAt,
       updatedAt: output.updatedAt,
     });
