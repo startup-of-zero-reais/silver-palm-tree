@@ -1,31 +1,25 @@
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import UseCaseInterface from '@/@shared/usecase/use-case.interface';
-import { CandidateRepositoryInterface } from 'src/candidate/domain/repository/candidate.repository.interface';
-import { FindByEmailInputDto, FindByEmailOutputDto } from './find-by-email.dto';
+import Candidate from '@/candidate/domain/entity/candidate.entity';
+import { Candidate as CandidateModel } from '@/candidate/infra/repository/mongo/candidate.model';
+import { CandidateRepositoryInterface } from '@/candidate/domain/repository/candidate.repository.interface';
+import { FindByEmailInputDto } from './find-by-email.dto';
 
+@Injectable()
 export default class FindCandidateByEmailUsecase implements UseCaseInterface {
   constructor(
+    @InjectModel(CandidateModel.name)
     private readonly candidateRepository: CandidateRepositoryInterface,
   ) {}
 
-  async execute(input: FindByEmailInputDto): Promise<FindByEmailOutputDto> {
+  async execute(input: FindByEmailInputDto): Promise<Candidate> {
     const candidate = await this.candidateRepository.findByEmail(input.email);
 
     if (!candidate) {
       throw new Error('Candidate not found');
     }
 
-    return new FindByEmailOutputDto(
-      candidate.id,
-      candidate.name,
-      candidate.email,
-      candidate.image,
-      candidate.phone,
-      candidate.techs.map((tech) => ({
-        tech: tech.tech,
-        knowledge_level: tech.knowledge_level,
-      })),
-      candidate.createdAt,
-      candidate.updatedAt,
-    );
+    return candidate;
   }
 }

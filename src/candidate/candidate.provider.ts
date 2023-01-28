@@ -1,7 +1,5 @@
-import { FactoryProvider } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import CandidateFacade from './facade/candidate.facade';
 import {
   Candidate,
   CandidateDocument,
@@ -63,18 +61,6 @@ export namespace CANDIDATE_PROVIDERS {
         return new UpdateCandidateUseCase(candidateRepo);
       },
       inject: [CandidateMongoRepository],
-    };
-  }
-
-  export namespace FACADE {
-    export const CANDIDATE_FACADE: FactoryProvider = {
-      provide: CandidateFacade,
-      useFactory: (
-        findCandidateByEmailUseCase: FindCandidateByEmailUsecase,
-      ) => {
-        return new CandidateFacade(findCandidateByEmailUseCase);
-      },
-      inject: [FindCandidateByEmailUsecase],
     };
   }
 }

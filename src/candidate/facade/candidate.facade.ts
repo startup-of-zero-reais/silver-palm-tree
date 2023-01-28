@@ -1,12 +1,17 @@
+import { Inject, Injectable } from '@nestjs/common';
 import UseCaseInterface from 'src/@shared/usecase/use-case.interface';
-import CandidateFacadeInterface, {
-  CandidateFacadeOutputDto,
-} from './candidate.facade.interface';
+import Candidate from '../domain/entity/candidate.entity';
+import FindCandidateByEmailUsecase from '../usecase/find-by-email/find-by-email.candidate.usecase';
+import CandidateFacadeInterface from './candidate.facade.interface';
 
+@Injectable()
 export default class CandidateFacade implements CandidateFacadeInterface {
-  constructor(private readonly _findByEmail: UseCaseInterface) {}
+  constructor(
+    @Inject(FindCandidateByEmailUsecase)
+    private readonly _findByEmail: UseCaseInterface,
+  ) {}
 
-  async getByEmail(email: string): Promise<CandidateFacadeOutputDto> {
-    return this._findByEmail.execute({ email });
+  async getByEmail(email: string): Promise<Candidate> {
+    return await this._findByEmail.execute({ email });
   }
 }

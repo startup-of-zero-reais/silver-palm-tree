@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { CandidateRepositoryInterface } from '@/candidate/domain/repository/candidate.repository.interface';
-import Entity from '@/candidate/domain/entity/candidate.entity';
 import Candidate from '@/candidate/domain/entity/candidate.entity';
 import Techs from '@/candidate/domain/value-object/techs-value-object';
 import { PaginationInterface } from '@/@shared/repository/pagination-interface';
@@ -43,7 +42,7 @@ export default class CandidateMongoRepository
     );
   }
 
-  async create(entity: Entity): Promise<void> {
+  async create(entity: Candidate): Promise<void> {
     await this.candidateModel.create({
       _id: entity.id,
       name: entity.name,
@@ -60,7 +59,7 @@ export default class CandidateMongoRepository
     });
   }
 
-  async update(entity: Entity): Promise<void> {
+  async update(entity: Candidate): Promise<void> {
     await this.candidateModel
       .findByIdAndUpdate(entity.id, {
         name: entity.name,
@@ -74,20 +73,20 @@ export default class CandidateMongoRepository
       .populate('techs');
   }
 
-  async findByEmail(email: string): Promise<Entity> {
+  async findByEmail(email: string): Promise<Candidate> {
     const candidate = await this.candidateModel.findOne({ email }).exec();
     return this.toDomain(candidate);
   }
 
-  async find(id: string): Promise<Entity> {
+  async find(id: string): Promise<Candidate> {
     const candidate = await this.candidateModel.findOne({ _id: id }).exec();
     return this.toDomain(candidate);
   }
 
-  private toDomain(object?: any): Entity {
+  private toDomain(object?: any): Candidate {
     if (!object) throw new BadRequestException(`Candidate not found`);
 
-    return new Entity({
+    return new Candidate({
       id: object._id,
       name: object.name,
       email: object.email,
