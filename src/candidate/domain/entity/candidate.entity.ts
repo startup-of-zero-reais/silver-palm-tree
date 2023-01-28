@@ -3,6 +3,7 @@ import Entity from '../../../@shared/entity/entity.abstract';
 import CandidateValidatorFactory from '../factory/candidate.validator.factory';
 import NotificationError from '../../../@shared/notification/notification.error';
 import { hashSync, compareSync } from 'bcryptjs';
+import { ProfessionalExperience } from '../value-object/professional-experience';
 
 type Props = {
   id?: string;
@@ -10,6 +11,7 @@ type Props = {
   email: string;
   image: string;
   password: string;
+  professionalExperiences: ProfessionalExperience[];
   phone: string;
   techs?: Techs[];
   createdAt?: Date;
@@ -26,6 +28,7 @@ export default class Candidate extends Entity {
   private _phone: string;
   private _password: string;
   private _techs: Techs[];
+  private _professionalExperience: ProfessionalExperience[];
 
   constructor(props: Props) {
     super(props.id, props.createdAt, props.updatedAt);
@@ -35,6 +38,7 @@ export default class Candidate extends Entity {
     this._phone = props.phone;
     this._techs = props.techs;
     this._password = props.password;
+    this._professionalExperience = props.professionalExperiences;
 
     this.validate();
   }
@@ -81,8 +85,12 @@ export default class Candidate extends Entity {
     return this._techs;
   }
 
+  get professionalExperiences(): ProfessionalExperience[] {
+    return this._professionalExperience;
+  }
+
   update(props: UpdateProps): void {
-    const { name, image, phone, techs } = props;
+    const { name, image, phone, techs, professionalExperiences } = props;
     if (name) {
       this._name = name;
     }
@@ -94,6 +102,10 @@ export default class Candidate extends Entity {
     }
     if (techs?.length) {
       this._techs = techs;
+    }
+
+    if (professionalExperiences?.length) {
+      this._professionalExperience = professionalExperiences;
     }
 
     this._updatedAt = new Date();

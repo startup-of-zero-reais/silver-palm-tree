@@ -1,9 +1,18 @@
+import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { KnowledgeLevel } from '../../../candidate/domain/value-object/techs-value-object';
 
-type Techs = {
+class Techs {
   knowledge_level: KnowledgeLevel;
   tech: string;
+}
+
+type ProfessionalExperience = {
+  company: string;
+  role: string;
+  acting_time: string;
+  description: string;
+  qualification: string;
 };
 
 export class UpdateCandidateInputDto {
@@ -22,17 +31,27 @@ export class UpdateCandidateInputDto {
   @IsNotEmpty()
   @IsOptional()
   techs: Techs[];
+  @IsNotEmpty()
+  @IsOptional()
+  professionalExperiences: ProfessionalExperience[];
 }
 
 export class UpdateCandidateOutputDto {
-  constructor(
-    public id: string,
-    public name: string,
-    public email: string,
-    public image: string,
-    public phone: string,
-    public techs: Techs[],
-    public createdAt: Date,
-    public updatedAt: Date,
-  ) {}
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+  phone: string;
+
+  @Transform((param) => {
+    console.log(param);
+    return [];
+  })
+  techs: Techs[];
+
+  // @Expose()
+  // @Transform((param) => JSON.stringify(param.value))
+  // professionalExperiences: ProfessionalExperience[];
+  createdAt: Date;
+  updatedAt: Date;
 }

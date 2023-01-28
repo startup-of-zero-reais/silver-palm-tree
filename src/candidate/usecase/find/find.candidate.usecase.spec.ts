@@ -1,4 +1,5 @@
-import Candidate from '@/candidate/domain/entity/candidate.entity';
+import CandidateFactory from '@/candidate/domain/factory/candidate.factory';
+import { ProfessionalExperience } from '@/candidate/domain/value-object/professional-experience';
 import Techs, {
   KnowledgeLevel,
 } from '@/candidate/domain/value-object/techs-value-object';
@@ -9,15 +10,25 @@ const techs = new Techs({
   tech: 'PHP',
 });
 
-const candidate = new Candidate({
-  id: 'any_id',
-  email: 'foo@bar.com',
-  image: 'http://image.com',
-  name: 'foo',
-  phone: '123',
-  password: '123',
-  techs: [techs],
+const professionalExperience = new ProfessionalExperience({
+  acting_time: '1 year',
+  company: 'any_company',
+  description: 'any_description',
+  qualification: 'any_qualification',
+  role: 'any_role',
 });
+
+const candidate = CandidateFactory.create(
+  {
+    email: 'foo@bar.com',
+    image: 'http://image.com',
+    name: 'foo',
+    phone: '123',
+    password: '123',
+  },
+  [techs],
+  [professionalExperience],
+);
 
 const MockRepository = () => {
   return {
@@ -36,20 +47,6 @@ describe('Unit test find candidate usecase', () => {
 
     const output = await usecase.execute({ id: candidate.id });
 
-    expect(output).toEqual({
-      id: candidate.id,
-      email: candidate.email,
-      image: candidate.image,
-      name: candidate.name,
-      phone: candidate.phone,
-      techs: [
-        {
-          knowledge_level: techs.knowledge_level,
-          tech: techs.tech,
-        },
-      ],
-      createdAt: output.createdAt,
-      updatedAt: output.updatedAt,
-    });
+    expect(output).toEqual(candidate);
   });
 });

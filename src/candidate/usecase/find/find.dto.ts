@@ -7,17 +7,24 @@ export class FindInputDto {
 }
 
 export class FindOutputDto {
-  constructor(
-    public id: string,
-    public name: string,
-    public email: string,
-    public image: string,
-    public phone: string,
-    public techs: Techs[],
-    public createdAt: Date,
-    public updatedAt: Date,
-  ) {}
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+  phone: string;
+  techs: Techs[];
+  professionalExperiences: ProfessionalExperience[];
+  createdAt: Date;
+  updatedAt: Date;
 }
+
+type ProfessionalExperience = {
+  company: string;
+  role: string;
+  acting_time: string;
+  description: string;
+  qualification: string;
+};
 
 type Techs = {
   knowledge_level: KnowledgeLevel;

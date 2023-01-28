@@ -1,8 +1,12 @@
+import { Inject, Injectable } from '@nestjs/common';
+import CandidateMongoRepository from 'src/candidate/infra/repository/mongo/candidate.repository';
 import { CandidateRepositoryInterface } from '../../../candidate/domain/repository/candidate.repository.interface';
 import { ListCandidateInputDto, ListCandidateOutputDto } from './list.dto';
 
+@Injectable()
 export default class ListCandidateUseCase {
   constructor(
+    @Inject(CandidateMongoRepository)
     private readonly candidateRepository: CandidateRepositoryInterface,
   ) {}
 
@@ -12,8 +16,8 @@ export default class ListCandidateUseCase {
       input.page,
     );
 
-    return new ListCandidateOutputDto(
-      candidates.items().map((candidate) => ({
+    return {
+      data: candidates.items().map((candidate) => ({
         id: candidate.id,
         name: candidate.name,
         email: candidate.email,
@@ -23,16 +27,25 @@ export default class ListCandidateUseCase {
           knowledge_level: tech.knowledge_level,
           tech: tech.tech,
         })),
+        professionalExperiences: candidate.professionalExperiences.map(
+          (experience) => ({
+            company: experience.company,
+            role: experience.role,
+            acting_time: experience.acting_time,
+            description: experience.description,
+            qualification: experience.qualification,
+          }),
+        ),
         updatedAt: candidate.updatedAt,
         createdAt: candidate.createdAt,
       })),
-      {
+      meta: {
         total: candidates.total(),
         currentPage: candidates.currentPage(),
         firstPage: candidates.firstPage(),
         lastPage: candidates.lastPage(),
         perPage: candidates.perPage(),
       },
-    );
+    };
   }
 }
