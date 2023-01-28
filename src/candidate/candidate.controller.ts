@@ -9,7 +9,7 @@ import {
   Response,
 } from '@nestjs/common';
 import CreateCandidateUseCase from './usecase/create/create.candidate.usecase';
-import { Create } from './usecase/create/create.dto';
+import { CreateCandidateInputDto } from './usecase/create/create.dto';
 import { Response as eResponse } from 'express';
 import NotificationError from 'src/@shared/notification/notification.error';
 import FindCandidateUsecase from './usecase/find/find.candidate.usecase';
@@ -57,7 +57,7 @@ export class CandidateController {
 
   @Post()
   async create(
-    @Body() createCandidateDto: Create.Input,
+    @Body() createCandidateDto: CreateCandidateInputDto,
     @Response() response: eResponse,
   ) {
     try {

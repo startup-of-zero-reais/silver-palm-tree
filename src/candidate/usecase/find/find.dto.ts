@@ -1,20 +1,25 @@
+import { IsNotEmpty } from 'class-validator';
 import { KnowledgeLevel } from '../../../candidate/domain/value-object/techs-value-object';
 
-export namespace Find {
-  export type Input = {
-    id: string;
-  };
-  export type Output = {
-    id: string;
-    name: string;
-    email: string;
-    image: string;
-    phone: string;
-    techs?: {
-      knowledge_level: KnowledgeLevel;
-      tech: string;
-    }[];
-    createdAt: Date;
-    updatedAt: Date;
-  };
+export class FindInputDto {
+  @IsNotEmpty()
+  id: string;
 }
+
+export class FindOutputDto {
+  constructor(
+    public id: string,
+    public name: string,
+    public email: string,
+    public image: string,
+    public phone: string,
+    public techs: Techs[],
+    public createdAt: Date,
+    public updatedAt: Date,
+  ) {}
+}
+
+type Techs = {
+  knowledge_level: KnowledgeLevel;
+  tech: string;
+};
