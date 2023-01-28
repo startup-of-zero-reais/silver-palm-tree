@@ -14,6 +14,7 @@ const candidate = new Candidate({
   email: 'foo@bar.com',
   image: 'http://image.com',
   name: 'foo',
+  password: '123',
   phone: '123',
   techs: [techs],
 });
