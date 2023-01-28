@@ -77,7 +77,10 @@ export class CandidateController {
       if (error instanceof NotificationError) {
         return response.status(HttpStatus.UNPROCESSABLE_ENTITY).json(error);
       }
-      return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(error);
+
+      return response
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ error: error.message });
     }
   }
 
