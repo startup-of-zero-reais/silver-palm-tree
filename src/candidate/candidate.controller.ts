@@ -15,7 +15,7 @@ import NotificationError from 'src/@shared/notification/notification.error';
 import FindCandidateUsecase from './usecase/find/find.candidate.usecase';
 import ListCandidateUseCase from './usecase/list/list.candidate.usecase';
 
-@Controller('candidate')
+@Controller('candidates')
 export class CandidateController {
   constructor(
     private readonly createCandidateUseCase: CreateCandidateUseCase,
