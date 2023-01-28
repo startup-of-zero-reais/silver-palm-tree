@@ -1,3 +1,4 @@
+import { CandidateRepositoryInterface } from '@/candidate/domain/repository/candidate.repository.interface';
 import Candidate from '../../domain/entity/candidate.entity';
 import Techs, {
   KnowledgeLevel,
@@ -19,9 +20,10 @@ const candidate = new Candidate({
   techs: [techs],
 });
 
-const MockRepository = () => {
+const MockRepository = (): CandidateRepositoryInterface => {
   return {
     find: jest.fn().mockResolvedValue(candidate),
+    findByEmail: jest.fn(),
     paginate: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
