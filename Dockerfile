@@ -2,7 +2,7 @@ FROM node:18.13.0-alpine3.16
 
 COPY . .
 
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 USER node
 
