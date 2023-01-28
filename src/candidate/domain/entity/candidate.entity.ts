@@ -2,23 +2,29 @@ import Techs from '../value-object/techs-value-object';
 import Entity from '../../../@shared/entity/entity.abstract';
 import CandidateValidatorFactory from '../factory/candidate.validator.factory';
 import NotificationError from '../../../@shared/notification/notification.error';
+import { hashSync, compareSync } from 'bcryptjs';
 
 type Props = {
   id?: string;
   name: string;
   email: string;
   image: string;
+  password: string;
   phone: string;
   techs?: Techs[];
   createdAt?: Date;
   updatedAt?: Date;
 };
 
+type UpdateProps = Partial<
+  Omit<Props, 'createdAt' | 'id' | 'email' | 'password'>
+>;
 export default class Candidate extends Entity {
   private _name: string;
   private _email: string;
   private _image: string;
   private _phone: string;
+  private _password: string;
   private _techs: Techs[];
 
   constructor(props: Props) {
@@ -28,16 +34,24 @@ export default class Candidate extends Entity {
     this._image = props.image;
     this._phone = props.phone;
     this._techs = props.techs;
+    this._password = props.password;
 
     this.validate();
+  }
 
+  validate() {
+    CandidateValidatorFactory.create().validate(this);
     if (this.notification.hasError()) {
       throw new NotificationError(this.notification.getErrors());
     }
   }
 
-  validate() {
-    CandidateValidatorFactory.create().validate(this);
+  encrypt_password() {
+    this._password = hashSync(this._password);
+  }
+
+  valid_password(password: string): boolean {
+    return compareSync(password, this._password);
   }
 
   get id(): string {
@@ -55,11 +69,34 @@ export default class Candidate extends Entity {
     return this._image;
   }
 
+  get password(): string {
+    return this._password;
+  }
+
   get phone(): string {
     return this._phone;
   }
 
   get techs(): Techs[] {
     return this._techs;
+  }
+
+  update(props: UpdateProps): void {
+    const { name, image, phone, techs } = props;
+    if (name) {
+      this._name = name;
+    }
+    if (image) {
+      this._image = image;
+    }
+    if (phone) {
+      this._phone = phone;
+    }
+    if (techs?.length) {
+      this._techs = techs;
+    }
+
+    this._updatedAt = new Date();
+    this.validate();
   }
 }

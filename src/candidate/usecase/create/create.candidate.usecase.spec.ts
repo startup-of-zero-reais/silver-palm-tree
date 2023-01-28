@@ -31,6 +31,7 @@ describe('Unit test create candidate use case', () => {
       phone: 'any_phone',
       email: 'test@example.com',
       image: 'http://example.com',
+      password: 'any_password',
       techs: [{ knowledge_level: KnowledgeLevel.ADVANCED, tech: 'PHP' }],
     });
 

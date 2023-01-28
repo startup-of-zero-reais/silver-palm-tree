@@ -15,6 +15,7 @@ const candidate = new Candidate({
   image: 'http://image.com',
   name: 'foo',
   phone: '123',
+  password: '123',
   techs: [techs],
 });
 
