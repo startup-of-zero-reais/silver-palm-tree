@@ -36,7 +36,14 @@ describe('Domain > Candidate', () => {
         techs: [],
       });
     }).toThrowError(
-      'name must be at least 2 characters,name is a required field,email is a required field,image is a required field,phone is a required field,techs field must have at least 1 items',
+      [
+        'name must be at least 2 characters',
+        'name is a required field',
+        'email is a required field',
+        'image is a required field',
+        'phone is a required field',
+        'techs field must have at least 1 items',
+      ].join(','),
     );
   });
 });
