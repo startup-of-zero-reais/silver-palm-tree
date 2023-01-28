@@ -17,6 +17,12 @@ import {
   providers: [
     ...Object.values(CANDIDATE_PROVIDERS.REPOSITORIES),
     ...Object.values(CANDIDATE_PROVIDERS.USE_CASES),
+    ...Object.values(CANDIDATE_PROVIDERS.FACADE),
+  ],
+  exports: [
+    ...Object.values(CANDIDATE_PROVIDERS.REPOSITORIES),
+    ...Object.values(CANDIDATE_PROVIDERS.USE_CASES),
+    ...Object.values(CANDIDATE_PROVIDERS.FACADE),
   ],
 })
 export class CandidateModule {}
