@@ -53,13 +53,18 @@ describe('Domain > Candidate', () => {
 
   it('Should Candidate update', () => {
     const candidate = makeEntity();
-    candidate.update('bar', 'http://localhost.com', '00000000', [
-      new Techs({ knowledge_level: KnowledgeLevel.ADVANCED, tech: 'PHP' }),
-      new Techs({
-        knowledge_level: KnowledgeLevel.INTERMEDIATE,
-        tech: 'TYPESCRIPT',
-      }),
-    ]);
+    candidate.update({
+      name: 'bar',
+      image: 'http://localhost.com',
+      phone: '00000000',
+      techs: [
+        new Techs({ knowledge_level: KnowledgeLevel.ADVANCED, tech: 'PHP' }),
+        new Techs({
+          knowledge_level: KnowledgeLevel.INTERMEDIATE,
+          tech: 'TYPESCRIPT',
+        }),
+      ],
+    });
 
     expect(candidate.name).toBe('bar');
     expect(candidate.image).toBe('http://localhost.com');
@@ -73,16 +78,20 @@ describe('Domain > Candidate', () => {
     expect(candidate.techs[1].tech).toBe('TYPESCRIPT');
   });
 
-  it('Should Candidate update throws when missing param', () => {
+  it('Should candidate not update when passing undefined param', () => {
     const candidate = makeEntity();
-    expect(() => candidate.update('', '', '', [])).toThrowError(
-      [
-        'name must be at least 2 characters',
-        'name is a required field',
-        'image is a required field',
-        'phone is a required field',
-        'techs field must have at least 1 items',
-      ].join(','),
-    );
+    candidate.update({
+      name: 'name update',
+      image: undefined,
+      phone: undefined,
+      techs: undefined,
+    });
+    expect(candidate.name).toBe('name update');
+    expect(candidate.image).toBe('https://www.github.com/Vicenteefenequis');
+    expect(candidate.email).toBe('foo@bar.com');
+    expect(candidate.phone).toBe('any_phone');
+    expect(candidate.techs.length).toBe(1);
+    expect(candidate.techs[0].knowledge_level).toBe(KnowledgeLevel.ADVANCED);
+    expect(candidate.techs[0].tech).toBe('any_tech');
   });
 });

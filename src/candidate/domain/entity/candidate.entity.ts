@@ -16,6 +16,9 @@ type Props = {
   updatedAt?: Date;
 };
 
+type UpdateProps = Partial<
+  Omit<Props, 'createdAt' | 'id' | 'email' | 'password'>
+>;
 export default class Candidate extends Entity {
   private _name: string;
   private _email: string;
@@ -78,11 +81,21 @@ export default class Candidate extends Entity {
     return this._techs;
   }
 
-  update(name: string, image: string, phone: string, techs: Techs[]): void {
-    this._name = name;
-    this._image = image;
-    this._phone = phone;
-    this._techs = techs;
+  update(props: UpdateProps): void {
+    const { name, image, phone, techs } = props;
+    if (name) {
+      this._name = name;
+    }
+    if (image) {
+      this._image = image;
+    }
+    if (phone) {
+      this._phone = phone;
+    }
+    if (techs?.length) {
+      this._techs = techs;
+    }
+
     this._updatedAt = new Date();
     this.validate();
   }

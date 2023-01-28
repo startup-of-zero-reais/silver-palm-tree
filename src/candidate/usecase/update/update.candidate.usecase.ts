@@ -19,15 +19,17 @@ export default class UpdateCandidateUseCase {
       throw new Error('Candidate not found');
     }
 
-    candidate.update(
-      input.name,
-      input.image,
-      input.phone,
-      input.techs.map(
+    const { name, image, phone, techs } = input;
+
+    candidate.update({
+      name,
+      image,
+      phone,
+      techs: techs.map(
         (tech) =>
           new Techs({ knowledge_level: tech.knowledge_level, tech: tech.tech }),
       ),
-    );
+    });
 
     await this.candidateRepository.update(candidate);
 

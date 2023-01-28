@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { KnowledgeLevel } from '../../../candidate/domain/value-object/techs-value-object';
 
 type Techs = {
@@ -7,14 +7,20 @@ type Techs = {
 };
 
 export class UpdateCandidateInputDto {
+  @IsNotEmpty()
+  @IsOptional()
   id: string;
   @IsNotEmpty()
+  @IsOptional()
   name: string;
   @IsNotEmpty()
+  @IsOptional()
   image: string;
   @IsNotEmpty()
+  @IsOptional()
   phone: string;
   @IsNotEmpty()
+  @IsOptional()
   techs: Techs[];
 }
 
