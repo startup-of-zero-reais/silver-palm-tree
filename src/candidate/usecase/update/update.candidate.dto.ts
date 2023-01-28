@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsUrl } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { KnowledgeLevel } from '../../../candidate/domain/value-object/techs-value-object';
 
 type Techs = {
@@ -6,7 +6,25 @@ type Techs = {
   tech: string;
 };
 
-export class CreateCandidateOutputDto {
+export class UpdateCandidateInputDto {
+  @IsNotEmpty()
+  @IsOptional()
+  id: string;
+  @IsNotEmpty()
+  @IsOptional()
+  name: string;
+  @IsNotEmpty()
+  @IsOptional()
+  image: string;
+  @IsNotEmpty()
+  @IsOptional()
+  phone: string;
+  @IsNotEmpty()
+  @IsOptional()
+  techs: Techs[];
+}
+
+export class UpdateCandidateOutputDto {
   constructor(
     public id: string,
     public name: string,
@@ -17,21 +35,4 @@ export class CreateCandidateOutputDto {
     public createdAt: Date,
     public updatedAt: Date,
   ) {}
-}
-
-export class CreateCandidateInputDto {
-  @IsNotEmpty()
-  name: string;
-  @IsNotEmpty()
-  @IsEmail()
-  email: string;
-  @IsUrl()
-  @IsNotEmpty()
-  image: string;
-  @IsNotEmpty()
-  phone: string;
-  @IsNotEmpty()
-  password: string;
-  @IsNotEmpty()
-  techs: Techs[];
 }

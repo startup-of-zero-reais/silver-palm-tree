@@ -1,12 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { CandidateRepositoryInterface } from '../../../../candidate/domain/repository/candidate.repository.interface';
-import Entity from '../../../../candidate/domain/entity/candidate.entity';
+import { CandidateRepositoryInterface } from '../../../domain/repository/candidate.repository.interface';
+import Entity from '../../../domain/entity/candidate.entity';
 import { InjectModel } from '@nestjs/mongoose';
-import Candidate from '../../../../candidate/domain/entity/candidate.entity';
+import Candidate from '../../../domain/entity/candidate.entity';
 import { Model } from 'mongoose';
 import { CandidateDocument } from './candidate.model';
-import Techs from '../../../../candidate/domain/value-object/techs-value-object';
+import Techs from '../../../domain/value-object/techs-value-object';
 import PaginationPresenter from '../presenter/pagination.presenter';
 import { PaginationInterface } from 'src/@shared/repository/pagination-interface';
 
@@ -49,6 +49,7 @@ export default class CandidateMongoRepository
       name: entity.name,
       email: entity.email,
       image: entity.image,
+      password: entity.password,
       phone: entity.phone,
       techs: entity.techs.map((tech) => ({
         tech: tech.tech,
@@ -60,7 +61,17 @@ export default class CandidateMongoRepository
   }
 
   async update(entity: Entity): Promise<void> {
-    throw new Error('Not implemented');
+    await this.candidateModel
+      .findByIdAndUpdate(entity.id, {
+        name: entity.name,
+        image: entity.image,
+        phone: entity.phone,
+        techs: entity.techs.map((tech) => ({
+          tech: tech.tech,
+          knowledge_level: tech.knowledge_level,
+        })),
+      })
+      .populate('techs');
   }
   async find(id: string): Promise<Entity> {
     const candidate = await this.candidateModel.findOne({ _id: id }).exec();
@@ -74,6 +85,7 @@ export default class CandidateMongoRepository
       id: object._id,
       name: object.name,
       email: object.email,
+      password: object.password,
       image: object.image,
       phone: object.phone,
       techs: object.techs.map(
@@ -83,6 +95,8 @@ export default class CandidateMongoRepository
             knowledge_level: tech.knowledge_level,
           }),
       ),
+      createdAt: object.createdAt,
+      updatedAt: object.updatedAt,
     });
   }
 }

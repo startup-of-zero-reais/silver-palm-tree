@@ -19,6 +19,7 @@ export default class CreateCandidateUseCase {
       name: input.name,
       phone: input.phone,
       image: input.image,
+      password: input.password,
       techs: input.techs.map(
         (tech) =>
           new Techs({
@@ -27,6 +28,8 @@ export default class CreateCandidateUseCase {
           }),
       ),
     });
+
+    candidate.encrypt_password();
 
     await this.candidateRepository.create(candidate);
 

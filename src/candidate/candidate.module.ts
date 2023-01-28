@@ -5,7 +5,7 @@ import { CANDIDATE_PROVIDERS } from './candidate.provider';
 import {
   Candidate,
   CandidateSchema,
-} from './infra/repository/typeorm/candidate.model';
+} from './infra/repository/mongo/candidate.model';
 
 @Module({
   imports: [
