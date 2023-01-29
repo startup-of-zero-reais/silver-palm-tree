@@ -29,7 +29,6 @@ export default class UpdateCandidateUseCase {
       image,
       phone,
       techs: techs?.map((tech) => {
-        console.log({ tech });
         return new Techs({
           knowledge_level: tech.knowledge_level,
           tech: tech.tech,
