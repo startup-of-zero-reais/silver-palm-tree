@@ -9,18 +9,19 @@ import {
   Query,
   Response,
 } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
+import { Response as eResponse } from 'express';
+import NotificationError from '@/@shared/notification/notification.error';
 import CreateCandidateUseCase from './usecase/create/create.candidate.usecase';
 import { CreateCandidateInputDto } from './usecase/create/create.dto';
-import { Response as eResponse } from 'express';
-import NotificationError from 'src/@shared/notification/notification.error';
 import FindCandidateUsecase from './usecase/find/find.candidate.usecase';
+import { FindOutputDto } from './usecase/find/find.dto';
 import ListCandidateUseCase from './usecase/list/list.candidate.usecase';
 import {
   UpdateCandidateInputDto,
   UpdateCandidateOutputDto,
 } from './usecase/update/update.candidate.dto';
 import UpdateCandidateUseCase from './usecase/update/update.candidate.usecase';
-import { plainToClass } from 'class-transformer';
 
 @Controller('candidates')
 export class CandidateController {
@@ -35,7 +36,10 @@ export class CandidateController {
   async findOne(@Param('id') id: string, @Response() response: eResponse) {
     try {
       const output = await this.findCandidateUseCase.execute({ id: id });
-      return response.status(HttpStatus.OK).json(output);
+
+      return response
+        .status(HttpStatus.OK)
+        .json(plainToClass(FindOutputDto, output));
     } catch (error) {
       if (error instanceof NotificationError) {
         return response.status(HttpStatus.UNPROCESSABLE_ENTITY).json(error);

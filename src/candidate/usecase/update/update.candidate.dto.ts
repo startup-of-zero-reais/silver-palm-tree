@@ -1,57 +1,85 @@
-import { Exclude, Expose, Transform, Type } from 'class-transformer';
+import { Exclude, Expose, plainToClass, Transform } from 'class-transformer';
 import { IsNotEmpty, IsOptional } from 'class-validator';
-import { KnowledgeLevel } from '../../../candidate/domain/value-object/techs-value-object';
-
-class Techs {
-  knowledge_level: KnowledgeLevel;
-  tech: string;
-}
-
-type ProfessionalExperience = {
-  company: string;
-  role: string;
-  acting_time: string;
-  description: string;
-  qualification: string;
-};
+import { Tech, ProfessionalExperience } from '@/candidate/domain';
 
 export class UpdateCandidateInputDto {
   @IsNotEmpty()
   @IsOptional()
   id: string;
+
   @IsNotEmpty()
   @IsOptional()
   name: string;
+
   @IsNotEmpty()
   @IsOptional()
   image: string;
+
   @IsNotEmpty()
   @IsOptional()
   phone: string;
+
   @IsNotEmpty()
   @IsOptional()
-  techs: Techs[];
+  techs: Tech[];
+
   @IsNotEmpty()
   @IsOptional()
   professionalExperiences: ProfessionalExperience[];
 }
 
+@Exclude()
 export class UpdateCandidateOutputDto {
+  @Expose()
   id: string;
+
+  @Expose()
   name: string;
+
+  @Expose()
   email: string;
+
+  @Expose()
   image: string;
+
+  @Expose()
   phone: string;
 
-  @Transform((param) => {
-    console.log(param);
-    return [];
-  })
-  techs: Techs[];
+  @Expose()
+  @Transform(({ value }) => plainToClass(TechOutputDto, value))
+  techs: TechOutputDto[];
 
-  // @Expose()
-  // @Transform((param) => JSON.stringify(param.value))
-  // professionalExperiences: ProfessionalExperience[];
+  @Expose()
+  @Transform(({ value }) =>
+    plainToClass(ProfessionalExperienceOutputDto, value),
+  )
+  professionalExperiences: ProfessionalExperienceOutputDto[];
+
+  @Expose()
   createdAt: Date;
+
+  @Expose()
   updatedAt: Date;
+}
+
+@Exclude()
+class TechOutputDto {
+  @Expose()
+  knowledge_level: string;
+  @Expose()
+  tech: string;
+}
+
+@Exclude()
+class ProfessionalExperienceOutputDto {
+  @Expose()
+  company: string;
+  @Expose()
+  role: string;
+  @Expose()
+  acting_time: string;
+  @Expose()
+  description: string;
+  @Expose()
+  qualification: string;
 }

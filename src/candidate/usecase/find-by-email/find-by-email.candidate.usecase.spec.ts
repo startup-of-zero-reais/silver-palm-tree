@@ -1,5 +1,4 @@
 import {
-  Candidate,
   Tech as Techs,
   KnowledgeLevel,
   CandidateRepositoryInterface,

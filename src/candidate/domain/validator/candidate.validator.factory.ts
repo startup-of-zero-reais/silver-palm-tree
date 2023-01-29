@@ -1,6 +1,6 @@
 import ValidatorInterface from 'src/@shared/validator/ValidatorInterface';
-import Candidate from '../entity/candidate.entity';
 import * as yup from 'yup';
+import Candidate from '../entity/candidate.entity';
 
 export default class CandidateYupValidator
   implements ValidatorInterface<Candidate>

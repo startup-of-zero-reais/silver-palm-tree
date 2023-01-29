@@ -1,5 +1,4 @@
 import {
-  Candidate,
   KnowledgeLevel,
   Tech as Techs,
   ProfessionalExperience,

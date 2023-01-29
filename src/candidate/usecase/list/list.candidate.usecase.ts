@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import CandidateMongoRepository from 'src/candidate/infra/repository/mongo/candidate.repository';
 import { CandidateRepositoryInterface } from '../../../candidate/domain/repository/candidate.repository.interface';
 import { ListCandidateInputDto, ListCandidateOutputDto } from './list.dto';
+import CandidateMongoRepository from 'src/candidate/infra/repository/mongo/candidate.repository';
 
 @Injectable()
 export default class ListCandidateUseCase {

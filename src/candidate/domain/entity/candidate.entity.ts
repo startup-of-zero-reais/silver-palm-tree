@@ -1,9 +1,9 @@
-import Techs from '../value-object/techs-value-object';
-import Entity from '../../../@shared/entity/entity.abstract';
-import CandidateValidatorFactory from '../factory/candidate.validator.factory';
-import NotificationError from '../../../@shared/notification/notification.error';
 import { hashSync, compareSync } from 'bcryptjs';
+import Entity from '../../../@shared/entity/entity.abstract';
+import NotificationError from '../../../@shared/notification/notification.error';
+import CandidateValidatorFactory from '../factory/candidate.validator.factory';
 import { ProfessionalExperience } from '../value-object/professional-experience';
+import Techs from '../value-object/techs-value-object';
 
 type Props = {
   id?: string;

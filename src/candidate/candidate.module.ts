@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CandidateController } from './candidate.controller';
+import CandidateFacade from './facade/candidate.facade';
 import {
   Candidate,
   CandidateSchema,
 } from './infra/repository/mongo/candidate.model';
-import CandidateFacade from './facade/candidate.facade';
 import CandidateMongoRepository from './infra/repository/mongo/candidate.repository';
 import CreateCandidateUseCase from './usecase/create/create.candidate.usecase';
 import FindCandidateByEmailUsecase from './usecase/find-by-email/find-by-email.candidate.usecase';
@@ -32,6 +32,6 @@ import UpdateCandidateUseCase from './usecase/update/update.candidate.usecase';
     // facade
     CandidateFacade,
   ],
-  exports: [FindCandidateByEmailUsecase, CandidateFacade],
+  exports: [FindCandidateUsecase, FindCandidateByEmailUsecase, CandidateFacade],
 })
 export class CandidateModule {}

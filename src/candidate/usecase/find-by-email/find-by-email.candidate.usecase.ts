@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import UseCaseInterface from '@/@shared/usecase/use-case.interface';
 import Candidate from '@/candidate/domain/entity/candidate.entity';
 import { CandidateRepositoryInterface } from '@/candidate/domain/repository/candidate.repository.interface';
-import { FindByEmailInputDto } from './find-by-email.dto';
 import CandidateMongoRepository from '@/candidate/infra/repository/mongo/candidate.repository';
+import { FindByEmailInputDto } from './find-by-email.dto';
 
 @Injectable()
 export default class FindCandidateByEmailUsecase implements UseCaseInterface {

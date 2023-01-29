@@ -1,13 +1,12 @@
-import { ProfessionalExperience } from '../../../candidate/domain/value-object/professional-experience';
-import { CandidateRepositoryInterface } from '../../../candidate/domain/repository/candidate.repository.interface';
-import Techs from '../../../candidate/domain/value-object/techs-value-object';
-import {
-  UpdateCandidateInputDto,
-  UpdateCandidateOutputDto,
-} from './update.candidate.dto';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import CandidateMongoRepository from '../../../candidate/infra/repository/mongo/candidate.repository';
-import Candidate from '../../../candidate/domain/entity/candidate.entity';
+import {
+  Candidate,
+  Tech as Techs,
+  CandidateRepositoryInterface,
+  ProfessionalExperience,
+} from '@/candidate/domain';
+import CandidateMongoRepository from '@/candidate/infra/repository/mongo/candidate.repository';
+import { UpdateCandidateInputDto } from './update.candidate.dto';
 
 @Injectable()
 export default class UpdateCandidateUseCase {

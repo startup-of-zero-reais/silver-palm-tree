@@ -1,6 +1,6 @@
-import Candidate from './candidate.entity';
-import Techs, { KnowledgeLevel } from '../value-object/techs-value-object';
 import { ProfessionalExperience } from '../value-object/professional-experience';
+import Techs, { KnowledgeLevel } from '../value-object/techs-value-object';
+import Candidate from './candidate.entity';
 
 const makeEntity = () =>
   new Candidate({

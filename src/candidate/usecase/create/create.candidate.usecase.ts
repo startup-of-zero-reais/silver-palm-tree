@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import CandidateMongoRepository from '@/candidate/infra/repository/mongo/candidate.repository';
 import {
   CandidateFactory,
   CandidateRepositoryInterface,
 } from '@/candidate/domain';
+import CandidateMongoRepository from '@/candidate/infra/repository/mongo/candidate.repository';
 import {
   CreateCandidateInputDto,
   CreateCandidateOutputDto,

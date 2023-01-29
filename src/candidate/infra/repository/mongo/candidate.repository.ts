@@ -1,13 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-
-import { Candidate, CandidateRepositoryInterface } from '@/candidate/domain';
 import { PaginationInterface } from '@/@shared/repository/pagination-interface';
-import { TechsMapper } from './techs.mapper';
-import { ProfessionalExperienceMapper } from './professional-experience.mapper';
-import { Candidate as Entity, CandidateDocument } from './candidate.model';
+import { Candidate, CandidateRepositoryInterface } from '@/candidate/domain';
 import PaginationPresenter from '../presenter/pagination.presenter';
+import { Candidate as Entity, CandidateDocument } from './candidate.model';
+import { ProfessionalExperienceMapper } from './professional-experience.mapper';
+import { TechsMapper } from './techs.mapper';
 
 @Injectable()
 export default class CandidateMongoRepository
