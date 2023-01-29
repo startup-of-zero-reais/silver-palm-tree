@@ -13,7 +13,10 @@ import { plainToClass } from 'class-transformer';
 import { Response as eResponse } from 'express';
 import NotificationError from '@/@shared/notification/notification.error';
 import CreateCandidateUseCase from './usecase/create/create.candidate.usecase';
-import { CreateCandidateInputDto } from './usecase/create/create.dto';
+import {
+  CreateCandidateInputDto,
+  CreateCandidateOutputDto,
+} from './usecase/create/create.dto';
 import FindCandidateUsecase from './usecase/find/find.candidate.usecase';
 import { FindOutputDto } from './usecase/find/find.dto';
 import ListCandidateUseCase from './usecase/list/list.candidate.usecase';
@@ -76,7 +79,10 @@ export class CandidateController {
       const output = await this.createCandidateUseCase.execute(
         createCandidateDto,
       );
-      return response.status(HttpStatus.CREATED).json(output);
+
+      return response
+        .status(HttpStatus.CREATED)
+        .json(plainToClass(CreateCandidateOutputDto, output));
     } catch (error) {
       if (error instanceof NotificationError) {
         return response.status(HttpStatus.UNPROCESSABLE_ENTITY).json(error);
@@ -107,7 +113,6 @@ export class CandidateController {
       if (error instanceof NotificationError) {
         return response.status(HttpStatus.UNPROCESSABLE_ENTITY).json(error);
       }
-      console.log(error);
       return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(error);
     }
   }

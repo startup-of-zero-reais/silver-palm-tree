@@ -1,30 +1,30 @@
-import { Expose } from 'class-transformer';
+import { Exclude, Expose, plainToClass, Transform } from 'class-transformer';
 import { IsEmail, IsNotEmpty, IsOptional, IsUrl } from 'class-validator';
-import { KnowledgeLevel } from '../../../candidate/domain/value-object/techs-value-object';
+import { Tech, ProfessionalExperience } from '@/candidate/domain';
 
-type Techs = {
-  knowledge_level: KnowledgeLevel;
-  tech: string;
-};
-
-type ProfessionalExperience = {
-  company: string;
-  role: string;
-  acting_time: string;
-  description: string;
-  qualification: string;
-};
-
-@Expose()
+@Exclude()
 export class CreateCandidateOutputDto {
+  @Expose()
   id: string;
+  @Expose()
   name: string;
+  @Expose()
   email: string;
+  @Expose()
   image: string;
+  @Expose()
   phone: string;
-  techs: Techs[];
+  @Expose()
+  @Transform(({ value }) => plainToClass(TechOutputDto, value))
+  techs: TechOutputDto[];
+  @Expose()
+  @Transform(({ value }) =>
+    plainToClass(ProfessionalExperienceOutputDto, value),
+  )
   professionalExperiences: ProfessionalExperience[];
+  @Expose()
   createdAt: Date;
+  @Expose()
   updatedAt: Date;
 }
 
@@ -47,9 +47,31 @@ export class CreateCandidateInputDto {
   password: string;
 
   @IsNotEmpty()
-  techs: Techs[];
+  techs: Tech[];
 
   @IsNotEmpty()
   @IsOptional()
   professionalExperiences: ProfessionalExperience[];
+}
+
+@Exclude()
+class TechOutputDto {
+  @Expose()
+  knowledge_level: string;
+  @Expose()
+  tech: string;
+}
+
+@Exclude()
+class ProfessionalExperienceOutputDto {
+  @Expose()
+  company: string;
+  @Expose()
+  role: string;
+  @Expose()
+  acting_time: string;
+  @Expose()
+  description: string;
+  @Expose()
+  qualification: string;
 }
