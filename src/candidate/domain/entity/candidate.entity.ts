@@ -5,7 +5,7 @@ import CandidateValidatorFactory from '../factory/candidate.validator.factory';
 import { ProfessionalExperience } from '../value-object/professional-experience';
 import Techs from '../value-object/techs-value-object';
 
-type Props = {
+export type Props = {
   id?: string;
   name: string;
   email: string;
