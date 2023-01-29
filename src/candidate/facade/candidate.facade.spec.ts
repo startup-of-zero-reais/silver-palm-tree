@@ -5,6 +5,7 @@ import {
   ProfessionalExperience,
 } from '@/candidate/domain';
 import FindCandidateByEmailUsecase from '../usecase/find-by-email/find-by-email.candidate.usecase';
+import FindCandidateUsecase from '../usecase/find/find.candidate.usecase';
 import CandidateFacade from './candidate.facade';
 
 const tech = new Tech({
@@ -49,10 +50,14 @@ describe('Candidate test', () => {
 
   it('should return user who match with email', async () => {
     const candidateRepository = MockRepository();
-    const candidateUseCase = new FindCandidateByEmailUsecase(
+    const candidateUseCase = new FindCandidateUsecase(candidateRepository);
+    const candidateByEmailUseCase = new FindCandidateByEmailUsecase(
       candidateRepository,
     );
-    const candidateFacade = new CandidateFacade(candidateUseCase);
+    const candidateFacade = new CandidateFacade(
+      candidateUseCase,
+      candidateByEmailUseCase,
+    );
 
     const input = 'foo@bar.com';
 
