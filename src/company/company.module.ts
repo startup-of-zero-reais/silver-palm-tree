@@ -5,6 +5,7 @@ import { CompanyFacade } from './facade/company.facade';
 import { Company, CompanySchema } from './infra/repository/mongo/company.model';
 import { CompanyMongoRepository } from './infra/repository/mongo/company.repository';
 import { CreateCompanyUseCase } from './usecase/create/create.company.usecase';
+import { FindByCNPJUseCase } from './usecase/find-by-cnpj/find-by-cnpj.usecase';
 import { FindCompanyUseCase } from './usecase/find/find.company.usecase';
 
 @Module({
@@ -19,6 +20,7 @@ import { FindCompanyUseCase } from './usecase/find/find.company.usecase';
 		// USECASE
 		CreateCompanyUseCase,
 		FindCompanyUseCase,
+		FindByCNPJUseCase,
 		//REPOSITORY
 		CompanyMongoRepository,
 	],
