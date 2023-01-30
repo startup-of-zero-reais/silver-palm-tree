@@ -1,6 +1,6 @@
 import Company from '@/company/domain/entity/company.entity';
 import { CompanyRepositoryInterface } from '@/company/domain/repository/company.repository.interface';
-import { FindByCNPJ } from './find-by-cnpj.usecase';
+import { FindByCNPJUseCase } from './find-by-cnpj.usecase';
 
 const company = new Company({
 	id: 'any_id',
@@ -21,7 +21,7 @@ const MockRepository = (): CompanyRepositoryInterface => {
 
 describe('Unit test find company usecase', () => {
 	it('Should find company usecase', async () => {
-		const usecase = new FindByCNPJ(MockRepository());
+		const usecase = new FindByCNPJUseCase(MockRepository());
 
 		const output = await usecase.execute({
 			cnpj: 'any_cnpj',
@@ -38,7 +38,7 @@ describe('Unit test find company usecase', () => {
 			...MockRepository(),
 			findByCnpj: jest.fn().mockResolvedValue(undefined),
 		});
-		const usecase = new FindByCNPJ(MockThrowRepository());
+		const usecase = new FindByCNPJUseCase(MockThrowRepository());
 		await expect(usecase.execute({ cnpj: 'invalid_cnpj' })).rejects.toThrow(
 			'Company not found',
 		);

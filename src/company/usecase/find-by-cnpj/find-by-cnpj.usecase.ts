@@ -6,7 +6,7 @@ import { CompanyMongoRepository } from '@/company/infra/repository/mongo/company
 import { FindByCNPJCompanyInputDto } from './find-by-cnpj.dto';
 
 @Injectable()
-export class FindByCNPJ implements UseCaseInterface {
+export class FindByCNPJUseCase implements UseCaseInterface {
 	constructor(
 		@Inject(CompanyMongoRepository)
 		private readonly companyRepository: CompanyRepositoryInterface,
