@@ -15,14 +15,14 @@ import { FindCompanyUseCase } from './usecase/find/find.company.usecase';
 		]),
 	],
 	providers: [
-		// FACADE
-		CompanyFacade,
 		// USECASE
 		CreateCompanyUseCase,
 		FindCompanyUseCase,
 		FindByCNPJUseCase,
 		//REPOSITORY
 		CompanyMongoRepository,
+		// FACADE,
+		CompanyFacade,
 	],
 	controllers: [CompanyController],
 	exports: [CompanyFacade],

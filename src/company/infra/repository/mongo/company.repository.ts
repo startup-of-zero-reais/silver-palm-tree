@@ -46,6 +46,7 @@ export class CompanyMongoRepository implements CompanyRepositoryInterface {
 	}
 
 	private toDomain(object: any): CompanyEntity {
+		if (!object) return; // return empty if has no recruiter
 		return new CompanyEntity({
 			id: object._id,
 			cnpj: object.cnpj,

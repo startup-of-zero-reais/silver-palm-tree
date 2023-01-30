@@ -3,6 +3,7 @@ import {
 	Controller,
 	Get,
 	HttpStatus,
+	NotFoundException,
 	Param,
 	Post,
 	Put,
@@ -36,6 +37,11 @@ export class RecruiterController {
 				.status(HttpStatus.CREATED)
 				.json(plainToClass(CreateOutputDto, recruiter));
 		} catch (e) {
+			if (e instanceof NotFoundException) {
+				return response
+					.status(HttpStatus.NOT_FOUND)
+					.json({ error: e.message });
+			}
 			return response
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.json({ error: e.message });

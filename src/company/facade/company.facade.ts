@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { randomUUID } from 'crypto';
+import UseCaseInterface from '@/@shared/usecase/use-case.interface';
 import Company from '../domain/entity/company.entity';
 import { FindByCNPJUseCase } from '../usecase/find-by-cnpj/find-by-cnpj.usecase';
 import CompanyFacadeInterface from './company.facade.interface';
@@ -8,7 +8,7 @@ import CompanyFacadeInterface from './company.facade.interface';
 export class CompanyFacade implements CompanyFacadeInterface {
 	constructor(
 		@Inject(FindByCNPJUseCase)
-		private readonly _findByCnpjUseCase: FindByCNPJUseCase,
+		private readonly _findByCnpjUseCase: UseCaseInterface,
 	) {}
 
 	async getByCNPJ(cnpj: string): Promise<Company> {
