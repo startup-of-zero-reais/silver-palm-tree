@@ -36,6 +36,14 @@ export default class Recruiter extends BaseUser {
     this._companyCNPJ = props.company.cnpj;
   }
 
+  canLogin(): boolean {
+    return this._status !== Status.BLOCKED;
+  }
+
+  canInteract(): boolean {
+    return this._status === Status.ACTIVATED;
+  }
+
   update(props: Omit<UpdateProps, NotUpdableProps>): void {
     const { name, email, image } = props;
 

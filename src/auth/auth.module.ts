@@ -16,38 +16,38 @@ import { ManageSessionToken } from './usecase/manage-session-token/manage-sessio
 import { ValidateSessionUseCase } from './usecase/validate-session/validate-session.usecase';
 
 @Module({
-  imports: [
-    CandidateModule,
-    RecruiterModule,
-    PassportModule,
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (config: ConfigService) => {
-        return {
-          secret: config.get('SESSION_SECRET'),
-          signOptions: {
-            issuer: config.get('ISSUER'),
-            expiresIn: config.get('SESSION_TIME'),
-          },
-        };
-      },
-      inject: [ConfigService],
-    }),
-  ],
-  providers: [
-    // facades
-    CandidateFacade,
-    RecruiterFacade,
-    // auth providers
-    ManageSessionToken,
-    LoginUseCase,
-    ValidateSessionUseCase,
-    // guard strategies
-    LocalStrategy,
-    LocalAuthGuard,
-    JwtStrategy,
-    AuthTokenGuard,
-  ],
-  controllers: [AuthController],
+	imports: [
+		CandidateModule,
+		RecruiterModule,
+		PassportModule,
+		JwtModule.registerAsync({
+			imports: [ConfigModule],
+			useFactory: async (config: ConfigService) => {
+				return {
+					secret: config.get('SESSION_SECRET'),
+					signOptions: {
+						issuer: config.get('ISSUER'),
+						expiresIn: config.get('SESSION_TIME'),
+					},
+				};
+			},
+			inject: [ConfigService],
+		}),
+	],
+	providers: [
+		// facades
+		CandidateFacade,
+		RecruiterFacade,
+		// auth providers
+		ManageSessionToken,
+		LoginUseCase,
+		ValidateSessionUseCase,
+		// guard strategies
+		LocalStrategy,
+		LocalAuthGuard,
+		JwtStrategy,
+		AuthTokenGuard,
+	],
+	controllers: [AuthController],
 })
 export class AuthModule {}

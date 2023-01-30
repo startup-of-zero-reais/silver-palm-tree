@@ -29,7 +29,7 @@ import { FindRecruiterUseCase } from './usecase/find/find.recruiter.usecase';
     // facade
     RecruiterFacade,
   ],
-  exports: [RecruiterFacade],
+  exports: [FindRecruiterUseCase, FindByEmailRecruiterUseCase, RecruiterFacade],
   controllers: [RecruiterController],
 })
 export class RecruiterModule {}

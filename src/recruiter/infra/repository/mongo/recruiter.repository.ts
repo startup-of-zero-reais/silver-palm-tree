@@ -3,17 +3,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PaginationInterface } from '@/@shared/repository/pagination-interface';
 import { Recruiter, RecruiterRepositoryInterface } from '@/recruiter/domain';
-import {
-  Recruiter as RecruiterEntity,
-  RecruiterDocument,
-} from './recruiter.model';
+import { Recruiter as Entity, RecruiterDocument } from './recruiter.model';
 
 @Injectable()
 export default class RecruiterMongoRepository
   implements RecruiterRepositoryInterface
 {
   constructor(
-    @InjectModel(RecruiterEntity.name)
+    @InjectModel(Entity.name)
     private recruiterModel: Model<RecruiterDocument>,
   ) {}
 
@@ -39,7 +36,7 @@ export default class RecruiterMongoRepository
   }
 
   async find(id: string): Promise<Recruiter> {
-    const recruiter = await this.recruiterModel.findOne({ _id: id }).exec();
+    const recruiter = await this.recruiterModel.findById(id).exec();
     return this.toDomain(recruiter);
   }
 

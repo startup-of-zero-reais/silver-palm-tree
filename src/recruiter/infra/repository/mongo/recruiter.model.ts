@@ -13,7 +13,7 @@ export class Recruiter {
   @Prop()
   name: string;
 
-  @Prop()
+  @Prop({ index: true })
   email: string;
 
   @Prop()

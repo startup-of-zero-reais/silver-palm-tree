@@ -6,7 +6,7 @@ import CandidateFacadeInterface from '@/candidate/facade/candidate.facade.interf
 import { Recruiter } from '@/recruiter/domain';
 import { RecruiterFacade } from '@/recruiter/facade/recruiter.facade';
 import RecruiterFacadeInterface from '@/recruiter/facade/recruiter.facade.interface';
-import { LoginInputDto } from './login.dto';
+import { LoginInputDto, LoginOkDto } from './login.dto';
 
 @Injectable()
 export class LoginUseCase implements UseCaseInterface {
@@ -18,8 +18,8 @@ export class LoginUseCase implements UseCaseInterface {
     private readonly recruiterFacade: RecruiterFacadeInterface,
   ) {}
 
-  async execute(input: LoginInputDto): Promise<Candidate | Recruiter> {
-    const [candidate, recruiter] = await Promise.all([
+  async execute(input: LoginInputDto): Promise<LoginOkDto> {
+    let [candidate, recruiter] = await Promise.all([
       // catch to not throw any error, just undefined result
       this.candidateFacade
         .getByEmail(input.email)
@@ -30,15 +30,21 @@ export class LoginUseCase implements UseCaseInterface {
         .catch(() => undefined as Recruiter),
     ]);
 
-    // in case of result is a candidate build-it
-    if (candidate?.valid_password(input.password)) {
-      return candidate;
+    // is candidate and has no valid password
+    if (candidate && !candidate?.valid_password(input.password)) {
+      candidate = undefined;
     }
 
-    if (recruiter?.isValidPassword(input.password)) {
-      return recruiter;
+    // is recruiter and has no valid password
+    if (recruiter) {
+      // is recruiter but can not login
+      if (!recruiter.isValidPassword(input.password) || !recruiter.canLogin())
+        recruiter = undefined;
     }
 
-    throw new Error('Invalid authentication credentials');
+    return {
+      candidate,
+      recruiter,
+    };
   }
 }

@@ -1,31 +1,52 @@
 import { Inject, Injectable } from '@nestjs/common';
 import UseCaseInterface from '@/@shared/usecase/use-case.interface';
+import { Candidate } from '@/candidate/domain';
 import CandidateFacade from '@/candidate/facade/candidate.facade';
 import CandidateFacadeInterface from '@/candidate/facade/candidate.facade.interface';
+import { Recruiter } from '@/recruiter/domain';
+import { RecruiterFacade } from '@/recruiter/facade/recruiter.facade';
+import RecruiterFacadeInterface from '@/recruiter/facade/recruiter.facade.interface';
 import { PayloadDto, SessionOutputDto } from './validate-session.dto';
 
 @Injectable()
 export class ValidateSessionUseCase implements UseCaseInterface {
-  constructor(
-    @Inject(CandidateFacade)
-    private readonly candidateFacade: CandidateFacadeInterface,
-  ) {}
+	constructor(
+		@Inject(CandidateFacade)
+		private readonly candidateFacade: CandidateFacadeInterface,
 
-  async validateSession(
-    token: PayloadDto,
-    // error: any, user?: Express.User | false, info?: any
-    done: (err: any, user?: SessionOutputDto, info?: any) => void,
-  ) {
-    const session = await this.execute(token);
-    return done(null, session, session);
-  }
+		@Inject(RecruiterFacade)
+		private readonly recruiterFacade: RecruiterFacadeInterface,
+	) {}
 
-  async execute(input: PayloadDto): Promise<any> {
-    if (input.type === 'candidate') {
-      const candidate = await this.candidateFacade.getByID(input.sub);
-      return candidate;
-    }
+	async validateSession(
+		token: PayloadDto,
+		// error: any, user?: Express.User | false, info?: any
+		done: (err: any, user?: SessionOutputDto, info?: any) => void,
+	) {
+		const session = await this.execute(token);
 
-    return false;
-  }
+		if (typeof session === 'boolean') {
+			return done(new Error('Invalid session'), null, null);
+		}
+
+		return done(null, session, null);
+	}
+
+	async execute(input: PayloadDto) {
+		let candidate: Candidate, recruiter: Recruiter;
+		if (['candidate', 'both'].includes(input.aud)) {
+			candidate = await this.candidateFacade.getByID(input.cid);
+		}
+
+		if (['recruiter', 'both'].includes(input.aud)) {
+			recruiter = await this.recruiterFacade.getByID(input.rid);
+		}
+
+		if (!candidate && !recruiter) return false;
+
+		return {
+			candidate,
+			recruiter,
+		};
+	}
 }
