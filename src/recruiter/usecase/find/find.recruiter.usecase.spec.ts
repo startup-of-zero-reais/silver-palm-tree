@@ -15,7 +15,7 @@ const recruiter = new Recruiter({
 	status: Status.ACTIVATED,
 });
 
-let MockRepository = (): RecruiterRepositoryInterface => {
+const MockRepository = (): RecruiterRepositoryInterface => {
 	return {
 		findByEmail: jest.fn(),
 		find: jest.fn().mockResolvedValue(recruiter),
