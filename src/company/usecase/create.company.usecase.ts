@@ -1,10 +1,14 @@
+import { Inject, Injectable } from '@nestjs/common';
 import UseCaseInterface from '@/@shared/usecase/use-case.interface';
 import Company from '../domain/entity/company.entity';
 import { CompanyRepositoryInterface } from '../domain/repository/company.repository.interface';
+import { CompanyMongoRepository } from '../infra/repository/mongo/company.repository';
 import { CreateCompanyInputDto } from './create.dto';
 
+@Injectable()
 export class CreateCompanyUseCase implements UseCaseInterface {
 	constructor(
+		@Inject(CompanyMongoRepository)
 		private readonly companyRepository: CompanyRepositoryInterface,
 	) {}
 
