@@ -26,8 +26,9 @@ export class CompanyMongoRepository implements CompanyRepositoryInterface {
 		throw new Error('Method not implemented.');
 	}
 
-	find(id: string): Promise<CompanyEntity> {
-		throw new Error('Method not implemented.');
+	async find(id: string): Promise<CompanyEntity> {
+		const companyDb = await this.companyModel.findOne({ _id: id }).exec();
+		return this.toDomain(companyDb);
 	}
 
 	findByEmail(email: string): Promise<CompanyEntity> {
@@ -39,5 +40,16 @@ export class CompanyMongoRepository implements CompanyRepositoryInterface {
 		page: number,
 	): Promise<PaginationInterface<CompanyEntity>> {
 		throw new Error('Method not implemented.');
+	}
+
+	private toDomain(object: any): CompanyEntity {
+		return new CompanyEntity({
+			id: object._id,
+			cnpj: object.cnpj,
+			logo: object.logo,
+			description: object.description,
+			createdAt: object.createdAt,
+			updatedAt: object.updatedAt,
+		});
 	}
 }
