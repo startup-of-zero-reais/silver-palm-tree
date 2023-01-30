@@ -23,7 +23,7 @@ const input = {
 	cnpj: 'any_cnpj',
 };
 
-let MockRepository = (): RecruiterRepositoryInterface => {
+const MockRepository = (): RecruiterRepositoryInterface => {
 	return {
 		findByEmail: jest.fn().mockResolvedValue(undefined),
 		find: jest.fn(),
