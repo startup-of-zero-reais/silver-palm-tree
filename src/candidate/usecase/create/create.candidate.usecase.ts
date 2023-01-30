@@ -1,13 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
+  Candidate,
   CandidateFactory,
   CandidateRepositoryInterface,
 } from '@/candidate/domain';
 import CandidateMongoRepository from '@/candidate/infra/repository/mongo/candidate.repository';
-import {
-  CreateCandidateInputDto,
-  CreateCandidateOutputDto,
-} from './create.dto';
+import { CreateCandidateInputDto } from './create.dto';
 
 @Injectable()
 export default class CreateCandidateUseCase {
@@ -16,9 +14,7 @@ export default class CreateCandidateUseCase {
     private readonly candidateRepository: CandidateRepositoryInterface,
   ) {}
 
-  async execute(
-    input: CreateCandidateInputDto,
-  ): Promise<CreateCandidateOutputDto> {
+  async execute(input: CreateCandidateInputDto): Promise<Candidate> {
     const {
       email,
       image,
@@ -43,28 +39,7 @@ export default class CreateCandidateUseCase {
 
     await this.candidateRepository.create(candidate);
 
-    return {
-      id: candidate.id,
-      name: candidate.name,
-      email: candidate.email,
-      image: candidate.image,
-      phone: candidate.phone,
-      techs: candidate.techs.map((tech) => ({
-        knowledge_level: tech.knowledge_level,
-        tech: tech.tech,
-      })),
-      professionalExperiences: candidate.professionalExperiences.map(
-        (experience) => ({
-          acting_time: experience.acting_time,
-          company: experience.company,
-          description: experience.description,
-          qualification: experience.qualification,
-          role: experience.role,
-        }),
-      ),
-      updatedAt: candidate.updatedAt,
-      createdAt: candidate.createdAt,
-    };
+    return candidate;
   }
 
   private async candidateAlreadyExists(email: string): Promise<boolean> {
