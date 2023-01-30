@@ -13,6 +13,13 @@ export class CompanyMongoRepository implements CompanyRepositoryInterface {
 		private companyModel: Model<CompanyDocument>,
 	) {}
 
+	async findByCnpj(cnpj: string): Promise<CompanyEntity> {
+		const companyDb = await this.companyModel
+			.findOne({ cnpj: cnpj })
+			.exec();
+		return this.toDomain(companyDb);
+	}
+
 	async create(entity: CompanyEntity): Promise<void> {
 		await this.companyModel.create({
 			_id: entity.id,
@@ -29,10 +36,6 @@ export class CompanyMongoRepository implements CompanyRepositoryInterface {
 	async find(id: string): Promise<CompanyEntity> {
 		const companyDb = await this.companyModel.findOne({ _id: id }).exec();
 		return this.toDomain(companyDb);
-	}
-
-	findByEmail(email: string): Promise<CompanyEntity> {
-		throw new Error('Method not implemented.');
 	}
 
 	paginate(
