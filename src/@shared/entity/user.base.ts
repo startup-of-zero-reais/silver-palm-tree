@@ -11,7 +11,7 @@ export type BaseUserProps = {
 	updatedAt?: Date;
 };
 
-export type NotUpdableProps = 'id' | 'createdAt' | 'updatedAt';
+export type NotUpdableProps = 'id' | 'email' | 'createdAt' | 'updatedAt';
 
 export default abstract class BaseUser extends Entity {
 	protected _name: string;
