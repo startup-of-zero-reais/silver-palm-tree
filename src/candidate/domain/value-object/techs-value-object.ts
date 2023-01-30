@@ -14,6 +14,7 @@ export default class Techs {
   private _tech: string;
 
   constructor(props: Props) {
+    if (!props) return;
     this._knowledge_level = props.knowledge_level;
     this._tech = props.tech;
   }

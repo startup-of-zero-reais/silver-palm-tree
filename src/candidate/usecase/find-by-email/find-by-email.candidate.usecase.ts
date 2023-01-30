@@ -1,18 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
 import UseCaseInterface from '@/@shared/usecase/use-case.interface';
-import { Candidate, CandidateRepositoryInterface } from '@/candidate/domain';
+import Candidate from '@/candidate/domain/entity/candidate.entity';
+import { CandidateRepositoryInterface } from '@/candidate/domain/repository/candidate.repository.interface';
 import CandidateMongoRepository from '@/candidate/infra/repository/mongo/candidate.repository';
-import { FindInputDto } from './find.dto';
+import { FindByEmailInputDto } from './find-by-email.dto';
 
 @Injectable()
-export default class FindCandidateUsecase implements UseCaseInterface {
+export default class FindCandidateByEmailUsecase implements UseCaseInterface {
   constructor(
     @Inject(CandidateMongoRepository)
     private readonly candidateRepository: CandidateRepositoryInterface,
   ) {}
 
-  async execute(input: FindInputDto): Promise<Candidate> {
-    const candidate = await this.candidateRepository.find(input.id);
+  async execute(input: FindByEmailInputDto): Promise<Candidate> {
+    const candidate = await this.candidateRepository.findByEmail(input.email);
 
     if (!candidate) {
       throw new Error('Candidate not found');

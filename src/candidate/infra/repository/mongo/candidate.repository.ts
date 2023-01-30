@@ -1,21 +1,19 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-
-import { CandidateRepositoryInterface } from '../../../domain/repository/candidate.repository.interface';
-import Entity from '../../../domain/entity/candidate.entity';
 import { InjectModel } from '@nestjs/mongoose';
-import Candidate from '../../../domain/entity/candidate.entity';
 import { Model } from 'mongoose';
-import { CandidateDocument } from './candidate.model';
-import Techs from '../../../domain/value-object/techs-value-object';
+import { PaginationInterface } from '@/@shared/repository/pagination-interface';
+import { Candidate, CandidateRepositoryInterface } from '@/candidate/domain';
 import PaginationPresenter from '../presenter/pagination.presenter';
-import { PaginationInterface } from 'src/@shared/repository/pagination-interface';
+import { Candidate as Entity, CandidateDocument } from './candidate.model';
+import { ProfessionalExperienceMapper } from './professional-experience.mapper';
+import { TechsMapper } from './techs.mapper';
 
 @Injectable()
 export default class CandidateMongoRepository
   implements CandidateRepositoryInterface
 {
   constructor(
-    @InjectModel(Candidate.name)
+    @InjectModel(Entity.name)
     private candidateModel: Model<CandidateDocument>,
   ) {}
 
@@ -43,7 +41,7 @@ export default class CandidateMongoRepository
     );
   }
 
-  async create(entity: Entity): Promise<void> {
+  async create(entity: Candidate): Promise<void> {
     await this.candidateModel.create({
       _id: entity.id,
       name: entity.name,
@@ -51,49 +49,49 @@ export default class CandidateMongoRepository
       image: entity.image,
       password: entity.password,
       phone: entity.phone,
-      techs: entity.techs.map((tech) => ({
-        tech: tech.tech,
-        knowledge_level: tech.knowledge_level,
-      })),
+      techs: TechsMapper.ToObject(entity.techs),
+      professionalExperiences: ProfessionalExperienceMapper.ToObject(
+        entity.professionalExperiences,
+      ),
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
     });
   }
 
-  async update(entity: Entity): Promise<void> {
+  async update(entity: Candidate): Promise<void> {
     await this.candidateModel
       .findByIdAndUpdate(entity.id, {
         name: entity.name,
         image: entity.image,
         phone: entity.phone,
-        techs: entity.techs.map((tech) => ({
-          tech: tech.tech,
-          knowledge_level: tech.knowledge_level,
-        })),
+        techs: TechsMapper.ToObject(entity.techs),
       })
       .populate('techs');
   }
-  async find(id: string): Promise<Entity> {
+
+  async findByEmail(email: string): Promise<Candidate> {
+    const candidate = await this.candidateModel.findOne({ email }).exec();
+    return this.toDomain(candidate);
+  }
+
+  async find(id: string): Promise<Candidate> {
     const candidate = await this.candidateModel.findOne({ _id: id }).exec();
     return this.toDomain(candidate);
   }
 
-  private toDomain(object?: any): Entity {
+  private toDomain(object?: any): Candidate {
     if (!object) throw new BadRequestException(`Candidate not found`);
 
-    return new Entity({
+    return new Candidate({
       id: object._id,
       name: object.name,
       email: object.email,
       password: object.password,
       image: object.image,
       phone: object.phone,
-      techs: object.techs.map(
-        (tech) =>
-          new Techs({
-            tech: tech.tech,
-            knowledge_level: tech.knowledge_level,
-          }),
+      techs: TechsMapper.ToDomain(object.techs),
+      professionalExperiences: ProfessionalExperienceMapper.ToDomain(
+        object.professionalExperiences,
       ),
       createdAt: object.createdAt,
       updatedAt: object.updatedAt,

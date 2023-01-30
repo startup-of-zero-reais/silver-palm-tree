@@ -1,6 +1,6 @@
 import ValidatorInterface from 'src/@shared/validator/ValidatorInterface';
-import Candidate from '../entity/candidate.entity';
 import * as yup from 'yup';
+import Candidate from '../entity/candidate.entity';
 
 export default class CandidateYupValidator
   implements ValidatorInterface<Candidate>
@@ -22,6 +22,7 @@ export default class CandidateYupValidator
               }),
             )
             .min(1),
+          professionalExperiences: yup.array().min(1),
         })
         .validateSync(
           {
@@ -30,6 +31,7 @@ export default class CandidateYupValidator
             image: entity.image,
             phone: entity.phone,
             techs: entity.techs,
+            professionalExperiences: entity.professionalExperiences,
           },
           { abortEarly: false },
         );

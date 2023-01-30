@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { KnowledgeLevel } from 'src/candidate/domain/value-object/techs-value-object';
+import { KnowledgeLevel } from '@/candidate/domain';
 
 export type TechsDocument = HydratedDocument<Techs>;
 

@@ -1,11 +1,17 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CandidateController } from './candidate.controller';
-import { CANDIDATE_PROVIDERS } from './candidate.provider';
+import CandidateFacade from './facade/candidate.facade';
 import {
   Candidate,
   CandidateSchema,
 } from './infra/repository/mongo/candidate.model';
+import CandidateMongoRepository from './infra/repository/mongo/candidate.repository';
+import CreateCandidateUseCase from './usecase/create/create.candidate.usecase';
+import FindCandidateByEmailUsecase from './usecase/find-by-email/find-by-email.candidate.usecase';
+import FindCandidateUsecase from './usecase/find/find.candidate.usecase';
+import ListCandidateUseCase from './usecase/list/list.candidate.usecase';
+import UpdateCandidateUseCase from './usecase/update/update.candidate.usecase';
 
 @Module({
   imports: [
@@ -15,8 +21,17 @@ import {
   ],
   controllers: [CandidateController],
   providers: [
-    ...Object.values(CANDIDATE_PROVIDERS.REPOSITORIES),
-    ...Object.values(CANDIDATE_PROVIDERS.USE_CASES),
+    //repository
+    CandidateMongoRepository,
+    //usecase
+    FindCandidateUsecase,
+    FindCandidateByEmailUsecase,
+    UpdateCandidateUseCase,
+    ListCandidateUseCase,
+    CreateCandidateUseCase,
+    // facade
+    CandidateFacade,
   ],
+  exports: [FindCandidateUsecase, FindCandidateByEmailUsecase, CandidateFacade],
 })
 export class CandidateModule {}

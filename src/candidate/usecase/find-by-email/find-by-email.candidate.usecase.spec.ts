@@ -1,17 +1,18 @@
 import {
   Tech as Techs,
+  KnowledgeLevel,
+  CandidateRepositoryInterface,
   ProfessionalExperience,
   CandidateFactory,
-  KnowledgeLevel,
 } from '@/candidate/domain';
-import FindCandidateUsecase from './find.candidate.usecase';
+import FindCandidateByEmailUsecase from './find-by-email.candidate.usecase';
 
 const techs = new Techs({
   knowledge_level: KnowledgeLevel.ADVANCED,
   tech: 'PHP',
 });
 
-const professionalExperience = new ProfessionalExperience({
+const professionalExperiences = new ProfessionalExperience({
   acting_time: '1 year',
   company: 'any_company',
   description: 'any_description',
@@ -28,13 +29,13 @@ const candidate = CandidateFactory.create(
     password: '123',
   },
   [techs],
-  [professionalExperience],
+  [professionalExperiences],
 );
 
-const MockRepository = () => {
+const MockRepository = (): CandidateRepositoryInterface => {
   return {
-    find: jest.fn().mockReturnValue(candidate),
-    findByEmail: jest.fn(),
+    findByEmail: jest.fn().mockReturnValue(candidate),
+    find: jest.fn(),
     paginate: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
@@ -42,11 +43,11 @@ const MockRepository = () => {
 };
 
 describe('Unit test find candidate usecase', () => {
-  it('should find candidate usecase', async () => {
+  it('should find candidate by email usecase', async () => {
     const repository = MockRepository();
-    const usecase = new FindCandidateUsecase(repository);
+    const usecase = new FindCandidateByEmailUsecase(repository);
 
-    const output = await usecase.execute({ id: candidate.id });
+    const output = await usecase.execute({ email: candidate.email });
 
     expect(output).toEqual(candidate);
   });
