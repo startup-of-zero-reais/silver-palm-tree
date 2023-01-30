@@ -18,7 +18,6 @@ export default class Company extends Entity {
 
 	constructor(props: Props) {
 		super(props.id, props.createdAt, props.updatedAt);
-		this._id = props.id;
 		this._logo = props.logo;
 		this._cnpj = props.cnpj;
 		this._description = props.description;
