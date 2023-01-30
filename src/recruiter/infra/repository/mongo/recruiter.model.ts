@@ -7,26 +7,32 @@ export type RecruiterDocument = HydratedDocument<Recruiter>;
 
 @Schema()
 export class Recruiter {
-  @Prop({ type: mongoose.Types.ObjectId })
-  _id: string;
+	@Prop({ type: mongoose.Types.ObjectId })
+	_id: string;
 
-  @Prop()
-  name: string;
+	@Prop()
+	name: string;
 
-  @Prop({ index: true })
-  email: string;
+	@Prop({ index: true })
+	email: string;
 
-  @Prop()
-  image: string;
+	@Prop()
+	image: string;
 
-  @Prop()
-  password: string;
+	@Prop()
+	password: string;
 
-  @Prop({ enum: Status })
-  status: Status;
+	@Prop({ enum: Status })
+	status: Status;
 
-  @Prop(Company)
-  company: Company;
+	@Prop(Company)
+	company: Company;
+
+	@Prop()
+	createdAt?: Date;
+
+	@Prop()
+	updatedAt?: Date;
 }
 
 export const RecruiterSchema = SchemaFactory.createForClass(Recruiter);
