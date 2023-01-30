@@ -1,7 +1,6 @@
 import Entity from '@/@shared/entity/entity.abstract';
-import { NotUpdableProps } from '@/@shared/entity/user.base';
 import NotificationError from '@/@shared/notification/notification.error';
-import CompanyValidatorFactory from '../factory/company.validator.factory';
+import { CompanyValidatorFactory } from '../factory/company.validator.factory';
 
 export type Props = {
 	id?: string;

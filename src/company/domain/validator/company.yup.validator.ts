@@ -1,11 +1,9 @@
 import * as yup from 'yup';
+import { validatorCNPJ } from '@/@shared/helper/validator.cnpj';
 import ValidatorInterface from '@/@shared/validator/ValidatorInterface';
 import Company from '../entity/company.entity';
-import { validatorCNPJ } from '@/@shared/helper/validator.cnpj';
 
-export default class CompanyYupValidator
-	implements ValidatorInterface<Company>
-{
+export class CompanyYupValidator implements ValidatorInterface<Company> {
 	validate(entity: Company): void {
 		try {
 			yup.object()
