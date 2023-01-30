@@ -5,6 +5,7 @@ import { CompanyFacade } from './facade/company.facade';
 import { Company, CompanySchema } from './infra/repository/mongo/company.model';
 import { CompanyMongoRepository } from './infra/repository/mongo/company.repository';
 import { CreateCompanyUseCase } from './usecase/create/create.company.usecase';
+import { FindCompanyUseCase } from './usecase/find/find.company.usecase';
 
 @Module({
 	imports: [
@@ -17,6 +18,7 @@ import { CreateCompanyUseCase } from './usecase/create/create.company.usecase';
 		CompanyFacade,
 		// USECASE
 		CreateCompanyUseCase,
+		FindCompanyUseCase,
 		//REPOSITORY
 		CompanyMongoRepository,
 	],
