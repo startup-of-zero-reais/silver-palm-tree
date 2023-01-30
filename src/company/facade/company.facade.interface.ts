@@ -1,3 +1,3 @@
 export default interface CompanyFacadeInterface {
-  getByCNPJ(cnpj: string): any;
+	getByCNPJ(cnpj: string): any;
 }

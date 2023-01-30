@@ -7,18 +7,20 @@ import { FindByEmailInputDto } from './find-by-email.dto';
 
 @Injectable()
 export default class FindCandidateByEmailUsecase implements UseCaseInterface {
-  constructor(
-    @Inject(CandidateMongoRepository)
-    private readonly candidateRepository: CandidateRepositoryInterface,
-  ) {}
+	constructor(
+		@Inject(CandidateMongoRepository)
+		private readonly candidateRepository: CandidateRepositoryInterface,
+	) {}
 
-  async execute(input: FindByEmailInputDto): Promise<Candidate> {
-    const candidate = await this.candidateRepository.findByEmail(input.email);
+	async execute(input: FindByEmailInputDto): Promise<Candidate> {
+		const candidate = await this.candidateRepository.findByEmail(
+			input.email,
+		);
 
-    if (!candidate) {
-      throw new Error('Candidate not found');
-    }
+		if (!candidate) {
+			throw new Error('Candidate not found');
+		}
 
-    return candidate;
-  }
+		return candidate;
+	}
 }

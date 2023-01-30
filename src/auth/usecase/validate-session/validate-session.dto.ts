@@ -1,4 +1,4 @@
-import { Transform, Exclude, Expose, plainToClass } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
 export class PayloadDto {
 	type: 'candidate' | 'recruiter' | 'both';

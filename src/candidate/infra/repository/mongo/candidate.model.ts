@@ -7,35 +7,35 @@ export type CandidateDocument = HydratedDocument<Candidate>;
 
 @Schema()
 export class Candidate {
-  @Prop({ type: mongoose.Types.ObjectId })
-  _id: string;
+	@Prop({ type: mongoose.Types.ObjectId })
+	_id: string;
 
-  @Prop()
-  name: string;
+	@Prop()
+	name: string;
 
-  @Prop()
-  email: string;
+	@Prop()
+	email: string;
 
-  @Prop()
-  image: string;
+	@Prop()
+	image: string;
 
-  @Prop()
-  phone: string;
+	@Prop()
+	phone: string;
 
-  @Prop()
-  password: string;
+	@Prop()
+	password: string;
 
-  @Prop([Techs])
-  techs: Techs[];
+	@Prop([Techs])
+	techs: Techs[];
 
-  @Prop([ProfessionalExperience])
-  professionalExperiences: ProfessionalExperience[];
+	@Prop([ProfessionalExperience])
+	professionalExperiences: ProfessionalExperience[];
 
-  @Prop()
-  createdAt: Date;
+	@Prop()
+	createdAt: Date;
 
-  @Prop()
-  updatedAt: Date;
+	@Prop()
+	updatedAt: Date;
 }
 
 export const CandidateSchema = SchemaFactory.createForClass(Candidate);

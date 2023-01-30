@@ -3,67 +3,67 @@ import { IsNotEmpty } from 'class-validator';
 import { ProfessionalExperience, Tech } from '@/candidate/domain';
 
 export class FindInputDto {
-  @IsNotEmpty()
-  id: string;
+	@IsNotEmpty()
+	id: string;
 }
 
 @Exclude()
 export class FindOutputDto {
-  @Expose()
-  id: string;
+	@Expose()
+	id: string;
 
-  @Expose()
-  name: string;
+	@Expose()
+	name: string;
 
-  @Expose()
-  email: string;
+	@Expose()
+	email: string;
 
-  @Expose()
-  image: string;
+	@Expose()
+	image: string;
 
-  @Expose()
-  phone: string;
+	@Expose()
+	phone: string;
 
-  @Expose()
-  @Transform(({ value }) => plainToClass(TechOutputDto, value))
-  techs: Tech[];
+	@Expose()
+	@Transform(({ value }) => plainToClass(TechOutputDto, value))
+	techs: Tech[];
 
-  @Expose()
-  @Transform(({ value }) =>
-    plainToClass(ProfessionalExperienceOutputDto, value),
-  )
-  professionalExperiences: ProfessionalExperience[];
+	@Expose()
+	@Transform(({ value }) =>
+		plainToClass(ProfessionalExperienceOutputDto, value),
+	)
+	professionalExperiences: ProfessionalExperience[];
 
-  @Expose()
-  createdAt: Date;
+	@Expose()
+	createdAt: Date;
 
-  @Expose()
-  updatedAt: Date;
+	@Expose()
+	updatedAt: Date;
 }
 
 @Exclude()
 class TechOutputDto {
-  @Expose()
-  knowledge_level: string;
+	@Expose()
+	knowledge_level: string;
 
-  @Expose()
-  tech: string;
+	@Expose()
+	tech: string;
 }
 
 @Exclude()
 export class ProfessionalExperienceOutputDto {
-  @Expose()
-  company: string;
+	@Expose()
+	company: string;
 
-  @Expose()
-  role: string;
+	@Expose()
+	role: string;
 
-  @Expose()
-  acting_time: string;
+	@Expose()
+	acting_time: string;
 
-  @Expose()
-  description: string;
+	@Expose()
+	description: string;
 
-  @Expose()
-  qualification: string;
+	@Expose()
+	qualification: string;
 }

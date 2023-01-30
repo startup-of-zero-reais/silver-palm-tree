@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { Candidate } from '@/candidate/domain';
-import { Recruiter } from '@/recruiter/domain';
 import { LoginOkDto } from '../login/login.dto';
 
 @Injectable()

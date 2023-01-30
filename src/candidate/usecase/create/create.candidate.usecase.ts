@@ -1,52 +1,52 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
-  Candidate,
-  CandidateFactory,
-  CandidateRepositoryInterface,
+	Candidate,
+	CandidateFactory,
+	CandidateRepositoryInterface,
 } from '@/candidate/domain';
 import CandidateMongoRepository from '@/candidate/infra/repository/mongo/candidate.repository';
 import { CreateCandidateInputDto } from './create.dto';
 
 @Injectable()
 export default class CreateCandidateUseCase {
-  constructor(
-    @Inject(CandidateMongoRepository)
-    private readonly candidateRepository: CandidateRepositoryInterface,
-  ) {}
+	constructor(
+		@Inject(CandidateMongoRepository)
+		private readonly candidateRepository: CandidateRepositoryInterface,
+	) {}
 
-  async execute(input: CreateCandidateInputDto): Promise<Candidate> {
-    const {
-      email,
-      image,
-      name,
-      password,
-      phone,
-      techs,
-      professionalExperiences,
-    } = input;
+	async execute(input: CreateCandidateInputDto): Promise<Candidate> {
+		const {
+			email,
+			image,
+			name,
+			password,
+			phone,
+			techs,
+			professionalExperiences,
+		} = input;
 
-    if (await this.candidateAlreadyExists(email)) {
-      throw new Error('Candidate with this email already registered');
-    }
+		if (await this.candidateAlreadyExists(email)) {
+			throw new Error('Candidate with this email already registered');
+		}
 
-    const candidate = CandidateFactory.create(
-      { email, image, name, password, phone },
-      techs,
-      professionalExperiences,
-    );
+		const candidate = CandidateFactory.create(
+			{ email, image, name, password, phone },
+			techs,
+			professionalExperiences,
+		);
 
-    candidate.encrypt_password();
+		candidate.encrypt_password();
 
-    await this.candidateRepository.create(candidate);
+		await this.candidateRepository.create(candidate);
 
-    return candidate;
-  }
+		return candidate;
+	}
 
-  private async candidateAlreadyExists(email: string): Promise<boolean> {
-    const result = await this.candidateRepository
-      .findByEmail(email)
-      .catch(() => undefined);
+	private async candidateAlreadyExists(email: string): Promise<boolean> {
+		const result = await this.candidateRepository
+			.findByEmail(email)
+			.catch(() => undefined);
 
-    return Boolean(result);
-  }
+		return Boolean(result);
+	}
 }
