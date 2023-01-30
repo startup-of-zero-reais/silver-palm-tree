@@ -39,11 +39,13 @@ export default class RecruiterMongoRepository
   }
 
   async find(id: string): Promise<Recruiter> {
-    throw new Error('Method find not implemented.');
+    const recruiter = await this.recruiterModel.findOne({ _id: id }).exec();
+    return this.toDomain(recruiter);
   }
 
   async findByEmail(email: string): Promise<Recruiter> {
-    throw new Error('Method findByEmail not implemented.');
+    const recruiter = await this.recruiterModel.findOne({ email }).exec();
+    return this.toDomain(recruiter);
   }
 
   async paginate(
@@ -51,5 +53,22 @@ export default class RecruiterMongoRepository
     page: number,
   ): Promise<PaginationInterface<Recruiter>> {
     throw new Error('Method paginate not implemented.');
+  }
+
+  private toDomain(object?: RecruiterDocument): Recruiter {
+    if (!object) return; // return empty if has no recruiter
+
+    return new Recruiter({
+      id: object._id,
+      name: object.name,
+      email: object.email,
+      password: object.password,
+      image: object.image,
+      company: {
+        id: object.company.id,
+        cnpj: object.company.cnpj,
+      },
+      status: object.status,
+    });
   }
 }
