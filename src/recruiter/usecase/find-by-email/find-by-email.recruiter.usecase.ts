@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import UseCaseInterface from '@/@shared/usecase/use-case.interface';
 import { Recruiter, RecruiterRepositoryInterface } from '@/recruiter/domain';
 import RecruiterMongoRepository from '@/recruiter/infra/repository/mongo/recruiter.repository';
@@ -12,6 +12,12 @@ export class FindByEmailRecruiterUseCase implements UseCaseInterface {
   ) {}
 
   async execute(input: FindByEmailInputDto): Promise<Recruiter> {
-    return await this.recruiterRepository.findByEmail(input.email);
+    const recruiter = await this.recruiterRepository.findByEmail(input.email);
+
+    if (!recruiter) {
+      throw new NotFoundException('Recruiter not found');
+    }
+
+    return recruiter;
   }
 }

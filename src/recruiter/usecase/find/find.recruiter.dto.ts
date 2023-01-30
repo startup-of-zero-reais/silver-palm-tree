@@ -1,5 +1,18 @@
 import { Exclude, Expose, plainToClass, Transform } from 'class-transformer';
 
+export class FindRecruiterInputDto {
+  id: string;
+}
+
+@Exclude()
+export class CompanyOutputDto {
+  @Expose()
+  id: string;
+
+  @Expose()
+  cnpj: string;
+}
+
 @Exclude()
 export class FindRecruiterOutputDto {
   @Expose()
@@ -17,13 +30,4 @@ export class FindRecruiterOutputDto {
   @Expose()
   @Transform(({ value }) => plainToClass(CompanyOutputDto, value))
   company: CompanyOutputDto;
-}
-
-@Exclude()
-export class CompanyOutputDto {
-  @Expose()
-  id: string;
-
-  @Expose()
-  cnpj: string;
 }

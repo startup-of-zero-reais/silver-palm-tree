@@ -10,6 +10,7 @@ import RecruiterMongoRepository from './infra/repository/mongo/recruiter.reposit
 import { RecruiterController } from './recruiter.controller';
 import { CreateRecruiterUseCase } from './usecase/create/create.recruiter.usecase';
 import { FindByEmailRecruiterUseCase } from './usecase/find-by-email/find-by-email.recruiter.usecase';
+import { FindRecruiterUseCase } from './usecase/find/find.recruiter.usecase';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { FindByEmailRecruiterUseCase } from './usecase/find-by-email/find-by-ema
     RecruiterMongoRepository,
     // services
     CreateRecruiterUseCase,
+    FindRecruiterUseCase,
     FindByEmailRecruiterUseCase,
     // facade
     RecruiterFacade,
