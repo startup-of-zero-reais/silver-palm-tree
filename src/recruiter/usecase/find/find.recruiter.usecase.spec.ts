@@ -1,4 +1,3 @@
-import CompanyFacadeInterface from '@/company/facade/company.facade.interface';
 import {
 	Recruiter,
 	RecruiterRepositoryInterface,
@@ -42,7 +41,7 @@ describe('Unit test find recruiter usecase', () => {
 		expect(output.companyID).toBe(recruiter.companyID);
 	});
 
-	it('Should CreateRecruiterUseCase throws error if candidate has already exists', async () => {
+	it('Should FindRecruiterUseCase throws error if candidate has already exists', async () => {
 		const MockThrowRepository = (): RecruiterRepositoryInterface => ({
 			...MockRepository(),
 			find: jest.fn().mockResolvedValue(undefined),
