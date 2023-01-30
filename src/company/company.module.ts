@@ -4,7 +4,7 @@ import { CompanyController } from './company.controller';
 import { CompanyFacade } from './facade/company.facade';
 import { Company, CompanySchema } from './infra/repository/mongo/company.model';
 import { CompanyMongoRepository } from './infra/repository/mongo/company.repository';
-import { CreateCompanyUseCase } from './usecase/create.company.usecase';
+import { CreateCompanyUseCase } from './usecase/create/create.company.usecase';
 
 @Module({
 	imports: [

@@ -1,11 +1,11 @@
 import { Body, Controller, HttpStatus, Post, Response } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { Response as eResponse } from 'express';
-import { CreateCompanyUseCase } from './usecase/create.company.usecase';
+import { CreateCompanyUseCase } from './usecase/create/create.company.usecase';
 import {
 	CreateCompanyInputDto,
 	CreateCompanyOutputDto,
-} from './usecase/create.dto';
+} from './usecase/create/create.dto';
 
 @Controller('companies')
 export class CompanyController {
