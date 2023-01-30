@@ -33,7 +33,13 @@ class CommonPropsDto {
 export class CandidateSessionOutputDto extends CommonPropsDto {}
 
 @Exclude()
-export class RecruiterSessionOutputDto extends CommonPropsDto {}
+export class RecruiterSessionOutputDto extends CommonPropsDto {
+	@Expose()
+	companyID?: string;
+
+	@Expose()
+	companyCNPJ?: string;
+}
 
 @Exclude()
 export class SessionOutputDto {

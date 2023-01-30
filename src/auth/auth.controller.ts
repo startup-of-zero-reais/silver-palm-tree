@@ -1,6 +1,8 @@
 import {
 	Controller,
+	ForbiddenException,
 	Get,
+	Headers,
 	HttpStatus,
 	Post,
 	Request,
@@ -39,12 +41,11 @@ export class AuthController {
 				user,
 			);
 
+			const expiresIn = 60;
 			const expiresAt = new Date();
 			const currentMinute = expiresAt.getMinutes();
-			const after = currentMinute + 2;
-			expiresAt.setHours(
-				after < currentMinute ? currentMinute + 1 : currentMinute,
-			);
+			const after = currentMinute + expiresIn;
+
 			expiresAt.setMinutes(after);
 
 			response.cookie(authConstants.SESSION_COOKIE, authToken, {
@@ -65,18 +66,28 @@ export class AuthController {
 	@UseGuards(AuthTokenGuard)
 	@Get('/me')
 	async whoAmI(
+		@Headers('x-audience') aud: 'recruiter' | 'candidate' | 'both' = 'both',
 		@LoggedCandidate() meAsCandidate: Candidate,
 		@LoggedRecruiter() meAsRecruiter: Recruiter,
 	) {
-		if (!meAsCandidate)
-			return plainToClass(RecruiterSessionOutputDto, meAsRecruiter);
+		let candidate: CandidateSessionOutputDto,
+			recruiter: RecruiterSessionOutputDto;
 
-		if (!meAsRecruiter)
-			return plainToClass(CandidateSessionOutputDto, meAsCandidate);
+		if (meAsCandidate && ['both', 'candidate'].includes(aud))
+			candidate = plainToClass(CandidateSessionOutputDto, meAsCandidate);
+
+		if (meAsRecruiter && ['both', 'recruiter'].includes(aud))
+			recruiter = plainToClass(RecruiterSessionOutputDto, meAsRecruiter);
+
+		// if has no one of candidate or recruiter throws a
+		// forbidden exception who says
+		// You can not consume this service
+		if (!recruiter && !candidate)
+			throw new ForbiddenException('You can not consume this service');
 
 		return plainToClass(SessionOutputDto, {
-			candidate: plainToClass(CandidateSessionOutputDto, meAsCandidate),
-			recruiter: plainToClass(RecruiterSessionOutputDto, meAsCandidate),
+			candidate: plainToClass(CandidateSessionOutputDto, candidate),
+			recruiter: plainToClass(RecruiterSessionOutputDto, recruiter),
 		});
 	}
 }
