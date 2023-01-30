@@ -28,17 +28,12 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 	private static fromCookies(request: Request) {
 		const auth_token = request.cookies[constants.SESSION_COOKIE];
 
-		console.log('COOKIE', auth_token);
 		if (!auth_token) return ``;
 
 		return auth_token;
 	}
 
 	private static fromAuthorizationHeader(request: Request): string {
-		console.log(
-			'HEADER',
-			request.headers.authorization?.replace(/^bearer\s/i, ''),
-		);
 		if (request.headers.authorization) {
 			return request.headers.authorization.replace(/^bearer\s/i, '');
 		}

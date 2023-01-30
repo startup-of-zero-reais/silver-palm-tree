@@ -6,11 +6,11 @@ export type TechsDocument = HydratedDocument<Techs>;
 
 @Schema()
 export class Techs {
-  @Prop()
-  tech: string;
+	@Prop()
+	tech: string;
 
-  @Prop({ enum: KnowledgeLevel })
-  knowledge_level: KnowledgeLevel;
+	@Prop({ enum: KnowledgeLevel })
+	knowledge_level: KnowledgeLevel;
 }
 
 export const TechsSchema = SchemaFactory.createForClass(Techs);

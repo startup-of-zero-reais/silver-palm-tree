@@ -3,8 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { CompanyModule } from '@/company/company.module';
 import { RecruiterFacade } from './facade/recruiter.facade';
 import {
-  Recruiter,
-  RecruiterSchema,
+	Recruiter,
+	RecruiterSchema,
 } from './infra/repository/mongo/recruiter.model';
 import RecruiterMongoRepository from './infra/repository/mongo/recruiter.repository';
 import { RecruiterController } from './recruiter.controller';
@@ -13,23 +13,27 @@ import { FindByEmailRecruiterUseCase } from './usecase/find-by-email/find-by-ema
 import { FindRecruiterUseCase } from './usecase/find/find.recruiter.usecase';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      { name: Recruiter.name, schema: RecruiterSchema },
-    ]),
-    CompanyModule,
-  ],
-  providers: [
-    // repositories
-    RecruiterMongoRepository,
-    // services
-    CreateRecruiterUseCase,
-    FindRecruiterUseCase,
-    FindByEmailRecruiterUseCase,
-    // facade
-    RecruiterFacade,
-  ],
-  exports: [FindRecruiterUseCase, FindByEmailRecruiterUseCase, RecruiterFacade],
-  controllers: [RecruiterController],
+	imports: [
+		MongooseModule.forFeature([
+			{ name: Recruiter.name, schema: RecruiterSchema },
+		]),
+		CompanyModule,
+	],
+	providers: [
+		// repositories
+		RecruiterMongoRepository,
+		// services
+		CreateRecruiterUseCase,
+		FindRecruiterUseCase,
+		FindByEmailRecruiterUseCase,
+		// facade
+		RecruiterFacade,
+	],
+	exports: [
+		FindRecruiterUseCase,
+		FindByEmailRecruiterUseCase,
+		RecruiterFacade,
+	],
+	controllers: [RecruiterController],
 })
 export class RecruiterModule {}

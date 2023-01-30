@@ -1,4 +1,4 @@
-import { Transform, Exclude, Expose, plainToClass } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
 export class PayloadDto {
 	type: 'candidate' | 'recruiter' | 'both';
@@ -33,7 +33,13 @@ class CommonPropsDto {
 export class CandidateSessionOutputDto extends CommonPropsDto {}
 
 @Exclude()
-export class RecruiterSessionOutputDto extends CommonPropsDto {}
+export class RecruiterSessionOutputDto extends CommonPropsDto {
+	@Expose()
+	companyID?: string;
+
+	@Expose()
+	companyCNPJ?: string;
+}
 
 @Exclude()
 export class SessionOutputDto {
