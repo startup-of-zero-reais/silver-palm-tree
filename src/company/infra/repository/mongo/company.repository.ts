@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PaginationInterface } from '@/@shared/repository/pagination-interface';
+import PaginationPresenter from '@/candidate/infra/repository/presenter/pagination.presenter';
 import CompanyEntity from '@/company/domain/entity/company.entity';
 import { CompanyRepositoryInterface } from '@/company/domain/repository/company.repository.interface';
 import { Company, CompanyDocument } from './company.model';
@@ -12,9 +13,6 @@ export class CompanyMongoRepository implements CompanyRepositoryInterface {
 		@InjectModel(Company.name)
 		private companyModel: Model<CompanyDocument>,
 	) {}
-	delete(id: string): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
 
 	async findByCnpj(cnpj: string): Promise<CompanyEntity> {
 		const companyDb = await this.companyModel
@@ -41,10 +39,31 @@ export class CompanyMongoRepository implements CompanyRepositoryInterface {
 		return this.toDomain(companyDb);
 	}
 
-	paginate(
+	async paginate(
 		per_page: number,
 		page: number,
 	): Promise<PaginationInterface<CompanyEntity>> {
+		const companiesDb = this.companyModel;
+
+		const [countCompanies, companies] = await Promise.all([
+			await companiesDb.find().countDocuments().exec(),
+			await companiesDb
+				.find()
+				.sort({ createdAt: -1 })
+				.limit(per_page)
+				.skip((page - 1) * per_page)
+				.exec(),
+		]);
+
+		return new PaginationPresenter(
+			companies.map((candidate) => this.toDomain(candidate)),
+			per_page,
+			page,
+			countCompanies,
+		);
+	}
+
+	delete(id: string): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 
