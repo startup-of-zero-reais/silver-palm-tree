@@ -9,6 +9,7 @@ import { FindByCNPJUseCase } from './usecase/find-by-cnpj/find-by-cnpj.usecase';
 import { FindCompanyUseCase } from './usecase/find/find.company.usecase';
 import { ListCompanyUseCase } from './usecase/list/list.company.usecase';
 import { UpdateStatusCompanyUseCase } from './usecase/update-status/update-status.company.usecase';
+import { UpdateCompanyUseCase } from './usecase/update/update.company.usecase';
 
 @Module({
 	imports: [
@@ -23,6 +24,7 @@ import { UpdateStatusCompanyUseCase } from './usecase/update-status/update-statu
 		FindByCNPJUseCase,
 		ListCompanyUseCase,
 		UpdateStatusCompanyUseCase,
+		UpdateCompanyUseCase,
 		//REPOSITORY
 		CompanyMongoRepository,
 		// FACADE,

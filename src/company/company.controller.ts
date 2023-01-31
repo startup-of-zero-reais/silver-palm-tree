@@ -6,6 +6,7 @@ import {
 	Param,
 	Patch,
 	Post,
+	Put,
 	Query,
 	Response,
 } from '@nestjs/common';
@@ -28,6 +29,11 @@ import {
 	UpdateStatusCompanyOutputDto,
 } from './usecase/update-status/update-status.company.dto';
 import { UpdateStatusCompanyUseCase } from './usecase/update-status/update-status.company.usecase';
+import {
+	UpdateCompanyInputDto,
+	UpdateCompanyOutputDto,
+} from './usecase/update/update-company.dto';
+import { UpdateCompanyUseCase } from './usecase/update/update.company.usecase';
 
 @Controller('companies')
 export class CompanyController {
@@ -36,6 +42,7 @@ export class CompanyController {
 		private readonly findCompanyUseCase: FindCompanyUseCase,
 		private readonly listCompanyUseCase: ListCompanyUseCase,
 		private readonly updateStatusCompanyUseCase: UpdateStatusCompanyUseCase,
+		private readonly updateCompanyUseCase: UpdateCompanyUseCase,
 	) {}
 
 	@Post()
@@ -53,6 +60,21 @@ export class CompanyController {
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.json({ error: e.message });
 		}
+	}
+
+	@Put(':id')
+	async update(
+		@Param('id') companyID: string,
+		@Body() updateCompanyInputDto: UpdateCompanyInputDto,
+		@Response() response: eResponse,
+	) {
+		updateCompanyInputDto.id = companyID;
+		const recruiter = await this.updateCompanyUseCase.execute(
+			updateCompanyInputDto,
+		);
+		return response
+			.status(HttpStatus.CREATED)
+			.json(plainToClass(UpdateCompanyOutputDto, recruiter));
 	}
 
 	@Get(':id')
