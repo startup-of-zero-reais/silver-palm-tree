@@ -57,10 +57,11 @@ export default class Company extends Entity {
 	}
 
 	update(props: Omit<Props, 'id' | 'createdAt' | 'updatedAt'>) {
-		const { cnpj, description, logo } = props;
+		const { cnpj, description, logo, status } = props;
 		if (cnpj) this._cnpj = cnpj;
 		if (description) this._description = description;
 		if (logo) this._logo = logo;
+		if (status) this._status = status;
 
 		this.validate();
 		this._updatedAt = new Date();
