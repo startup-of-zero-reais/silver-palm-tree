@@ -16,6 +16,9 @@ export default class CandidateMongoRepository
 		@InjectModel(Entity.name)
 		private candidateModel: Model<CandidateDocument>,
 	) {}
+	delete(id: string): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 
 	async paginate(
 		per_page = 10,

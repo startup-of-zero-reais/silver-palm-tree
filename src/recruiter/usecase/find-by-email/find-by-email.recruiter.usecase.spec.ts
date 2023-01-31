@@ -15,13 +15,14 @@ const recruiter = new Recruiter({
 	status: Status.ACTIVATED,
 });
 
-let MockRepository = (): RecruiterRepositoryInterface => {
+const MockRepository = (): RecruiterRepositoryInterface => {
 	return {
 		findByEmail: jest.fn().mockResolvedValue(recruiter),
 		find: jest.fn(),
 		paginate: jest.fn(),
 		create: jest.fn(),
 		update: jest.fn(),
+		delete: jest.fn(),
 	};
 };
 

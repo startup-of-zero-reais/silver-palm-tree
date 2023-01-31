@@ -14,6 +14,9 @@ export default class RecruiterMongoRepository
 		@InjectModel(Entity.name)
 		private recruiterModel: Model<RecruiterDocument>,
 	) {}
+	delete(id: string): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 
 	async create(entity: Recruiter): Promise<void> {
 		await this.recruiterModel.create({

@@ -16,6 +16,7 @@ const MockRepository = (): CompanyRepositoryInterface => {
 		create: jest.fn(),
 		update: jest.fn(),
 		findByCnpj: jest.fn(),
+		delete: jest.fn(),
 	};
 };
 

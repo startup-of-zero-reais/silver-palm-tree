@@ -12,6 +12,9 @@ export class CompanyMongoRepository implements CompanyRepositoryInterface {
 		@InjectModel(Company.name)
 		private companyModel: Model<CompanyDocument>,
 	) {}
+	delete(id: string): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 
 	async findByCnpj(cnpj: string): Promise<CompanyEntity> {
 		const companyDb = await this.companyModel
