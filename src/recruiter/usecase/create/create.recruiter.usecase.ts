@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import UseCaseInterface from '@/@shared/usecase/use-case.interface';
+import Company from '@/company/domain/entity/company.entity';
 import { CompanyFacade } from '@/company/facade/company.facade';
 import CompanyFacadeInterface from '@/company/facade/company.facade.interface';
 import {
@@ -23,14 +24,29 @@ export class CreateRecruiterUseCase implements UseCaseInterface {
 	async execute(input: CreateInputDto): Promise<Recruiter> {
 		const [recruiterAlreadyExists, _company] = await Promise.all([
 			this.recruiterAlreadyExists(input.email),
-			this.companyFacade.getByCNPJ(input.cnpj),
+			this.companyFacade.getByCNPJ(input.company.cnpj),
 		]);
+
+		let company: Company = _company;
 
 		if (recruiterAlreadyExists) {
 			throw new Error('Recruiter with this email already exists');
 		}
 
-		if (!_company) {
+		if (company && (input.company.description || input.company.logo))
+			throw new Error('Forbidden resource');
+
+		if (!_company && input.company.description && input.company.logo) {
+			company = await this.companyFacade.create(
+				new Company({
+					cnpj: input.company.cnpj,
+					description: input.company.description,
+					logo: input.company.logo,
+				}),
+			);
+		}
+
+		if (!company) {
 			throw new Error('Company not found');
 		}
 
@@ -43,8 +59,8 @@ export class CreateRecruiterUseCase implements UseCaseInterface {
 			password,
 			status: Status.INSPECTION,
 			company: {
-				id: _company.id,
-				cnpj: _company.cnpj,
+				id: company.id,
+				cnpj: company.cnpj,
 			},
 		});
 
