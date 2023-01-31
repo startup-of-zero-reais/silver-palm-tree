@@ -13,12 +13,14 @@ import { ApiBody } from '@nestjs/swagger';
 import { plainToClass } from 'class-transformer';
 import { Request as eRequest, Response as eResponse } from 'express';
 import { LoggedCandidate, LoggedRecruiter } from '@/@shared/decorator';
+import { AuthToken } from '@/@shared/decorator/token.decorator';
 import { Candidate } from '@/candidate/domain';
 import { Recruiter } from '@/recruiter/domain';
 import authConstants from './auth.constants';
 import { AuthTokenGuard } from './usecase/authorization-strategy/token.guard';
 import { LocalAuthGuard } from './usecase/do-login-strategy/local-auth.guard';
 import { LoginInputDto, LoginOkDto } from './usecase/login/login.dto';
+import { LogoutUseCase } from './usecase/logout/logout.usecase';
 import { ManageSessionToken } from './usecase/manage-session-token/manage-session-token.usecase';
 import {
 	SessionOutputDto,
@@ -28,7 +30,10 @@ import {
 
 @Controller('auth')
 export class AuthController {
-	constructor(private readonly manageSessionToken: ManageSessionToken) {}
+	constructor(
+		private readonly manageSessionToken: ManageSessionToken,
+		private readonly logoutUseCase: LogoutUseCase,
+	) {}
 
 	@UseGuards(LocalAuthGuard)
 	@Post('/login')
@@ -89,5 +94,11 @@ export class AuthController {
 			candidate: plainToClass(CandidateSessionOutputDto, candidate),
 			recruiter: plainToClass(RecruiterSessionOutputDto, recruiter),
 		});
+	}
+
+	@UseGuards(AuthTokenGuard)
+	@Post('logout')
+	async logout(@AuthToken() token: string) {
+		return this.logoutUseCase.execute({ token });
 	}
 }

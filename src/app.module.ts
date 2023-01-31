@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_FILTER } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
+import { MainExceptionFilter } from './@shared/exception-filter/http-exception.filter';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -24,6 +26,12 @@ import { RecruiterModule } from './recruiter/recruiter.module';
 		CompanyModule,
 	],
 	controllers: [AppController],
-	providers: [AppService],
+	providers: [
+		{
+			provide: APP_FILTER,
+			useClass: MainExceptionFilter,
+		},
+		AppService,
+	],
 })
 export class AppModule {}
