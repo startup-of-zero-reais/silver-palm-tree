@@ -16,6 +16,15 @@ export class CompanyOutputDto {
 	cnpj: string;
 }
 
+class CompanyInputDto {
+	@IsOptional()
+	logo: string;
+	@IsOptional()
+	description: string;
+	@IsOptional()
+	cnpj: string;
+}
+
 export class CreateInputDto {
 	@IsNotEmpty()
 	name: string;
@@ -32,8 +41,8 @@ export class CreateInputDto {
 	@Length(6, 64)
 	password: string;
 
-	@IsNotEmpty()
-	cnpj: string;
+	@IsOptional()
+	company?: CompanyInputDto;
 }
 
 @Exclude()
