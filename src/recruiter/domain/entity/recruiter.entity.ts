@@ -46,10 +46,11 @@ export default class Recruiter extends BaseUser {
 	}
 
 	update(props: Omit<UpdateProps, NotUpdableProps>): void {
-		const { name, image } = props;
+		const { name, image, status } = props;
 
 		if (name) this._name = name;
 		if (image) this._image = image;
+		if (status) this._status = status;
 
 		this.validate();
 	}
@@ -59,6 +60,10 @@ export default class Recruiter extends BaseUser {
 
 		if (this.notification.hasError())
 			throw new NotificationError(this.notification.getErrors());
+	}
+
+	changeStatus(status: Status): void {
+		this._status = status;
 	}
 
 	get status(): Status {
