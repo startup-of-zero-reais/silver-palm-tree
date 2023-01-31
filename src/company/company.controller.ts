@@ -5,10 +5,12 @@ import {
 	HttpStatus,
 	Param,
 	Post,
+	Query,
 	Response,
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { Response as eResponse } from 'express';
+import NotificationError from '@/@shared/notification/notification.error';
 import { CreateCompanyUseCase } from './usecase/create/create.company.usecase';
 import {
 	CreateCompanyInputDto,
@@ -19,12 +21,14 @@ import {
 	FindCompanyInputDto,
 	FindCompanyOutputDto,
 } from './usecase/find/find.dto';
+import { ListCompanyUseCase } from './usecase/list/list.company.usecase';
 
 @Controller('companies')
 export class CompanyController {
 	constructor(
 		private readonly createCompanyUseCase: CreateCompanyUseCase,
 		private readonly findCompanyUseCase: FindCompanyUseCase,
+		private readonly listCompanyUseCase: ListCompanyUseCase,
 	) {}
 
 	@Post()
@@ -62,6 +66,26 @@ export class CompanyController {
 			return response
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.json({ error: e.message });
+		}
+	}
+
+	@Get()
+	async list(@Response() response: eResponse, @Query() query) {
+		try {
+			const output = await this.listCompanyUseCase.execute({
+				page: query.page,
+				page_size: query.page_size,
+			});
+			return response.status(HttpStatus.OK).json(output);
+		} catch (error) {
+			if (error instanceof NotificationError) {
+				return response
+					.status(HttpStatus.UNPROCESSABLE_ENTITY)
+					.json(error);
+			}
+			return response
+				.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				.json({ message: error.message });
 		}
 	}
 }
