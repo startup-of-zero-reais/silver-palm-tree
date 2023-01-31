@@ -1,6 +1,7 @@
 import {
 	Body,
 	Controller,
+	Delete,
 	Get,
 	HttpStatus,
 	NotFoundException,
@@ -16,6 +17,8 @@ import NotificationError from '@/@shared/notification/notification.error';
 import { ListRecruiterUseCase } from './list/list.recruiter.usecase';
 import { CreateInputDto, CreateOutputDto } from './usecase/create/create.dto';
 import { CreateRecruiterUseCase } from './usecase/create/create.recruiter.usecase';
+import { DeleteRecruiterInputDto } from './usecase/delete/delete.recruiter.dto';
+import { DeleteRecruiterUseCase } from './usecase/delete/delete.recruiter.usecase';
 import {
 	FindRecruiterInputDto,
 	FindRecruiterOutputDto,
@@ -34,6 +37,7 @@ export class RecruiterController {
 		private readonly findRecruiterUseCase: FindRecruiterUseCase,
 		private readonly updateRecruiterUseCase: UpdateRecruiterUseCase,
 		private readonly listRecruiterUseCase: ListRecruiterUseCase,
+		private readonly deleteRecruiterUseCase: DeleteRecruiterUseCase,
 	) {}
 
 	@Post()
@@ -119,6 +123,25 @@ export class RecruiterController {
 			return response
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.json({ message: error.message });
+		}
+	}
+
+	@Delete(':id')
+	async delete(
+		@Param('id') recruiterID: string,
+		@Response() response: eResponse,
+	) {
+		try {
+			const deleteRecruiterInputDto = new DeleteRecruiterInputDto();
+			deleteRecruiterInputDto.id = recruiterID;
+
+			await this.deleteRecruiterUseCase.execute(deleteRecruiterInputDto);
+
+			return response.status(HttpStatus.NO_CONTENT).send();
+		} catch (e) {
+			return response
+				.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				.json({ error: e.message });
 		}
 	}
 }
