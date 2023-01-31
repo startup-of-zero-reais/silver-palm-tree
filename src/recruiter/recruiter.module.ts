@@ -11,6 +11,7 @@ import { RecruiterController } from './recruiter.controller';
 import { CreateRecruiterUseCase } from './usecase/create/create.recruiter.usecase';
 import { FindByEmailRecruiterUseCase } from './usecase/find-by-email/find-by-email.recruiter.usecase';
 import { FindRecruiterUseCase } from './usecase/find/find.recruiter.usecase';
+import { UpdateRecruiterUseCase } from './usecase/update/update.recruiter.usecase';
 
 @Module({
 	imports: [
@@ -26,6 +27,7 @@ import { FindRecruiterUseCase } from './usecase/find/find.recruiter.usecase';
 		CreateRecruiterUseCase,
 		FindRecruiterUseCase,
 		FindByEmailRecruiterUseCase,
+		UpdateRecruiterUseCase,
 		// facade
 		RecruiterFacade,
 	],
