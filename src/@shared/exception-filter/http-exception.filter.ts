@@ -48,7 +48,7 @@ export class MainExceptionFilter implements ExceptionFilter {
 			}
 		}
 
-		return error.message;
+		return;
 	}
 
 	private getError(error: HttpException | HttpErrorException): string {

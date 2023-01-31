@@ -45,21 +45,10 @@ export class RecruiterController {
 		@Body() input: CreateInputDto,
 		@Response() response: eResponse,
 	) {
-		try {
-			const recruiter = await this.createRecruiterUseCase.execute(input);
-			return response
-				.status(HttpStatus.CREATED)
-				.json(plainToClass(CreateOutputDto, recruiter));
-		} catch (e) {
-			if (e instanceof NotFoundException) {
-				return response
-					.status(HttpStatus.NOT_FOUND)
-					.json({ error: e.message });
-			}
-			return response
-				.status(HttpStatus.INTERNAL_SERVER_ERROR)
-				.json({ error: e.message });
-		}
+		const recruiter = await this.createRecruiterUseCase.execute(input);
+		return response
+			.status(HttpStatus.CREATED)
+			.json(plainToClass(CreateOutputDto, recruiter));
 	}
 
 	@Get(':id')

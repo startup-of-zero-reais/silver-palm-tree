@@ -1,4 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpErrorException } from '@/@shared/exception-filter/http-error.exception';
 import UseCaseInterface from '@/@shared/usecase/use-case.interface';
 import Company from '@/company/domain/entity/company.entity';
 import { CompanyFacade } from '@/company/facade/company.facade';
@@ -34,7 +35,10 @@ export class CreateRecruiterUseCase implements UseCaseInterface {
 		}
 
 		if (company && (input.company.description || input.company.logo))
-			throw new Error('Forbidden resource');
+			throw new HttpErrorException(
+				'Forbidden resource',
+				HttpStatus.FORBIDDEN,
+			);
 
 		if (!_company && input.company.description && input.company.logo) {
 			company = await this.companyFacade.create(
