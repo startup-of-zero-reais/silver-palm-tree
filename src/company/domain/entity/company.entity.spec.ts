@@ -1,4 +1,4 @@
-import Company from './company.entity';
+import Company, { Status } from './company.entity';
 
 describe('Domain Company', () => {
 	it('Should create a company', () => {
@@ -6,6 +6,7 @@ describe('Domain Company', () => {
 			description: 'This is a test company',
 			cnpj: '61.662.803/0001-04',
 			logo: 'http://example.com',
+			status: Status.INSPECTION,
 		});
 
 		expect(company.description).toBe('This is a test company');
@@ -20,6 +21,7 @@ describe('Domain Company', () => {
 					cnpj: '',
 					description: '',
 					logo: '',
+					status: Status.INSPECTION,
 				}),
 		).toThrowError(
 			[

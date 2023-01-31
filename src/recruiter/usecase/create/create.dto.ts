@@ -15,6 +15,7 @@ export class CompanyOutputDto {
 	@Expose()
 	cnpj: string;
 }
+
 export class CreateInputDto {
 	@IsNotEmpty()
 	name: string;
@@ -45,6 +46,9 @@ export class CreateOutputDto {
 
 	@Expose()
 	email: string;
+
+	@Expose()
+	status: string;
 
 	@Expose()
 	@Transform(({ obj }) =>

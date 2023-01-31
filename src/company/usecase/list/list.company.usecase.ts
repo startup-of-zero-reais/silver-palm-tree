@@ -25,6 +25,7 @@ export class ListCompanyUseCase implements UseCaseInterface {
 				logo: company.logo,
 				cnpj: company.cnpj,
 				description: company.description,
+				status: company.status,
 				updatedAt: company.updatedAt,
 				createdAt: company.createdAt,
 			})),

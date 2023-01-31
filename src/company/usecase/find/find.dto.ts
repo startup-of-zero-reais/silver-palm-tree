@@ -19,4 +19,7 @@ export class FindCompanyOutputDto {
 
 	@Expose()
 	description: string;
+
+	@Expose()
+	status: string;
 }

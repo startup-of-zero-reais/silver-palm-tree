@@ -26,4 +26,7 @@ export class CreateCompanyOutputDto {
 
 	@Expose()
 	description: string;
+
+	@Expose()
+	status: string;
 }

@@ -1,5 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
+import { Status } from '@/recruiter/domain';
 
 export type CompanyDocument = HydratedDocument<Company>;
 
@@ -16,6 +17,9 @@ export class Company {
 
 	@Prop()
 	description: string;
+
+	@Prop({ enum: Status })
+	status: Status;
 
 	@Prop()
 	createdAt: Date;

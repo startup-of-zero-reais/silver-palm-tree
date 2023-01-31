@@ -19,4 +19,7 @@ export class FindByCNPJCompanyOutputDto {
 
 	@Expose()
 	description: string;
+
+	@Expose()
+	status: string;
 }

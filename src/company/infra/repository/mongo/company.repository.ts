@@ -27,6 +27,7 @@ export class CompanyMongoRepository implements CompanyRepositoryInterface {
 			cnpj: entity.cnpj,
 			logo: entity.logo,
 			description: entity.description,
+			status: entity.status,
 		});
 	}
 
@@ -74,6 +75,7 @@ export class CompanyMongoRepository implements CompanyRepositoryInterface {
 			cnpj: object.cnpj,
 			logo: object.logo,
 			description: object.description,
+			status: object.status,
 			createdAt: object.createdAt,
 			updatedAt: object.updatedAt,
 		});
