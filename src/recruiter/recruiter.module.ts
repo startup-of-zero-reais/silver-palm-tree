@@ -7,6 +7,7 @@ import {
 	RecruiterSchema,
 } from './infra/repository/mongo/recruiter.model';
 import RecruiterMongoRepository from './infra/repository/mongo/recruiter.repository';
+import { ListRecruiterUseCase } from './list/list.recruiter.usecase';
 import { RecruiterController } from './recruiter.controller';
 import { CreateRecruiterUseCase } from './usecase/create/create.recruiter.usecase';
 import { FindByEmailRecruiterUseCase } from './usecase/find-by-email/find-by-email.recruiter.usecase';
@@ -28,6 +29,7 @@ import { UpdateRecruiterUseCase } from './usecase/update/update.recruiter.usecas
 		FindRecruiterUseCase,
 		FindByEmailRecruiterUseCase,
 		UpdateRecruiterUseCase,
+		ListRecruiterUseCase,
 		// facade
 		RecruiterFacade,
 	],
