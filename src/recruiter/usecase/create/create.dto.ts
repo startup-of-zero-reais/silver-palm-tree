@@ -18,9 +18,9 @@ export class CompanyOutputDto {
 
 class CompanyInputDto {
 	@IsOptional()
-	logo: string;
+	logo?: string;
 	@IsOptional()
-	description: string;
+	description?: string;
 	@IsOptional()
 	cnpj: string;
 }

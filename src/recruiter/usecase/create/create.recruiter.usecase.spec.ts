@@ -20,7 +20,9 @@ const input = {
 	email: 'any_email',
 	image: 'http://image.com',
 	password: 'any_password',
-	cnpj: 'any_cnpj',
+	company: {
+		cnpj: 'any',
+	},
 };
 
 const MockRepository = (): RecruiterRepositoryInterface => {
@@ -39,6 +41,7 @@ const MockCompanyFacade = (): CompanyFacadeInterface => {
 		getByCNPJ: jest
 			.fn()
 			.mockReturnValue({ id: 'any_id', cnpj: 'any_cnpj' }),
+		create: jest.fn(),
 	};
 };
 
@@ -71,22 +74,6 @@ describe('Unit test create recruiter usecase', () => {
 
 		await expect(usecase.execute(input)).rejects.toThrow(
 			'Recruiter with this email already exists',
-		);
-	});
-
-	it('Should CreateRecruiterUseCase throws error if company not found', async () => {
-		const MockThrowFacade = (): CompanyFacadeInterface => ({
-			...MockCompanyFacade(),
-			getByCNPJ: jest.fn().mockResolvedValue(undefined),
-		});
-
-		const usecase = new CreateRecruiterUseCase(
-			MockRepository(),
-			MockThrowFacade(),
-		);
-
-		await expect(usecase.execute(input)).rejects.toThrow(
-			'Company not found',
 		);
 	});
 });
