@@ -8,6 +8,7 @@ import { CreateCompanyUseCase } from './usecase/create/create.company.usecase';
 import { FindByCNPJUseCase } from './usecase/find-by-cnpj/find-by-cnpj.usecase';
 import { FindCompanyUseCase } from './usecase/find/find.company.usecase';
 import { ListCompanyUseCase } from './usecase/list/list.company.usecase';
+import { UpdateStatusCompanyUseCase } from './usecase/update-status/update-status.company.usecase';
 
 @Module({
 	imports: [
@@ -21,6 +22,7 @@ import { ListCompanyUseCase } from './usecase/list/list.company.usecase';
 		FindCompanyUseCase,
 		FindByCNPJUseCase,
 		ListCompanyUseCase,
+		UpdateStatusCompanyUseCase,
 		//REPOSITORY
 		CompanyMongoRepository,
 		// FACADE,

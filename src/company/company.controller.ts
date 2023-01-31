@@ -4,6 +4,7 @@ import {
 	Get,
 	HttpStatus,
 	Param,
+	Patch,
 	Post,
 	Query,
 	Response,
@@ -22,6 +23,11 @@ import {
 	FindCompanyOutputDto,
 } from './usecase/find/find.dto';
 import { ListCompanyUseCase } from './usecase/list/list.company.usecase';
+import {
+	UpdateStatusCompanyInputDto,
+	UpdateStatusCompanyOutputDto,
+} from './usecase/update-status/update-status.company.dto';
+import { UpdateStatusCompanyUseCase } from './usecase/update-status/update-status.company.usecase';
 
 @Controller('companies')
 export class CompanyController {
@@ -29,6 +35,7 @@ export class CompanyController {
 		private readonly createCompanyUseCase: CreateCompanyUseCase,
 		private readonly findCompanyUseCase: FindCompanyUseCase,
 		private readonly listCompanyUseCase: ListCompanyUseCase,
+		private readonly updateStatusCompanyUseCase: UpdateStatusCompanyUseCase,
 	) {}
 
 	@Post()
@@ -67,6 +74,21 @@ export class CompanyController {
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.json({ error: e.message });
 		}
+	}
+
+	@Patch(':id')
+	async updateStatus(
+		@Param('id') companyID: string,
+		@Body() updateStatusCompanyInputDto: UpdateStatusCompanyInputDto,
+		@Response() response: eResponse,
+	) {
+		updateStatusCompanyInputDto.id = companyID;
+		const recruiter = await this.updateStatusCompanyUseCase.execute(
+			updateStatusCompanyInputDto,
+		);
+		return response
+			.status(HttpStatus.CREATED)
+			.json(plainToClass(UpdateStatusCompanyOutputDto, recruiter));
 	}
 
 	@Get()
