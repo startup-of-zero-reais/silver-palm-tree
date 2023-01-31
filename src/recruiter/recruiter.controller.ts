@@ -7,10 +7,13 @@ import {
 	Param,
 	Post,
 	Put,
+	Query,
 	Response,
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { Response as eResponse } from 'express';
+import NotificationError from '@/@shared/notification/notification.error';
+import { ListRecruiterUseCase } from './list/list.recruiter.usecase';
 import { CreateInputDto, CreateOutputDto } from './usecase/create/create.dto';
 import { CreateRecruiterUseCase } from './usecase/create/create.recruiter.usecase';
 import {
@@ -30,6 +33,7 @@ export class RecruiterController {
 		private readonly createRecruiterUseCase: CreateRecruiterUseCase,
 		private readonly findRecruiterUseCase: FindRecruiterUseCase,
 		private readonly updateRecruiterUseCase: UpdateRecruiterUseCase,
+		private readonly listRecruiterUseCase: ListRecruiterUseCase,
 	) {}
 
 	@Post()
@@ -52,11 +56,6 @@ export class RecruiterController {
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.json({ error: e.message });
 		}
-	}
-
-	@Get()
-	async list() {
-		return true;
 	}
 
 	@Get(':id')
@@ -100,6 +99,26 @@ export class RecruiterController {
 			return response
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.json({ error: e.message });
+		}
+	}
+
+	@Get()
+	async list(@Response() response: eResponse, @Query() query) {
+		try {
+			const output = await this.listRecruiterUseCase.execute({
+				page: query.page,
+				page_size: query.page_size,
+			});
+			return response.status(HttpStatus.OK).json(output);
+		} catch (error) {
+			if (error instanceof NotificationError) {
+				return response
+					.status(HttpStatus.UNPROCESSABLE_ENTITY)
+					.json(error);
+			}
+			return response
+				.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				.json({ message: error.message });
 		}
 	}
 }
