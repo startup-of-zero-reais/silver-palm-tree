@@ -14,9 +14,7 @@ export class FindByCNPJUseCase implements UseCaseInterface {
 
 	async execute(input: FindByCNPJCompanyInputDto): Promise<Company> {
 		const company = await this.companyRepository.findByCnpj(input.cnpj);
-
-		if (!company) throw new NotFoundException('Company not found');
-
+		if (!company) return null;
 		return company;
 	}
 }

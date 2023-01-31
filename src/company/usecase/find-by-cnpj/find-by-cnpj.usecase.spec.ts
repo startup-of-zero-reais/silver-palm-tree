@@ -40,8 +40,7 @@ describe('Unit test find company usecase', () => {
 			findByCnpj: jest.fn().mockResolvedValue(undefined),
 		});
 		const usecase = new FindByCNPJUseCase(MockThrowRepository());
-		await expect(usecase.execute({ cnpj: 'invalid_cnpj' })).rejects.toThrow(
-			'Company not found',
-		);
+		const output = await usecase.execute({ cnpj: 'any_cnpj' });
+		expect(output).toBeNull();
 	});
 });
