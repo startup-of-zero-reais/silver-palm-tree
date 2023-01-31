@@ -67,6 +67,10 @@ export default class Company extends Entity {
 		this._updatedAt = new Date();
 	}
 
+	changeStatus(status: Status) {
+		this._status = status;
+	}
+
 	validate() {
 		CompanyValidatorFactory.create().validate(this);
 

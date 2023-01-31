@@ -31,8 +31,18 @@ export class CompanyMongoRepository implements CompanyRepositoryInterface {
 		});
 	}
 
-	update(entity: CompanyEntity): Promise<void> {
-		throw new Error('Method not implemented.');
+	async update(entity: CompanyEntity): Promise<void> {
+		await this.companyModel.updateOne(
+			{ _id: entity.id },
+			{
+				$set: {
+					logo: entity.logo,
+					cnpj: entity.cnpj,
+					status: entity.status,
+					description: entity.description,
+				},
+			},
+		);
 	}
 
 	async find(id: string): Promise<CompanyEntity> {
