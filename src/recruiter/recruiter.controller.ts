@@ -4,8 +4,8 @@ import {
 	Delete,
 	Get,
 	HttpStatus,
-	NotFoundException,
 	Param,
+	Patch,
 	Post,
 	Put,
 	Query,
@@ -14,7 +14,6 @@ import {
 import { plainToClass } from 'class-transformer';
 import { Response as eResponse } from 'express';
 import NotificationError from '@/@shared/notification/notification.error';
-import { ListRecruiterUseCase } from './list/list.recruiter.usecase';
 import { CreateInputDto, CreateOutputDto } from './usecase/create/create.dto';
 import { CreateRecruiterUseCase } from './usecase/create/create.recruiter.usecase';
 import { DeleteRecruiterInputDto } from './usecase/delete/delete.recruiter.dto';
@@ -24,6 +23,12 @@ import {
 	FindRecruiterOutputDto,
 } from './usecase/find/find.recruiter.dto';
 import { FindRecruiterUseCase } from './usecase/find/find.recruiter.usecase';
+import { ListRecruiterUseCase } from './usecase/list/list.recruiter.usecase';
+import {
+	UpdateStatusRecruiterInputDto,
+	UpdateStatusRecruiterOutputDto,
+} from './usecase/update-status/update-status.dto';
+import { UpdateStatusRecruiterUseCase } from './usecase/update-status/update-status.usecase';
 import {
 	UpdateRecruiterInputDto,
 	UpdateRecruiterOutputDto,
@@ -38,6 +43,7 @@ export class RecruiterController {
 		private readonly updateRecruiterUseCase: UpdateRecruiterUseCase,
 		private readonly listRecruiterUseCase: ListRecruiterUseCase,
 		private readonly deleteRecruiterUseCase: DeleteRecruiterUseCase,
+		private readonly updateStatusRecruiterUseCase: UpdateStatusRecruiterUseCase,
 	) {}
 
 	@Post()
@@ -49,6 +55,21 @@ export class RecruiterController {
 		return response
 			.status(HttpStatus.CREATED)
 			.json(plainToClass(CreateOutputDto, recruiter));
+	}
+
+	@Patch(':id')
+	async updateStatus(
+		@Param('id') recruiterID: string,
+		@Body() updateStatusRecruiterInputDto: UpdateStatusRecruiterInputDto,
+		@Response() response: eResponse,
+	) {
+		updateStatusRecruiterInputDto.id = recruiterID;
+		const recruiter = await this.updateStatusRecruiterUseCase.execute(
+			updateStatusRecruiterInputDto,
+		);
+		return response
+			.status(HttpStatus.CREATED)
+			.json(plainToClass(UpdateStatusRecruiterOutputDto, recruiter));
 	}
 
 	@Get(':id')
