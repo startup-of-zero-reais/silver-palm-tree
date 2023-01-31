@@ -8,7 +8,7 @@ export class Session {
 	@Prop({ type: mongoose.Types.ObjectId })
 	_id: string;
 
-	@Prop()
+	@Prop({ required: true })
 	token: string;
 
 	@Prop({ index: true })

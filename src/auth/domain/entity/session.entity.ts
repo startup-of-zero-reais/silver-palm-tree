@@ -1,15 +1,25 @@
+import { randomUUID } from 'crypto';
+import { createDate } from '@/@shared/helpers/create-date';
+import { parseTime } from '@/@shared/helpers/parse-time';
+
 export type Props = {
-	id: string;
+	id?: string;
 	token: string;
 	cid?: string;
 	rid?: string;
-	createdAt: string;
+	createdAt?: string;
 };
 
 export default class Session {
 	constructor(private _props: Props) {}
 
 	get id(): string {
+		if (!this._props.id) {
+			this._props.id = Buffer.from(
+				[this._props.cid, this._props.rid].join(':'),
+			).toString('base64');
+		}
+
 		return this._props.id;
 	}
 
@@ -25,31 +35,17 @@ export default class Session {
 		return this._props.rid;
 	}
 
+	get createdAt(): Date {
+		return createDate(this._props.createdAt);
+	}
+
 	isValidSession(): boolean {
-		const expiresIn = this.parseExpirationTime(process.env.SESSION_TIME);
+		const expiresIn = parseTime(process.env.SESSION_TIME);
 		const now = new Date();
 		const createdAt = new Date(this._props.createdAt);
 
 		createdAt.setSeconds(expiresIn);
 
 		return now < createdAt;
-	}
-
-	private parseExpirationTime(env: string): number {
-		const scales = {
-			d: 60 * 60 * 24,
-			m: 60,
-			s: 1,
-		};
-
-		const scale = env.replace(/\d+/, '');
-		const time = Number(env.replace(/[dms]/, ''));
-
-		if (isNaN(time)) {
-			throw new Error('invalid session time env');
-		}
-
-		const timeInS = time * scales[scale];
-		return timeInS;
 	}
 }
