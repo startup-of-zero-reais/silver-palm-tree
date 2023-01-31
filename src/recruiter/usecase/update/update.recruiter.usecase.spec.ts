@@ -1,3 +1,4 @@
+import Company from '@/company/domain/entity/company.entity';
 import {
 	Recruiter,
 	RecruiterRepositoryInterface,
@@ -19,10 +20,14 @@ const input = {
 	id: 'any_id',
 	name: 'name updated',
 	image: 'https://imageimageupdated.com',
-	company: { cnpj: 'any_cnpj', id: 'any_id' },
+	company: new Company({
+		cnpj: '98.668.465/0001-10',
+		description: 'Company description',
+		logo: 'http://logo.com',
+	}),
 };
 
-let MockRepository = (): RecruiterRepositoryInterface => {
+const MockRepository = (): RecruiterRepositoryInterface => {
 	return {
 		findByEmail: jest.fn(),
 		find: jest.fn().mockResolvedValue(recruiter),
@@ -40,8 +45,6 @@ describe('Unit test update recruiter usecase', () => {
 		expect(output.id).toBe(input.id);
 		expect(output.name).toBe(input.name);
 		expect(output.image).toBe(input.image);
-		expect(output.companyCNPJ).toEqual(input.company.cnpj);
-		expect(output.companyID).toEqual(input.company.id);
 	});
 
 	it('Should UpdateRecruiterUseCase throw error not found', async () => {

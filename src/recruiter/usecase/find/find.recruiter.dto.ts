@@ -28,6 +28,11 @@ export class FindRecruiterOutputDto {
 	status: string;
 
 	@Expose()
-	@Transform(({ value }) => plainToClass(CompanyOutputDto, value))
+	@Transform(({ obj }) =>
+		plainToClass(CompanyOutputDto, {
+			id: obj.companyID,
+			cnpj: obj.companyCNPJ,
+		}),
+	)
 	company: CompanyOutputDto;
 }

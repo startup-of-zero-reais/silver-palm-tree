@@ -13,10 +13,6 @@ export class UpdateRecruiterInputDto {
 	@IsNotEmpty()
 	@IsOptional()
 	image: string;
-
-	@IsNotEmpty()
-	@IsOptional()
-	company: any;
 }
 
 @Exclude()
@@ -43,7 +39,12 @@ export class UpdateRecruiterOutputDto {
 	status: string;
 
 	@Expose()
-	@Transform(({ value }) => plainToClass(CompanyOutputDto, value))
+	@Transform(({ obj }) =>
+		plainToClass(CompanyOutputDto, {
+			id: obj.companyID,
+			cnpj: obj.companyCNPJ,
+		}),
+	)
 	company: CompanyOutputDto;
 
 	@Expose()

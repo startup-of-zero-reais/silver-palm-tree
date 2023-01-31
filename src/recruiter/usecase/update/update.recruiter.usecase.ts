@@ -19,10 +19,11 @@ export class UpdateRecruiterUseCase implements UseCaseInterface {
 		}
 
 		recruiter.update({
-			company: input.company,
 			image: input.image,
 			name: input.name,
 		});
+
+		await this.recruiterRepository.update(recruiter);
 
 		return recruiter;
 	}

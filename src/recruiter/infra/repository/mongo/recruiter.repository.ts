@@ -32,7 +32,19 @@ export default class RecruiterMongoRepository
 	}
 
 	async update(entity: Recruiter): Promise<void> {
-		throw new Error('Method update not implemented.');
+		await this.recruiterModel.updateOne(
+			{ _id: entity.id },
+			{
+				$set: {
+					name: entity.name,
+					image: entity.image,
+					company: {
+						id: entity.companyID,
+						cnpj: entity.companyCNPJ,
+					},
+				},
+			},
+		);
 	}
 
 	async find(id: string): Promise<Recruiter> {
