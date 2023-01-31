@@ -18,12 +18,18 @@ import {
 	FindRecruiterOutputDto,
 } from './usecase/find/find.recruiter.dto';
 import { FindRecruiterUseCase } from './usecase/find/find.recruiter.usecase';
+import {
+	UpdateRecruiterInputDto,
+	UpdateRecruiterOutputDto,
+} from './usecase/update/update.dto';
+import { UpdateRecruiterUseCase } from './usecase/update/update.recruiter.usecase';
 
 @Controller('recruiters')
 export class RecruiterController {
 	constructor(
 		private readonly createRecruiterUseCase: CreateRecruiterUseCase,
 		private readonly findRecruiterUseCase: FindRecruiterUseCase,
+		private readonly updateRecruiterUseCase: UpdateRecruiterUseCase,
 	) {}
 
 	@Post()
@@ -74,8 +80,26 @@ export class RecruiterController {
 		}
 	}
 
-	@Put()
-	async update() {
-		return true;
+	@Put(':id')
+	async update(
+		@Param('id') recruiterID: string,
+		@Body() updateRecruiterInputDto: UpdateRecruiterInputDto,
+		@Response() response: eResponse,
+	) {
+		try {
+			updateRecruiterInputDto.id = recruiterID;
+
+			const recruiter = await this.updateRecruiterUseCase.execute(
+				updateRecruiterInputDto,
+			);
+
+			return response
+				.status(HttpStatus.OK)
+				.json(plainToClass(UpdateRecruiterOutputDto, recruiter));
+		} catch (e) {
+			return response
+				.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				.json({ error: e.message });
+		}
 	}
 }
