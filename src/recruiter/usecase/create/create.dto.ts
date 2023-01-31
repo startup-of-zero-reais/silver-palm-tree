@@ -1,4 +1,4 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, plainToClass, Transform } from 'class-transformer';
 import {
 	IsEmail,
 	IsNotEmpty,
@@ -7,6 +7,14 @@ import {
 	Length,
 } from 'class-validator';
 
+@Exclude()
+export class CompanyOutputDto {
+	@Expose()
+	id: string;
+
+	@Expose()
+	cnpj: string;
+}
 export class CreateInputDto {
 	@IsNotEmpty()
 	name: string;
@@ -37,4 +45,13 @@ export class CreateOutputDto {
 
 	@Expose()
 	email: string;
+
+	@Expose()
+	@Transform(({ obj }) =>
+		plainToClass(CompanyOutputDto, {
+			id: obj.companyID,
+			cnpj: obj.companyCNPJ,
+		}),
+	)
+	company: CompanyOutputDto;
 }
