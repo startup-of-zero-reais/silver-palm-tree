@@ -31,6 +31,8 @@ export class ManageSessionToken {
 			subject,
 		);
 
+		await this.sessionRepository.clearExpiredSessions();
+
 		if (session) {
 			return session.token;
 		}
