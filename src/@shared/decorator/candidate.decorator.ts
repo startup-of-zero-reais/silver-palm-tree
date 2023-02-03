@@ -20,8 +20,8 @@ export const LoggedCandidate = createParamDecorator(
 
 		if (['candidate', 'both', undefined].includes(aud))
 			throw new HttpErrorException(
-				'invalid session',
-				HttpStatus.UNAUTHORIZED,
+				'You can not consume this service',
+				HttpStatus.FORBIDDEN,
 			);
 	},
 );
