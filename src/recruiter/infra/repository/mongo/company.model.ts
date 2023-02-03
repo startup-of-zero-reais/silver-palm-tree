@@ -5,11 +5,11 @@ export type CompanyDocument = HydratedDocument<Company>;
 
 @Schema()
 export class Company {
-  @Prop()
-  id: string;
+	@Prop()
+	id: string;
 
-  @Prop()
-  cnpj: string;
+	@Prop()
+	cnpj: string;
 }
 
 export const CompanySchema = SchemaFactory.createForClass(Company);

@@ -7,18 +7,18 @@ import UseCaseInterface from 'src/@shared/usecase/use-case.interface';
 
 @Injectable()
 export default class CandidateFacade implements CandidateFacadeInterface {
-  constructor(
-    @Inject(FindCandidateUsecase)
-    private readonly _find: UseCaseInterface,
-    @Inject(FindCandidateByEmailUsecase)
-    private readonly _findByEmail: UseCaseInterface,
-  ) {}
+	constructor(
+		@Inject(FindCandidateUsecase)
+		private readonly _find: UseCaseInterface,
+		@Inject(FindCandidateByEmailUsecase)
+		private readonly _findByEmail: UseCaseInterface,
+	) {}
 
-  async getByID(id: string): Promise<Candidate> {
-    return await this._find.execute({ id });
-  }
+	async getByID(id: string): Promise<Candidate> {
+		return await this._find.execute({ id });
+	}
 
-  async getByEmail(email: string): Promise<Candidate> {
-    return await this._findByEmail.execute({ email });
-  }
+	async getByEmail(email: string): Promise<Candidate> {
+		return await this._findByEmail.execute({ email });
+	}
 }

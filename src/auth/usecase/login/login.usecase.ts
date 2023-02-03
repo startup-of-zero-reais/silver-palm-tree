@@ -10,41 +10,44 @@ import { LoginInputDto, LoginOkDto } from './login.dto';
 
 @Injectable()
 export class LoginUseCase implements UseCaseInterface {
-  constructor(
-    @Inject(CandidateFacade)
-    private readonly candidateFacade: CandidateFacadeInterface,
+	constructor(
+		@Inject(CandidateFacade)
+		private readonly candidateFacade: CandidateFacadeInterface,
 
-    @Inject(RecruiterFacade)
-    private readonly recruiterFacade: RecruiterFacadeInterface,
-  ) {}
+		@Inject(RecruiterFacade)
+		private readonly recruiterFacade: RecruiterFacadeInterface,
+	) {}
 
-  async execute(input: LoginInputDto): Promise<LoginOkDto> {
-    let [candidate, recruiter] = await Promise.all([
-      // catch to not throw any error, just undefined result
-      this.candidateFacade
-        .getByEmail(input.email)
-        .catch(() => undefined as Candidate),
-      // catch to not throw any error, just undefined result
-      this.recruiterFacade
-        .getByEmail(input.email)
-        .catch(() => undefined as Recruiter),
-    ]);
+	async execute(input: LoginInputDto): Promise<LoginOkDto> {
+		let [candidate, recruiter] = await Promise.all([
+			// catch to not throw any error, just undefined result
+			this.candidateFacade
+				.getByEmail(input.email)
+				.catch(() => undefined as Candidate),
+			// catch to not throw any error, just undefined result
+			this.recruiterFacade
+				.getByEmail(input.email)
+				.catch(() => undefined as Recruiter),
+		]);
 
-    // is candidate and has no valid password
-    if (candidate && !candidate?.valid_password(input.password)) {
-      candidate = undefined;
-    }
+		// is candidate and has no valid password
+		if (candidate && !candidate?.valid_password(input.password)) {
+			candidate = undefined;
+		}
 
-    // is recruiter and has no valid password
-    if (recruiter) {
-      // is recruiter but can not login
-      if (!recruiter.isValidPassword(input.password) || !recruiter.canLogin())
-        recruiter = undefined;
-    }
+		// is recruiter and has no valid password
+		if (recruiter) {
+			// is recruiter but can not login
+			if (
+				!recruiter.isValidPassword(input.password) ||
+				!recruiter.canLogin()
+			)
+				recruiter = undefined;
+		}
 
-    return {
-      candidate,
-      recruiter,
-    };
-  }
+		return {
+			candidate,
+			recruiter,
+		};
+	}
 }

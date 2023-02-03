@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { Candidate } from '@/candidate/domain';
-import { Recruiter } from '@/recruiter/domain';
+import { Session } from '@/auth/domain';
+import { SessionMongoRepository } from '@/auth/infra/repository/mongo/session.repository';
 import { LoginOkDto } from '../login/login.dto';
 
 @Injectable()
@@ -10,6 +10,7 @@ export class ManageSessionToken {
 	constructor(
 		private config: ConfigService,
 		private jwtService: JwtService,
+		private readonly sessionRepository: SessionMongoRepository,
 	) {}
 
 	public async newSessionToken(user: LoginOkDto): Promise<string> {
@@ -22,11 +23,19 @@ export class ManageSessionToken {
 		const recruiterID = user.recruiter?.id || 'None';
 		const candidateID = user.candidate?.id || 'None';
 
-		const subject = Buffer.from(`${recruiterID}:${candidateID}`).toString(
+		const subject = Buffer.from(`${candidateID}:${recruiterID}`).toString(
 			'base64',
 		);
 
-		return this.jwtService.sign(
+		const session = await this.sessionRepository.findBySessionSubject(
+			subject,
+		);
+
+		if (session) {
+			return session.token;
+		}
+
+		const token = this.jwtService.sign(
 			{
 				type,
 				rid: recruiterID,
@@ -40,6 +49,17 @@ export class ManageSessionToken {
 				subject: subject,
 			},
 		);
+
+		await this.sessionRepository.create(
+			new Session({
+				id: subject,
+				token,
+				cid: candidateID,
+				rid: recruiterID,
+			}),
+		);
+
+		return token;
 	}
 }
 

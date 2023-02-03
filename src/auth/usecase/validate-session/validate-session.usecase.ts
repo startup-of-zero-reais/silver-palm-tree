@@ -35,11 +35,15 @@ export class ValidateSessionUseCase implements UseCaseInterface {
 	async execute(input: PayloadDto) {
 		let candidate: Candidate, recruiter: Recruiter;
 		if (['candidate', 'both'].includes(input.aud)) {
-			candidate = await this.candidateFacade.getByID(input.cid);
+			candidate = await this.candidateFacade
+				.getByID(input.cid)
+				.catch(() => undefined);
 		}
 
 		if (['recruiter', 'both'].includes(input.aud)) {
-			recruiter = await this.recruiterFacade.getByID(input.rid);
+			recruiter = await this.recruiterFacade
+				.getByID(input.rid)
+				.catch(() => undefined);
 		}
 
 		if (!candidate && !recruiter) return false;
