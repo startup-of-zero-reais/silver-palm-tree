@@ -1,13 +1,27 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import {
+	createParamDecorator,
+	ExecutionContext,
+	HttpStatus,
+} from '@nestjs/common';
+import { Request } from 'express';
+import { HttpErrorException } from '../exception-filter/http-error.exception';
 
 export const LoggedCandidate = createParamDecorator(
 	(data: unknown, context: ExecutionContext) => {
-		const request = context.switchToHttp().getRequest();
+		const request = context.switchToHttp().getRequest<Request>();
 
-		if (request.user.candidate) {
-			return request.user.candidate;
+		const user: any = request.user;
+
+		if (user.candidate) {
+			return user.candidate;
 		}
 
-		return undefined;
+		const aud = request.header['x-audience'];
+
+		if (['candidate', 'both', undefined].includes(aud))
+			throw new HttpErrorException(
+				'You can not consume this service',
+				HttpStatus.FORBIDDEN,
+			);
 	},
 );

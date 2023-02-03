@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
+import { CacheManager } from '@/@shared/repository/cache.repository';
 import { CandidateModule } from '@/candidate/candidate.module';
 import CandidateFacade from '@/candidate/facade/candidate.facade';
 import { RecruiterFacade } from '@/recruiter/facade/recruiter.facade';
@@ -44,6 +45,7 @@ import { ValidateSessionUseCase } from './usecase/validate-session/validate-sess
 	providers: [
 		// repositories
 		SessionMongoRepository,
+		CacheManager,
 		// facades
 		CandidateFacade,
 		RecruiterFacade,

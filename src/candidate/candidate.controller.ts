@@ -11,7 +11,9 @@ import {
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { Response as eResponse } from 'express';
+import { LoggedCandidate, MustBeAuth } from '@/@shared/decorator';
 import NotificationError from '@/@shared/notification/notification.error';
+import { Candidate } from './domain';
 import CreateCandidateUseCase from './usecase/create/create.candidate.usecase';
 import {
 	CreateCandidateInputDto,
@@ -35,10 +37,16 @@ export class CandidateController {
 		private readonly updateCandidateUseCase: UpdateCandidateUseCase,
 	) {}
 
-	@Get(':id')
-	async findOne(@Param('id') id: string, @Response() response: eResponse) {
+	@Get('/me')
+	@MustBeAuth()
+	async findOne(
+		@LoggedCandidate() candidate: Candidate,
+		@Response() response: eResponse,
+	) {
 		try {
-			const output = await this.findCandidateUseCase.execute({ id: id });
+			const output = await this.findCandidateUseCase.execute({
+				id: candidate.id,
+			});
 
 			return response
 				.status(HttpStatus.OK)
@@ -57,6 +65,7 @@ export class CandidateController {
 	}
 
 	@Get()
+	@MustBeAuth()
 	async list(@Response() response: eResponse, @Query() query) {
 		try {
 			const output = await this.listCandidateUseCase.execute({
@@ -102,14 +111,15 @@ export class CandidateController {
 		}
 	}
 
-	@Put(':id')
+	@Put()
+	@MustBeAuth()
 	async update(
-		@Param('id') id: string,
 		@Body() updateCandidateDto: UpdateCandidateInputDto,
+		@LoggedCandidate() candidate: Candidate,
 		@Response() response: eResponse,
 	) {
 		try {
-			updateCandidateDto.id = id;
+			updateCandidateDto.id = candidate.id;
 			const output = await this.updateCandidateUseCase.execute(
 				updateCandidateDto,
 			);

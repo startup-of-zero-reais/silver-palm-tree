@@ -10,6 +10,9 @@ export class Company {
 
 	@Prop()
 	cnpj: string;
+
+	@Prop({ default: false })
+	isAdmin: boolean;
 }
 
 export const CompanySchema = SchemaFactory.createForClass(Company);

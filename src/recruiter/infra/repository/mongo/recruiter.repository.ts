@@ -30,6 +30,7 @@ export default class RecruiterMongoRepository
 			company: {
 				id: entity.companyID,
 				cnpj: entity.companyCNPJ,
+				isAdmin: entity.isCompanyAdmin,
 			},
 			createdAt: entity.createdAt,
 			updatedAt: entity.updatedAt,

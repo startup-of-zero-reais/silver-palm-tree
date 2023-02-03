@@ -18,6 +18,7 @@ export class CreateCompanyUseCase implements UseCaseInterface {
 			description: input.description,
 			logo: input.logo,
 		});
+
 		await this.companyRepository.create(company);
 
 		return company;

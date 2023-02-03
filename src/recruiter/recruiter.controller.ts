@@ -4,7 +4,6 @@ import {
 	Delete,
 	Get,
 	HttpStatus,
-	Param,
 	Patch,
 	Post,
 	Put,
@@ -13,7 +12,9 @@ import {
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { Response as eResponse } from 'express';
+import { LoggedRecruiter, MustBeAuth } from '@/@shared/decorator';
 import NotificationError from '@/@shared/notification/notification.error';
+import { Recruiter } from './domain';
 import { CreateInputDto, CreateOutputDto } from './usecase/create/create.dto';
 import { CreateRecruiterUseCase } from './usecase/create/create.recruiter.usecase';
 import { DeleteRecruiterInputDto } from './usecase/delete/delete.recruiter.dto';
@@ -57,24 +58,28 @@ export class RecruiterController {
 			.json(plainToClass(CreateOutputDto, recruiter));
 	}
 
-	@Patch(':id')
+	@Patch()
+	@MustBeAuth()
 	async updateStatus(
-		@Param('id') recruiterID: string,
+		@LoggedRecruiter() { id: recruiterID }: Recruiter,
 		@Body() updateStatusRecruiterInputDto: UpdateStatusRecruiterInputDto,
 		@Response() response: eResponse,
 	) {
 		updateStatusRecruiterInputDto.id = recruiterID;
+
 		const recruiter = await this.updateStatusRecruiterUseCase.execute(
 			updateStatusRecruiterInputDto,
 		);
+
 		return response
 			.status(HttpStatus.CREATED)
 			.json(plainToClass(UpdateStatusRecruiterOutputDto, recruiter));
 	}
 
-	@Get(':id')
+	@Get('/me')
+	@MustBeAuth()
 	async fetch(
-		@Param('id') recruiterID: string,
+		@LoggedRecruiter() { id: recruiterID }: Recruiter,
 		@Response() response: eResponse,
 	) {
 		try {
@@ -93,9 +98,10 @@ export class RecruiterController {
 		}
 	}
 
-	@Put(':id')
+	@Put()
+	@MustBeAuth()
 	async update(
-		@Param('id') recruiterID: string,
+		@LoggedRecruiter() { id: recruiterID }: Recruiter,
 		@Body() updateRecruiterInputDto: UpdateRecruiterInputDto,
 		@Response() response: eResponse,
 	) {
@@ -117,6 +123,7 @@ export class RecruiterController {
 	}
 
 	@Get()
+	@MustBeAuth()
 	async list(@Response() response: eResponse, @Query() query) {
 		try {
 			const output = await this.listRecruiterUseCase.execute({
@@ -136,9 +143,10 @@ export class RecruiterController {
 		}
 	}
 
-	@Delete(':id')
+	@Delete()
+	@MustBeAuth()
 	async delete(
-		@Param('id') recruiterID: string,
+		@LoggedRecruiter() { id: recruiterID }: Recruiter,
 		@Response() response: eResponse,
 	) {
 		try {

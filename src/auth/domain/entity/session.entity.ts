@@ -1,4 +1,4 @@
-import { randomUUID } from 'crypto';
+import { addSeconds } from 'date-fns';
 import { createDate } from '@/@shared/helpers/create-date';
 import { parseTime } from '@/@shared/helpers/parse-time';
 
@@ -41,11 +41,12 @@ export default class Session {
 
 	isValidSession(): boolean {
 		const expiresIn = parseTime(process.env.SESSION_TIME);
-		const now = new Date();
 		const createdAt = new Date(this._props.createdAt);
 
-		createdAt.setSeconds(expiresIn);
+		const now = new Date();
 
-		return now < createdAt;
+		const expiresAt = addSeconds(createdAt, expiresIn);
+
+		return now < expiresAt;
 	}
 }

@@ -6,9 +6,11 @@ export class CreateCompanyInputDto {
 	@IsNotEmpty()
 	@IsUrl()
 	logo: string;
+
 	@IsNotEmpty()
 	@IsCNPJ()
 	cnpj: string;
+
 	@IsNotEmpty()
 	description: string;
 }
