@@ -33,7 +33,6 @@ export function cacheTicker() {
 		for (const [key, item] of cache) {
 			if (Date.now() > item.ttl) {
 				cache.delete(key);
-				console.log(`key: ${key} deleted`);
 			}
 		}
 	}, 1000);

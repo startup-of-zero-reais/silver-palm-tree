@@ -32,8 +32,6 @@ export class SessionMongoRepository implements SessionRepositoryInterface {
 	async findByToken(token: string): Promise<Session> {
 		const value = await this.cache.get<Session>(token);
 
-		console.log('Value', value);
-
 		if (!value) {
 			const session = await this.sessionModel
 				.findOne({
