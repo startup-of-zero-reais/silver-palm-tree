@@ -3,7 +3,6 @@ import {
 	Controller,
 	Get,
 	HttpStatus,
-	Param,
 	Patch,
 	Post,
 	Put,
@@ -12,8 +11,9 @@ import {
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { Response as eResponse } from 'express';
-import { MustBeAuth } from '@/@shared/decorator';
+import { LoggedRecruiter, MustBeAuth } from '@/@shared/decorator';
 import NotificationError from '@/@shared/notification/notification.error';
+import { Recruiter } from '@/recruiter/domain';
 import { CreateCompanyUseCase } from './usecase/create/create.company.usecase';
 import {
 	CreateCompanyInputDto,
@@ -53,11 +53,11 @@ export class CompanyController {
 		@Response() response: eResponse,
 	) {
 		try {
-			const recruiter = await this.createCompanyUseCase.execute(input);
+			const company = await this.createCompanyUseCase.execute(input);
 
 			return response
 				.status(HttpStatus.CREATED)
-				.json(plainToClass(CreateCompanyOutputDto, recruiter));
+				.json(plainToClass(CreateCompanyOutputDto, company));
 		} catch (e) {
 			return response
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -65,9 +65,10 @@ export class CompanyController {
 		}
 	}
 
-	@Put(':id')
+	@Put()
+	@MustBeAuth()
 	async update(
-		@Param('id') companyID: string,
+		@LoggedRecruiter() { companyID }: Recruiter,
 		@Body() updateCompanyInputDto: UpdateCompanyInputDto,
 		@Response() response: eResponse,
 	) {
@@ -80,9 +81,10 @@ export class CompanyController {
 			.json(plainToClass(UpdateCompanyOutputDto, recruiter));
 	}
 
-	@Get(':id')
+	@Get('/mine')
+	@MustBeAuth()
 	async fetch(
-		@Param('id') companyID: string,
+		@LoggedRecruiter() { companyID }: Recruiter,
 		@Response() response: eResponse,
 	) {
 		try {
@@ -101,9 +103,10 @@ export class CompanyController {
 		}
 	}
 
-	@Patch(':id')
+	@Patch()
+	@MustBeAuth()
 	async updateStatus(
-		@Param('id') companyID: string,
+		@LoggedRecruiter() { companyID }: Recruiter,
 		@Body() updateStatusCompanyInputDto: UpdateStatusCompanyInputDto,
 		@Response() response: eResponse,
 	) {
@@ -117,6 +120,7 @@ export class CompanyController {
 	}
 
 	@Get()
+	@MustBeAuth()
 	async list(@Response() response: eResponse, @Query() query) {
 		try {
 			const output = await this.listCompanyUseCase.execute({
