@@ -19,6 +19,10 @@ export class CacheManager {
 		cache.set(key, { value, ttl: endTTL });
 	}
 
+	public async del(key: string) {
+		cache.delete(key);
+	}
+
 	public async reset() {
 		cache.clear();
 	}

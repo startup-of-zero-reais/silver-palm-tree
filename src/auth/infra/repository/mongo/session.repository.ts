@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { subSeconds } from 'date-fns';
 import { Model } from 'mongoose';
+import { HttpErrorException } from '@/@shared/exception-filter/http-error.exception';
 import { parseTime } from '@/@shared/helpers/parse-time';
 import { CacheManager } from '@/@shared/repository/cache.repository';
 import { Session } from '@/auth/domain';
@@ -31,6 +32,8 @@ export class SessionMongoRepository implements SessionRepositoryInterface {
 	async findByToken(token: string): Promise<Session> {
 		const value = await this.cache.get<Session>(token);
 
+		console.log('Value', value);
+
 		if (!value) {
 			const session = await this.sessionModel
 				.findOne({
@@ -47,8 +50,14 @@ export class SessionMongoRepository implements SessionRepositoryInterface {
 				})
 				.exec();
 
+			if (!session)
+				throw new HttpErrorException(
+					'invalid session',
+					HttpStatus.UNAUTHORIZED,
+				);
+
 			const domainSession = this.toDomain(session);
-			await this.cache.set(session.token, session, 30);
+			await this.cache.set(session.token, domainSession, 30);
 			return domainSession;
 		}
 
@@ -75,7 +84,7 @@ export class SessionMongoRepository implements SessionRepositoryInterface {
 				.exec();
 
 			const domainSession = this.toDomain(session);
-			await this.cache.set(sub, session, 30);
+			await this.cache.set(sub, domainSession, 30);
 			return domainSession;
 		}
 
@@ -95,6 +104,11 @@ export class SessionMongoRepository implements SessionRepositoryInterface {
 				},
 			})
 			.exec();
+	}
+
+	async invalidateSession(token: string): Promise<void> {
+		await this.sessionModel.deleteOne({ token }).exec();
+		await this.cache.del(token);
 	}
 
 	private toDomain(sessionObject: any): Session {

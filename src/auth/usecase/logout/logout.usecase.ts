@@ -12,13 +12,17 @@ export class LogoutUseCase implements UseCaseInterface {
 	) {}
 
 	async execute(input: LogoutInputDto): Promise<any> {
-		const session = await this.sessionRepository.findByToken(input.token);
+		const session = await this.sessionRepository
+			.findByToken(input.token)
+			.catch(() => undefined);
 
 		if (!session) {
 			return;
 		}
 
-		console.log(session.isValidSession());
+		if (session.isValidSession()) {
+			await this.sessionRepository.invalidateSession(input.token);
+		}
 
 		return;
 	}

@@ -12,7 +12,11 @@ import {
 import { ApiBody } from '@nestjs/swagger';
 import { plainToClass } from 'class-transformer';
 import { Request as eRequest, Response as eResponse } from 'express';
-import { LoggedCandidate, LoggedRecruiter } from '@/@shared/decorator';
+import {
+	LoggedCandidate,
+	LoggedRecruiter,
+	MustBeAuth,
+} from '@/@shared/decorator';
 import { AuthToken } from '@/@shared/decorator/token.decorator';
 import { Candidate } from '@/candidate/domain';
 import { Recruiter } from '@/recruiter/domain';
@@ -68,7 +72,7 @@ export class AuthController {
 		}
 	}
 
-	@UseGuards(AuthTokenGuard)
+	@MustBeAuth()
 	@Get('/me')
 	async whoAmI(
 		@Headers('x-audience') aud: 'recruiter' | 'candidate' | 'both' = 'both',
@@ -96,7 +100,7 @@ export class AuthController {
 		});
 	}
 
-	@UseGuards(AuthTokenGuard)
+	@MustBeAuth()
 	@Post('logout')
 	async logout(@AuthToken() token: string) {
 		return this.logoutUseCase.execute({ token });
