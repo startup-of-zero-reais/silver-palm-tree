@@ -16,7 +16,9 @@ export const LoggedRecruiter = createParamDecorator(
 			return user.recruiter;
 		}
 
-		if (['recruiter', 'both'].includes(request.header['x-audience']))
+		const aud = request.header['x-audience'];
+
+		if (['recruiter', 'both', undefined].includes(aud))
 			throw new HttpErrorException(
 				'invalid session',
 				HttpStatus.UNAUTHORIZED,
