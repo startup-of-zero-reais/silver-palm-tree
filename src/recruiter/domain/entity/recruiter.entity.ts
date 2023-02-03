@@ -19,6 +19,7 @@ export type Props = {
 	company: {
 		id: string;
 		cnpj: string;
+		isAdmin?: boolean;
 	};
 } & BaseUserProps;
 
@@ -28,6 +29,7 @@ export default class Recruiter extends BaseUser {
 	private _status: Status;
 	private _companyID: string;
 	private _companyCNPJ: string;
+	private _isCompanyAdmin: boolean;
 
 	constructor(props: Props) {
 		super(props);
@@ -35,6 +37,7 @@ export default class Recruiter extends BaseUser {
 		this._status = props.status;
 		this._companyID = props.company.id;
 		this._companyCNPJ = props.company.cnpj;
+		this._isCompanyAdmin = props.company.isAdmin ?? false;
 	}
 
 	canLogin(): boolean {
@@ -76,5 +79,9 @@ export default class Recruiter extends BaseUser {
 
 	get companyCNPJ(): string {
 		return this._companyCNPJ;
+	}
+
+	get isCompanyAdmin(): boolean {
+		return this._isCompanyAdmin ?? false;
 	}
 }

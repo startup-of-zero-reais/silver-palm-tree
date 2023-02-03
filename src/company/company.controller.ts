@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { Response as eResponse } from 'express';
+import { MustBeAuth } from '@/@shared/decorator';
 import NotificationError from '@/@shared/notification/notification.error';
 import { CreateCompanyUseCase } from './usecase/create/create.company.usecase';
 import {
@@ -46,12 +47,14 @@ export class CompanyController {
 	) {}
 
 	@Post()
+	@MustBeAuth()
 	async create(
 		@Body() input: CreateCompanyInputDto,
 		@Response() response: eResponse,
 	) {
 		try {
 			const recruiter = await this.createCompanyUseCase.execute(input);
+
 			return response
 				.status(HttpStatus.CREATED)
 				.json(plainToClass(CreateCompanyOutputDto, recruiter));

@@ -11,6 +11,7 @@ export class ValidateCNPJ implements ValidatorConstraintInterface {
 	validate(value: string): boolean | Promise<boolean> {
 		return validatorCNPJ(value);
 	}
+
 	defaultMessage(validationArguments?: ValidationArguments): string {
 		return `${validationArguments.property} is invalid`;
 	}

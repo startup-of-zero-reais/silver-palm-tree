@@ -6,6 +6,7 @@ import {
 	IsUrl,
 	Length,
 } from 'class-validator';
+import { IsCNPJ } from '@/@shared/decorator';
 
 @Exclude()
 export class CompanyOutputDto {
@@ -19,9 +20,12 @@ export class CompanyOutputDto {
 class CompanyInputDto {
 	@IsOptional()
 	logo?: string;
+
 	@IsOptional()
 	description?: string;
+
 	@IsOptional()
+	@IsCNPJ()
 	cnpj: string;
 }
 

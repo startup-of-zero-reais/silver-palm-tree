@@ -40,6 +40,7 @@ export class CreateRecruiterUseCase implements UseCaseInterface {
 				HttpStatus.FORBIDDEN,
 			);
 
+		let isAdmin = false;
 		if (!_company && input.company.description && input.company.logo) {
 			company = await this.companyFacade.create(
 				new Company({
@@ -48,6 +49,8 @@ export class CreateRecruiterUseCase implements UseCaseInterface {
 					logo: input.company.logo,
 				}),
 			);
+
+			isAdmin = true;
 		}
 
 		if (!company) {
@@ -65,6 +68,7 @@ export class CreateRecruiterUseCase implements UseCaseInterface {
 			company: {
 				id: company.id,
 				cnpj: company.cnpj,
+				isAdmin,
 			},
 		});
 
