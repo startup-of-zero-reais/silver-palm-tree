@@ -9,10 +9,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
-      - run: npm install
+      - run: npm install --legacy-peer-deps
       - run: ./node_modules/typescript/bin/tsc --noEmit
       - run: npm run build
-   
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -20,5 +20,5 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
-      - run: npm install
+      - run: npm install --legacy-peer-deps
       - run: make unit_test
