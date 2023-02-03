@@ -37,7 +37,7 @@ export class CandidateController {
 		private readonly updateCandidateUseCase: UpdateCandidateUseCase,
 	) {}
 
-	@Get()
+	@Get('/me')
 	@MustBeAuth()
 	async findOne(
 		@LoggedCandidate() candidate: Candidate,
