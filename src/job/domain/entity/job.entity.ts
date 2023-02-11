@@ -27,7 +27,7 @@ export type State = {
 export default class JobAd extends Entity {
 	private _events: Event[];
 
-	constructor(private _state: State = {} as any) {
+	constructor(private _state: Partial<State> = {} as any) {
 		super(_state?.id, _state?.createdAt, _state?.updatedAt);
 	}
 
@@ -77,6 +77,14 @@ export default class JobAd extends Entity {
 
 	get owner(): string {
 		return this._state.owner;
+	}
+
+	get editors(): string[] {
+		return this._state.editors;
+	}
+
+	get lastEditor(): string {
+		return this._state.editors.at(-1);
 	}
 
 	get version(): number {
