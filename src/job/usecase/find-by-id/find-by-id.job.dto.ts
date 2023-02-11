@@ -2,13 +2,13 @@ import { Exclude, Expose, Transform } from 'class-transformer';
 import { IsUUID } from 'class-validator';
 import { Status } from '@/job/domain/entity/job.entity';
 
-export class FindJobInputDto {
+export class FindJobByIDInputDto {
 	@IsUUID()
 	id: string;
 }
 
 @Exclude()
-export class FindJobOutputDto {
+export class FindJobByIDOutputDto {
 	@Expose()
 	id: string;
 

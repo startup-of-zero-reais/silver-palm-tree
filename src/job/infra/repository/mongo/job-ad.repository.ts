@@ -25,6 +25,7 @@ export class JobAdMongoRepository {
 	) {}
 
 	async getJob(jobAd: { id: string }): Promise<JobAd> {
+		await this.materializeView(jobAd.id);
 		const job = await this.jobAdView.findOne({ _id: jobAd.id }).exec();
 
 		if (!job) {
@@ -37,7 +38,7 @@ export class JobAdMongoRepository {
 	async putEvent(_event: DomainEvent) {
 		const event = EventMapper.toEvent(_event);
 
-		const jobID = _event.data().id;
+		let jobID = _event.data().id;
 
 		if (!jobID)
 			throw new HttpErrorException(
@@ -50,12 +51,13 @@ export class JobAdMongoRepository {
 
 		// only create new job to created action
 		if (!job && _event.action() === 'jobad.created') {
-			await this.jobAdModel.create({
+			const newJob = await this.jobAdModel.create({
 				_id: jobID,
 				events: [event],
-				state: {},
-				__v: 0,
+				__v: -1,
 			});
+
+			jobID = newJob._id;
 		}
 
 		// any action who is not created will update job
@@ -68,14 +70,14 @@ export class JobAdMongoRepository {
 			);
 		}
 
-		await this.materializeView(jobID, job.__v);
+		await this.materializeView(jobID, job?.__v);
 
 		return;
 	}
 
 	private async materializeView(jobID: string, __v = -1) {
 		await this.jobAdModel.aggregate([
-			{ $match: { _id: jobID, __v: { $gt: __v } } },
+			{ $match: { _id: jobID } },
 			{
 				$group: {
 					_id: '$_id',
@@ -102,11 +104,61 @@ export class JobAdMongoRepository {
 
 	private accumulate() {
 		return function (state: Job, events: Event[], __v = 0) {
+			events.sort((a, b) => a.__v - b.__v);
 			for (const event of events) {
-				if (event.data && (__v == 0 || event.__v > __v)) {
-					Object.assign(state, event.data);
-					state.__v = event.__v;
+				// if has no data on event or initial __v of job
+				// is greather than 0 and event __v is less than or equal
+				// job initial __v
+				//
+				// in this case, pass by to the next event
+				if (!event.data || (__v > 0 && event.__v <= __v)) {
+					continue;
 				}
+
+				// to every key in event data we check a lot of conditions
+				for (const k of Object.keys(event.data)) {
+					const data = event.data[k];
+
+					// go to next event data key
+					// data empty
+					if (typeof data === 'undefined') {
+						continue;
+					}
+
+					if (
+						// when has no state prop or has state prop and this
+						// has the same type of data but...
+						(!state[k] || typeof state[k] == typeof data) &&
+						// data can not be an array (type object) or a
+						// object.
+						//
+						// then we set state prop with a primitive value (string,
+						// number, boolean...)
+						typeof data !== 'object'
+					) {
+						state[k] = data;
+						continue;
+					}
+
+					// when state prop and data are objects assign objects
+					if (isObject(state[k]) && isObject(data)) {
+						Object.assign(state[k], data);
+						continue;
+					}
+
+					if (!state[k] && Array.isArray(data)) {
+						state[k] = data;
+						continue;
+					}
+
+					// when state prop is an array. editors as example
+					// if data came as array we need to merge
+					if (Array.isArray(state[k]) && Array.isArray(data)) {
+						state[k].push(...data);
+					}
+				}
+
+				state.__v = event.__v;
 			}
 
 			return state;
@@ -118,4 +170,8 @@ export class JobAdMongoRepository {
 			return finalState ?? {};
 		};
 	}
+}
+
+function isObject(input: any): boolean {
+	return typeof input === 'object' && !Array.isArray(input);
 }

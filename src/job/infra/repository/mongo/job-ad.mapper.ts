@@ -23,11 +23,15 @@ export class JobAdMapper {
 
 	static toData(data: Partial<DomainJobAd>): Job {
 		const job = new Job();
-		job.title = data.title;
-		job.description = data.description;
-		job.salary = data.salary;
-		job.hideSalary = data.isSalaryHidden;
-		job.status = data.status;
+		if (data.title) job.title = data.title;
+		if (data.description) job.description = data.description;
+		if (data.salary) job.salary = data.salary;
+		if (data.isSalaryHidden) job.hideSalary = data.isSalaryHidden;
+		if (data.status) job.status = data.status;
+		if (data.editors) {
+			if (!job.editors) job.editors = [];
+			job.editors.push(...data.editors);
+		}
 
 		return job;
 	}

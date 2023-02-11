@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { JobAdCreatedListener } from './infra/listeners/jobad-created.listener';
+import { JobAdEventListener } from './infra/listeners/jobad-event.listener';
 import {
 	JobAd,
 	JobAdSchema,
@@ -10,7 +10,8 @@ import {
 import { JobAdMongoRepository } from './infra/repository/mongo/job-ad.repository';
 import { JobController } from './job.controller';
 import { CreateJobUseCase } from './usecase/create/create.usecase';
-import { FindJobUseCase } from './usecase/find/find.job.usecase';
+import { FindJobByIDUseCase } from './usecase/find-by-id/find-by-id.job.usecase';
+import { UpdateJobStatusUseCase } from './usecase/update-job-status/update-job-status.usecase';
 
 @Module({
 	imports: [
@@ -27,9 +28,10 @@ import { FindJobUseCase } from './usecase/find/find.job.usecase';
 		JobAdMongoRepository,
 		// services
 		CreateJobUseCase,
-		FindJobUseCase,
+		FindJobByIDUseCase,
+		UpdateJobStatusUseCase,
 		// event listeners
-		JobAdCreatedListener,
+		JobAdEventListener,
 	],
 })
 export class JobModule {}
