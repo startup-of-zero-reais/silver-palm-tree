@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
-import JobAd, { Event, Status } from './job.entity';
+import { Event } from '../events/event';
+import JobAd, { Status } from './job.entity';
 
 const makeJob = () =>
 	new JobAd({
@@ -8,7 +9,7 @@ const makeJob = () =>
 		owner: randomUUID(),
 		salary: 300000,
 		status: Status.INSPECTION,
-		__v: 0,
+		__v: -1,
 	});
 
 describe('Domain > Job', () => {
@@ -19,7 +20,7 @@ describe('Domain > Job', () => {
 		expect(job.title).toBe('Programador Back-end');
 		expect(job.description).toBe('Programador que não dá migué no serviço');
 		expect(job.owner).toBeDefined();
-		expect(job.salary).toBe(`R$\xa03.000,00`); // \xa0 is the space char
+		expect(job.salaryStr).toBe(`R$\xa03.000,00`); // \xa0 is the space char
 		expect(job.status).toBe(Status.INSPECTION);
 	});
 
@@ -27,30 +28,25 @@ describe('Domain > Job', () => {
 		const job = makeJob();
 
 		const events: Event[] = [
-			{
-				action: 'jobad.created',
-				data: { status: Status.INSPECTION, title: 'Programador C#' },
-			},
-			{
-				action: 'jobad.activated',
-				data: { status: Status.ACTIVATED },
-			},
-			{
-				action: 'jobad.updated',
-				data: { title: 'Programador PHP' },
-			},
-			{
-				action: 'jobad.updated',
-				data: { description: 'Descrição da vaga atualizada' },
-			},
+			new Event(
+				'jobad.created',
+				{ status: Status.INSPECTION, title: 'Programador C#' },
+				0,
+			),
+			new Event('jobad.activated', { status: Status.ACTIVATED }, 1),
+			new Event('jobad.updated', { title: 'Programador PHP' }, 2),
+			new Event(
+				'jobad.updated',
+				{ description: 'Descrição da vaga atualizada' },
+				3,
+			),
 		];
 
-		job.putEvents(...events);
-		job.compileEvents();
+		job.putEvents(...events).compileEvents();
 
 		expect(job.title).toBe('Programador PHP');
 		expect(job.status).toBe(Status.ACTIVATED);
 		expect(job.description).toBe('Descrição da vaga atualizada');
-		expect(job.version).toBe(events.length);
+		expect(job.version).toBe(events.length - 1);
 	});
 });
