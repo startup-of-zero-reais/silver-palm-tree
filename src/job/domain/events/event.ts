@@ -5,7 +5,7 @@ export class Event extends Entity {
 	constructor(
 		private readonly _action: string,
 		private readonly _data: Partial<JobAd>,
-		private readonly _version: number = 0,
+		private _version: number = 0,
 	) {
 		super(_data.id);
 	}
@@ -20,5 +20,9 @@ export class Event extends Entity {
 
 	public version(): number {
 		return this._version;
+	}
+
+	set __v(__v: number) {
+		this._version = __v;
 	}
 }
