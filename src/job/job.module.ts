@@ -14,9 +14,10 @@ import { FindJobUseCase } from './usecase/find/find.job.usecase';
 
 @Module({
 	imports: [
-		// schemas
-		MongooseModule.forFeature([{ name: JobAd.name, schema: JobAdSchema }]),
 		MongooseModule.forFeature([
+			// entity
+			{ name: JobAd.name, schema: JobAdSchema },
+			// view
 			{ name: JobAdView.name, schema: JobAdViewSchema },
 		]),
 	],
