@@ -25,7 +25,6 @@ export class JobAdCreatedEvent extends Event {
 				owner: props.owner,
 				status: Status.INSPECTION,
 			}),
-			0,
 		);
 	}
 }

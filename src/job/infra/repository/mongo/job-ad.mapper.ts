@@ -6,15 +6,15 @@ export class JobAdMapper {
 	static toDomain(data: Partial<JobAdView>): JobAd {
 		const state: State = {
 			id: data._id,
-			title: data.state.title,
-			description: data.state.description,
-			salary: data.state.salary,
-			hideSalary: data.state.hideSalary,
-			status: data.state.status,
-			owner: data.state.owner,
-			editors: data.state.editors,
-			createdAt: data.state.createdAt,
-			updatedAt: data.state.updatedAt,
+			title: data.title,
+			description: data.description,
+			salary: data.salary,
+			hideSalary: data.hideSalary,
+			status: data.status,
+			owner: data.owner,
+			editors: data.editors,
+			createdAt: data.createdAt,
+			updatedAt: data.updatedAt,
 			__v: data.__v,
 		} as any;
 
@@ -44,8 +44,10 @@ export class JobAdMapper {
 		if (data.salary) job.salary = data.salary;
 		if (data.isSalaryHidden) job.hideSalary = data.isSalaryHidden;
 		if (data.status) job.status = data.status;
+		if (data.editors) job.editors = data.editors;
 		if (data.createdAt) job.createdAt = data.createdAt;
 		if (data.updatedAt) job.updatedAt = data.updatedAt;
+		if (data.version) job.__v = data.version;
 
 		return job;
 	}

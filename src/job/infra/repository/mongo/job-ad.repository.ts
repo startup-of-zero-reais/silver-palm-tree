@@ -26,7 +26,7 @@ export class JobAdMongoRepository {
 
 	async getJob(jobAd: { id: string }): Promise<JobAd> {
 		await this.materializeView(jobAd.id);
-		const job = await this.jobAdView.findOne({ _id: jobAd.id }).exec();
+		const job = await this.jobAdView.findById(jobAd.id).exec();
 
 		if (!job) {
 			return null;
@@ -70,33 +70,57 @@ export class JobAdMongoRepository {
 			);
 		}
 
-		await this.materializeView(jobID, job?.__v);
+		await this.materializeView(jobID);
 
 		return;
 	}
 
-	private async materializeView(jobID: string, __v = -1) {
+	private async materializeView(jobID: string) {
+		const [jobHistory, viewJobResult] = await Promise.all([
+			this.jobAdModel.findById(jobID).exec(),
+			this.jobAdView.findById(jobID).exec(),
+		]);
+
+		// if has no history do nothing. The job does not exists
+		if (!jobHistory) return;
+
+		let viewJob = new Job(); // initialize viewJob
+		// if already exists viewJobResult define viewJob with current
+		// view state
+		if (viewJobResult) viewJob = viewJobResult;
+
+		// initialize events to compile
+		let events: DomainEvent[] = [];
+		for (const event of jobHistory.events) {
+			// only append new events, who has not compiled yet
+			if (viewJob.__v < event.__v || viewJob.__v == 0)
+				events.push(EventMapper.toDomain(event));
+		}
+
+		// if has no events to compile just ignore new materialize
+		if (events.length == 0) return;
+		// sort events ASC by event version (__v)
+		events = events.sort((a, b) => a.__v - b.__v);
+
+		const job = new JobAd();
+		job.putEvents(...events).compileEvents();
+
+		// materialize state
+		const materializedState = JobAdMapper.toState(job);
+		// removes immutable _id from materialized state
+		// _id should never be updated
+		delete materializedState._id;
+
+		// materialize it on jobAdView collection
 		await this.jobAdModel.aggregate([
 			{ $match: { _id: jobID } },
-			{
-				$group: {
-					_id: '$_id',
-					state: {
-						$accumulator: {
-							init: this.dumbStep(),
-							accumulateArgs: ['$events', '$__v'],
-							accumulate: this.accumulate(),
-							merge: this.dumbStep(),
-							lang: 'js',
-						},
-					},
-				},
-			},
+			{ $group: { _id: '$_id' } },
+			{ $set: materializedState },
 			{
 				$merge: {
-					into: 'jobads_view',
-					whenMatched: 'replace',
+					into: this.jobAdView.collection.collectionName,
 					whenNotMatched: 'insert',
+					whenMatched: 'replace',
 				},
 			},
 		]);

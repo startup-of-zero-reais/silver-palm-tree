@@ -5,9 +5,10 @@ export class Event extends Entity {
 	constructor(
 		private readonly _action: string,
 		private readonly _data: Partial<JobAd>,
+		readonly _createdAt: Date = new Date(),
 		private _version: number = 0,
 	) {
-		super(_data.id);
+		super(_data.id, _createdAt, _data.createdAt);
 	}
 
 	public action(): string {

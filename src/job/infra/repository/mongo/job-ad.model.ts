@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Type } from 'class-transformer';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Status } from '@/job/domain/entity/job.entity';
 
@@ -36,7 +35,7 @@ export class Job {
 	updatedAt?: Date;
 
 	@Prop()
-	__v?: number;
+	__v?: number = 0;
 }
 
 @Schema()
@@ -66,13 +65,10 @@ export class JobAd {
 	__v?: number;
 }
 
-@Schema({ collection: 'jobads_view', autoCreate: false })
-export class JobAdView extends JobAd {
+@Schema({ collection: 'jobads_view', autoCreate: true })
+export class JobAdView extends Job {
 	@Prop({ type: mongoose.Types.ObjectId })
 	_id: string;
-
-	@Prop(Job)
-	state: Job;
 }
 
 export type JobDocument = HydratedDocument<Job>;

@@ -7,6 +7,7 @@ export class EventMapper {
 		const event = new Event(
 			schemaEvent.action,
 			schemaEvent.data,
+			schemaEvent.createdAt,
 			schemaEvent.__v,
 		);
 

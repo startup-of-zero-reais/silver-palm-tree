@@ -80,7 +80,7 @@ export default class JobAd extends Entity {
 	}
 
 	get editors(): string[] {
-		return this._state.editors;
+		return this._state.editors ?? [];
 	}
 
 	get lastEditor(): string {
@@ -98,26 +98,35 @@ export default class JobAd extends Entity {
 		return this;
 	}
 
-	private updateState(data: Partial<JobAd>) {
+	public addEditors(...editors: string[]) {
+		if (!this._state.editors) this._state.editors = [];
+		this._state.editors.push(...editors);
+	}
+
+	private updateState(data: Partial<Omit<JobAd, 'createdAt' | 'updatedAt'>>) {
 		if (data.id) this._state.id = data.id;
 		if (data.title) this._state.title = data.title;
 		if (data.description) this._state.description = data.description;
 		if (data.status) this._state.status = data.status;
 		if (data.salary) this._state.salary = data.salary;
-		this._state.hideSalary = data.isSalaryHidden ?? false;
+		if (typeof data.isSalaryHidden === 'boolean')
+			this._state.hideSalary = data.isSalaryHidden ?? false;
 		if (data.owner) this._state.owner = data.owner;
-		if (data.createdAt) this._createdAt = data.createdAt;
-		if (data.updatedAt) this._createdAt = data.updatedAt;
+		if (data.editors) this.addEditors(...data.editors);
 	}
 
 	public compileEvents() {
-		const createdAtOriginal = structuredClone(this._createdAt);
+		let createdAtOriginal = structuredClone(this._createdAt);
 
 		for (const event of this._events) {
+			// to first event we set up createdAt date
+			if (event.version() == 0)
+				createdAtOriginal = structuredClone(event.createdAt);
+
 			// bypass past versions
 			if (event.version() <= this._state.__v) continue;
 
-			const updatedAt = structuredClone(event.data().createdAt);
+			const updatedAt = structuredClone(event.createdAt);
 
 			this.updateState(event.data());
 
