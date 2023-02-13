@@ -26,6 +26,12 @@ export class FindJobByIDOutputDto {
 	status: Status;
 
 	@Expose()
+	owner: string;
+
+	@Expose()
+	editors: string[];
+
+	@Expose()
 	createdAt: Date;
 
 	@Expose()

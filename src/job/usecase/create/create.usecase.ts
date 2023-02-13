@@ -19,6 +19,6 @@ export class CreateJobUseCase implements UseCaseInterface {
 
 		await this.dispatcher.emitAsync(JobAdCreatedEvent.action, event);
 
-		return;
+		return { id: event.data().id };
 	}
 }
