@@ -26,7 +26,8 @@ export class JobAdMapper {
 		if (data.title) job.title = data.title;
 		if (data.description) job.description = data.description;
 		if (data.salary) job.salary = data.salary;
-		if (data.isSalaryHidden) job.hideSalary = data.isSalaryHidden;
+		if (typeof data.isSalaryHidden !== 'undefined')
+			job.hideSalary = data.isSalaryHidden;
 		if (data.status) job.status = data.status;
 		if (data.owner) job.owner = data.owner;
 		if (data.editors) {
@@ -43,7 +44,8 @@ export class JobAdMapper {
 		if (data.title) job.title = data.title;
 		if (data.description) job.description = data.description;
 		if (data.salary) job.salary = data.salary;
-		if (data.isSalaryHidden) job.hideSalary = data.isSalaryHidden;
+		if (typeof data.isSalaryHidden !== 'undefined')
+			job.hideSalary = data.isSalaryHidden;
 		if (data.status) job.status = data.status;
 		if (data.owner) job.owner = data.owner;
 		if (data.editors) job.editors = data.editors;

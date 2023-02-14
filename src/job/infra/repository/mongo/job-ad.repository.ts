@@ -2,8 +2,9 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { HttpErrorException } from '@/@shared/exception-filter/http-error.exception';
-import JobAd from '@/job/domain/entity/job.entity';
+import JobAd, { Status } from '@/job/domain/entity/job.entity';
 import { Event as DomainEvent } from '@/job/domain/events/event';
+import PaginationPresenter from '../presenter/pagination.presenter';
 import { EventMapper } from './event.mapper';
 import { JobAdMapper } from './job-ad.mapper';
 import {
@@ -33,6 +34,27 @@ export class JobAdMongoRepository {
 		}
 
 		return JobAdMapper.toDomain(job);
+	}
+
+	async paginate(page = 1, per_page = 30) {
+		const [total, jobs] = await Promise.all([
+			await this.jobAdView
+				.find({ status: { $eq: Status.ACTIVATED } })
+				.countDocuments(),
+
+			await this.jobAdView
+				.find({ status: { $eq: Status.ACTIVATED } })
+				.sort({ createdAt: -1 })
+				.limit(per_page)
+				.skip((page - 1) * per_page),
+		]);
+
+		return new PaginationPresenter(
+			jobs.map(JobAdMapper.toDomain),
+			total,
+			per_page,
+			page,
+		);
 	}
 
 	async putEvent(_event: DomainEvent) {
@@ -102,7 +124,7 @@ export class JobAdMongoRepository {
 		// sort events ASC by event version (__v)
 		events = events.sort((a, b) => a.__v - b.__v);
 
-		const job = new JobAd();
+		const job = new JobAd(viewJob);
 		job.putEvents(...events).compileEvents();
 
 		// materialize state

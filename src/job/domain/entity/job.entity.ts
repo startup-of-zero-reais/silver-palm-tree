@@ -100,7 +100,9 @@ export default class JobAd extends Entity {
 
 	public addEditors(...editors: string[]) {
 		if (!this._state.editors) this._state.editors = [];
-		this._state.editors.push(...editors);
+
+		const uniqEditors = new Set([...this._state.editors, ...editors]);
+		this._state.editors = [...uniqEditors];
 	}
 
 	private updateState(data: Partial<Omit<JobAd, 'createdAt' | 'updatedAt'>>) {

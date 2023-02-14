@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Get,
+	Param,
+	Patch,
+	Post,
+	Put,
+	Query,
+} from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { LoggedRecruiter, MustBeAuth } from '@/@shared/decorator';
 import { Recruiter } from '@/recruiter/domain';
@@ -10,19 +19,22 @@ import {
 	FindJobByIDOutputDto,
 } from './usecase/find-by-id/find-by-id.job.dto';
 import { FindJobByIDUseCase } from './usecase/find-by-id/find-by-id.job.usecase';
+import { ListJobsInputDTO, ListJobsOutputDTO } from './usecase/list/list.dto';
+import { ListJobsUseCase } from './usecase/list/list.usecase';
 import { UpdateJobStatusInputDto } from './usecase/update-job-status/update-job-status.dto';
 import { UpdateJobStatusUseCase } from './usecase/update-job-status/update-job-status.usecase';
 
 @Controller('jobs')
-@MustBeAuth()
 export class JobController {
 	constructor(
 		private readonly createJobUseCase: CreateJobUseCase,
 		private readonly findJobUseCase: FindJobByIDUseCase,
 		private readonly updateJobStatusUseCase: UpdateJobStatusUseCase,
+		private readonly listJobUseCase: ListJobsUseCase,
 	) {}
 
 	@Post()
+	@MustBeAuth()
 	async create(
 		@LoggedRecruiter() recruiter: Recruiter,
 		@Body() input: CreateJobInputDto,
@@ -40,7 +52,14 @@ export class JobController {
 		return plainToClass(FindJobByIDOutputDto, job);
 	}
 
+	@Get()
+	async getJobs(@Query() search: ListJobsInputDTO) {
+		const result = await this.listJobUseCase.execute(search);
+		return plainToClass(ListJobsOutputDTO, result);
+	}
+
 	@Patch(':id/activate')
+	@MustBeAuth()
 	async activateJob(
 		@LoggedRecruiter() recruiter: Recruiter,
 		@Param('id') id: string,

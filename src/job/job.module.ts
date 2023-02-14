@@ -11,6 +11,7 @@ import { JobAdMongoRepository } from './infra/repository/mongo/job-ad.repository
 import { JobController } from './job.controller';
 import { CreateJobUseCase } from './usecase/create/create.usecase';
 import { FindJobByIDUseCase } from './usecase/find-by-id/find-by-id.job.usecase';
+import { ListJobsUseCase } from './usecase/list/list.usecase';
 import { UpdateJobStatusUseCase } from './usecase/update-job-status/update-job-status.usecase';
 
 @Module({
@@ -30,6 +31,7 @@ import { UpdateJobStatusUseCase } from './usecase/update-job-status/update-job-s
 		CreateJobUseCase,
 		FindJobByIDUseCase,
 		UpdateJobStatusUseCase,
+		ListJobsUseCase,
 		// event listeners
 		JobAdEventListener,
 	],
