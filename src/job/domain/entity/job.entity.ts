@@ -64,7 +64,7 @@ export default class JobAd extends Entity {
 	}
 
 	get isSalaryHidden(): boolean {
-		return this._state.hideSalary ?? false;
+		return this._state.hideSalary;
 	}
 
 	get description(): string {
@@ -72,7 +72,7 @@ export default class JobAd extends Entity {
 	}
 
 	get status(): Status {
-		return this._state.status ?? Status.DEACTIVATED;
+		return this._state.status;
 	}
 
 	get owner(): string {
@@ -126,7 +126,8 @@ export default class JobAd extends Entity {
 				createdAtOriginal = structuredClone(event.createdAt);
 
 			// bypass past versions
-			if (event.version() <= this._state.__v) continue;
+			if (event.version() <= this._state.__v && event.version() > 0)
+				continue;
 
 			const updatedAt = structuredClone(event.createdAt);
 
