@@ -5,7 +5,8 @@ import {
 	Transform,
 	Type,
 } from 'class-transformer';
-import { IsNumber } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { TruncateAfter } from '@/@shared/decorator';
 import { PaginationInterface } from '@/@shared/repository/pagination-interface';
 
 export class ListJobsInputDTO {
@@ -15,6 +16,10 @@ export class ListJobsInputDTO {
 	@Type(() => Number)
 	@IsNumber()
 	per_page = 30;
+
+	@IsOptional()
+	@IsString()
+	search?: string;
 }
 
 @Exclude()
@@ -57,6 +62,7 @@ export class JobOutputDTO {
 	@Expose()
 	title: string;
 	@Expose()
+	@TruncateAfter(140)
 	description: string;
 	@Expose()
 	@Transform(({ obj }) => obj.salaryStr)

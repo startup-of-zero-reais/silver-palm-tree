@@ -11,6 +11,10 @@ export class ListJobsUseCase implements UseCaseInterface {
 	) {}
 
 	async execute(input: ListJobsInputDTO): Promise<any> {
-		return this.repository.paginate(input.page, input.per_page);
+		return this.repository.paginate(
+			input.page,
+			input.per_page,
+			input.search,
+		);
 	}
 }
