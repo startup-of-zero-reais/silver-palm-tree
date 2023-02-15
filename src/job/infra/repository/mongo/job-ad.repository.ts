@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model, ProjectionType, SortOrder } from 'mongoose';
 import { HttpErrorException } from '@/@shared/exception-filter/http-error.exception';
 import JobAd, { Status } from '@/job/domain/entity/job.entity';
 import { Event as DomainEvent } from '@/job/domain/events/event';
@@ -8,13 +8,14 @@ import PaginationPresenter from '../presenter/pagination.presenter';
 import { EventMapper } from './event.mapper';
 import { JobAdMapper } from './job-ad.mapper';
 import {
-	Event,
 	Job,
 	JobAd as JobAdEntity,
 	JobAdDocument,
 	JobAdView,
 	JobAdViewDocument,
 } from './job-ad.model';
+
+type Sorter = { [key: string]: SortOrder | { $meta: 'textScore' } };
 
 @Injectable()
 export class JobAdMongoRepository {
@@ -36,15 +37,40 @@ export class JobAdMongoRepository {
 		return JobAdMapper.toDomain(job);
 	}
 
-	async paginate(page = 1, per_page = 30) {
+	async paginate(page = 1, per_page = 30, search = '') {
+		let filterQuery: FilterQuery<JobAdViewDocument> = {
+			status: { $eq: Status.ACTIVATED },
+		};
+
+		let projection: ProjectionType<JobAdViewDocument> = undefined;
+
+		const sorter: Sorter = {
+			createdAt: 'desc',
+		};
+
+		if (search) {
+			filterQuery = {
+				$and: [
+					{ status: { $eq: Status.ACTIVATED } },
+					{ $text: { $search: search } },
+				],
+			};
+
+			// project a score field based on textScore search
+			projection = {
+				score: { $meta: 'textScore' },
+			};
+
+			// add score as sorter, to better search matching
+			Object.assign({ score: { $meta: 'textScore' } });
+		}
+
 		const [total, jobs] = await Promise.all([
-			await this.jobAdView
-				.find({ status: { $eq: Status.ACTIVATED } })
-				.countDocuments(),
+			await this.jobAdView.find(filterQuery, projection).countDocuments(),
 
 			await this.jobAdView
-				.find({ status: { $eq: Status.ACTIVATED } })
-				.sort({ createdAt: -1 })
+				.find(filterQuery, projection)
+				.sort(sorter)
 				.limit(per_page)
 				.skip((page - 1) * per_page),
 		]);
@@ -124,7 +150,7 @@ export class JobAdMongoRepository {
 		// sort events ASC by event version (__v)
 		events = events.sort((a, b) => a.__v - b.__v);
 
-		const job = new JobAd(viewJob);
+		const job = new JobAd(JobAdMapper.toState(viewJob));
 		job.putEvents(...events).compileEvents();
 
 		// materialize state
@@ -147,77 +173,4 @@ export class JobAdMongoRepository {
 			},
 		]);
 	}
-
-	private accumulate() {
-		return function (state: Job, events: Event[], __v = 0) {
-			events.sort((a, b) => a.__v - b.__v);
-			for (const event of events) {
-				// if has no data on event or initial __v of job
-				// is greather than 0 and event __v is less than or equal
-				// job initial __v
-				//
-				// in this case, pass by to the next event
-				if (!event.data || (__v > 0 && event.__v <= __v)) {
-					continue;
-				}
-
-				// to every key in event data we check a lot of conditions
-				for (const k of Object.keys(event.data)) {
-					const data = event.data[k];
-
-					// go to next event data key
-					// data empty
-					if (typeof data === 'undefined') {
-						continue;
-					}
-
-					if (
-						// when has no state prop or has state prop and this
-						// has the same type of data but...
-						(!state[k] || typeof state[k] == typeof data) &&
-						// data can not be an array (type object) or a
-						// object.
-						//
-						// then we set state prop with a primitive value (string,
-						// number, boolean...)
-						typeof data !== 'object'
-					) {
-						state[k] = data;
-						continue;
-					}
-
-					// when state prop and data are objects assign objects
-					if (isObject(state[k]) && isObject(data)) {
-						Object.assign(state[k], data);
-						continue;
-					}
-
-					if (!state[k] && Array.isArray(data)) {
-						state[k] = data;
-						continue;
-					}
-
-					// when state prop is an array. editors as example
-					// if data came as array we need to merge
-					if (Array.isArray(state[k]) && Array.isArray(data)) {
-						state[k].push(...data);
-					}
-				}
-
-				state.__v = event.__v;
-			}
-
-			return state;
-		};
-	}
-
-	private dumbStep() {
-		return function (finalState) {
-			return finalState ?? {};
-		};
-	}
-}
-
-function isObject(input: any): boolean {
-	return typeof input === 'object' && !Array.isArray(input);
 }
