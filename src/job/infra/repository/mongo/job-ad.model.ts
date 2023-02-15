@@ -65,7 +65,7 @@ export class JobAd {
 	__v?: number;
 }
 
-@Schema({ collection: 'jobads_view', autoCreate: true })
+@Schema({ collection: 'jobads_view' })
 export class JobAdView extends Job {
 	@Prop({ type: mongoose.Types.ObjectId })
 	_id: string;
@@ -80,3 +80,14 @@ export const JobSchema = SchemaFactory.createForClass(Job);
 export const EventSchema = SchemaFactory.createForClass(Event);
 export const JobAdSchema = SchemaFactory.createForClass(JobAd);
 export const JobAdViewSchema = SchemaFactory.createForClass(JobAdView);
+
+JobAdViewSchema.index(
+	{ title: 'text', description: 'text' },
+	{
+		weights: {
+			title: 5,
+			description: 3,
+		},
+		name: 'search_idx',
+	},
+);
