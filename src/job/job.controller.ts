@@ -42,6 +42,7 @@ export class JobController {
 		@Body() input: CreateJobInputDto,
 	) {
 		input.owner = recruiter.id;
+		input.companyID = recruiter.companyID;
 		return this.createJobUseCase.execute(input);
 	}
 

@@ -1,4 +1,5 @@
 import Entity from '@/@shared/entity/entity.abstract';
+import Company from '@/company/domain/entity/company.entity';
 import { Event } from '../events/event';
 
 export enum Status {
@@ -19,6 +20,8 @@ export type State = {
 	status: Status;
 	owner: string;
 	editors?: string[];
+	companyID: string;
+	company?: Company;
 	createdAt?: Date;
 	updatedAt?: Date;
 	__v?: number;
@@ -83,12 +86,25 @@ export default class JobAd extends Entity {
 		return this._state.editors ?? [];
 	}
 
+	get companyID(): string {
+		return this._state.companyID;
+	}
+
+	get company(): Company {
+		return this._state.company;
+	}
+
 	get lastEditor(): string {
 		return this._state.editors.at(-1);
 	}
 
 	get version(): number {
 		return this._state.__v ?? 0;
+	}
+
+	public attachCompany(company: Company): JobAd {
+		this._state.company = company;
+		return this;
 	}
 
 	public putEvents(...events: Event[]) {
@@ -115,6 +131,7 @@ export default class JobAd extends Entity {
 			this._state.hideSalary = data.isSalaryHidden ?? false;
 		if (data.owner) this._state.owner = data.owner;
 		if (data.editors) this.addEditors(...data.editors);
+		if (data.companyID) this._state.companyID = data.companyID;
 	}
 
 	public compileEvents() {

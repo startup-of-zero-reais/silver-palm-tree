@@ -29,6 +29,9 @@ export class Job {
 	editors?: string[];
 
 	@Prop()
+	companyID: string;
+
+	@Prop()
 	createdAt?: Date;
 
 	@Prop()

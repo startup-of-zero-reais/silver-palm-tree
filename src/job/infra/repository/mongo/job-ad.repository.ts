@@ -2,9 +2,11 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, ProjectionType, SortOrder } from 'mongoose';
 import { HttpErrorException } from '@/@shared/exception-filter/http-error.exception';
+import { Status as CompanyStatus } from '@/company/domain/entity/company.entity';
 import JobAd, { Status } from '@/job/domain/entity/job.entity';
 import { Event as DomainEvent } from '@/job/domain/events/event';
 import PaginationPresenter from '../presenter/pagination.presenter';
+import { aggregateCompany } from './aggregate-company.pipeline-stage';
 import { EventMapper } from './event.mapper';
 import { JobAdMapper } from './job-ad.mapper';
 import {
@@ -15,7 +17,7 @@ import {
 	JobAdViewDocument,
 } from './job-ad.model';
 
-type Sorter = { [key: string]: SortOrder | { $meta: 'textScore' } };
+type Sorter = Record<string, SortOrder> | { $meta: 'textScore' };
 
 @Injectable()
 export class JobAdMongoRepository {
@@ -51,7 +53,7 @@ export class JobAdMongoRepository {
 		if (search) {
 			filterQuery = {
 				$and: [
-					{ status: { $eq: Status.ACTIVATED } },
+					{ status: Status.ACTIVATED },
 					{ $text: { $search: search } },
 				],
 			};
@@ -66,10 +68,10 @@ export class JobAdMongoRepository {
 		}
 
 		const [total, jobs] = await Promise.all([
-			await this.jobAdView.find(filterQuery, projection).countDocuments(),
+			this.jobAdView.find(filterQuery, projection).countDocuments(),
 
-			await this.jobAdView
-				.find(filterQuery, projection)
+			this.jobAdView
+				.aggregate(aggregateCompany(filterQuery))
 				.sort(sorter)
 				.limit(per_page)
 				.skip((page - 1) * per_page),
@@ -150,7 +152,7 @@ export class JobAdMongoRepository {
 		// sort events ASC by event version (__v)
 		events = events.sort((a, b) => a.__v - b.__v);
 
-		const job = new JobAd(JobAdMapper.toState(viewJob));
+		const job = new JobAd(JobAdMapper.toStateFromEntity(viewJob));
 		job.putEvents(...events).compileEvents();
 
 		// materialize state

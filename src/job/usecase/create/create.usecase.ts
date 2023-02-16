@@ -15,6 +15,7 @@ export class CreateJobUseCase implements UseCaseInterface {
 			salary: input.salary,
 			hideSalary: input.hideSalary,
 			owner: input.owner,
+			companyID: input.companyID,
 		});
 
 		await this.dispatcher.emitAsync(JobAdCreatedEvent.action, event);

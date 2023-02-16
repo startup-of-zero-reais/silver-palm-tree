@@ -8,6 +8,7 @@ import {
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { TruncateAfter } from '@/@shared/decorator';
 import { PaginationInterface } from '@/@shared/repository/pagination-interface';
+import Company from '@/company/domain/entity/company.entity';
 
 export class ListJobsInputDTO {
 	@Type(() => Number)
@@ -53,6 +54,25 @@ class HalJSON {
 		href: `${process.env.BASE_URL}/jobs/${obj.id}`,
 	}))
 	self: any;
+
+	@Expose()
+	@Transform(({ obj }) => ({
+		href: `${process.env.BASE_URL}/companies/${obj.company._id}`,
+	}))
+	company: any;
+}
+
+@Exclude()
+export class JobCompanyOutputDTO {
+	@Expose()
+	@Transform(({ obj }) => obj._id)
+	id: string;
+	@Expose()
+	cnpj: string;
+	@Expose()
+	logo: string;
+	@Expose()
+	description: string;
 }
 
 @Exclude()
@@ -67,6 +87,9 @@ export class JobOutputDTO {
 	@Expose()
 	@Transform(({ obj }) => obj.salaryStr)
 	salary: string;
+	@Expose()
+	@Transform(({ obj }) => plainToClass(JobCompanyOutputDTO, obj.company))
+	company: JobCompanyOutputDTO;
 	@Expose()
 	createdAt: Date;
 	@Expose()

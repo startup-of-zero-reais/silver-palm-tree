@@ -20,6 +20,9 @@ export class CreateJobInputDto {
 	@IsEmpty()
 	owner: string;
 
+	@IsEmpty()
+	companyID: string;
+
 	@IsNotEmpty()
 	@IsNumber()
 	@IsInt()
