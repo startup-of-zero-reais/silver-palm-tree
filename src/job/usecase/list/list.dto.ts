@@ -3,12 +3,12 @@ import {
 	Expose,
 	plainToClass,
 	Transform,
+	TransformFnParams,
 	Type,
 } from 'class-transformer';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { TruncateAfter } from '@/@shared/decorator';
 import { PaginationInterface } from '@/@shared/repository/pagination-interface';
-import Company from '@/company/domain/entity/company.entity';
 
 export class ListJobsInputDTO {
 	@Type(() => Number)
@@ -50,15 +50,11 @@ export class ListJobsOutputDTO {
 @Exclude()
 class HalJSON {
 	@Expose()
-	@Transform(({ obj }) => ({
-		href: `${process.env.BASE_URL}/jobs/${obj.id}`,
-	}))
+	@Transform(applyHref('jobs', 'id'))
 	self: any;
 
 	@Expose()
-	@Transform(({ obj }) => ({
-		href: `${process.env.BASE_URL}/companies/${obj.company._id}`,
-	}))
+	@Transform(applyHref('companies', 'company._id'))
 	company: any;
 }
 
@@ -111,4 +107,23 @@ function parseObjToMeta(pagination: PaginationInterface<any>) {
 		last_page: pagination.lastPage(),
 		per_page: pagination.perPage(),
 	});
+}
+
+function applyHref(resource: string, key: string) {
+	return function ({ obj }: TransformFnParams) {
+		let param = '';
+		const keys = key.split('.');
+
+		for (const k of keys) {
+			if (!param) param = obj[k];
+
+			if (obj[k]) {
+				param = obj[k];
+			}
+		}
+
+		return {
+			href: `${process.env.BASE_URL}/${resource}/${param}`,
+		};
+	};
 }
