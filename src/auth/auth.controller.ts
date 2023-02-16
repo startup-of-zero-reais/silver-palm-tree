@@ -21,7 +21,6 @@ import { AuthToken } from '@/@shared/decorator/token.decorator';
 import { Candidate } from '@/candidate/domain';
 import { Recruiter } from '@/recruiter/domain';
 import authConstants from './auth.constants';
-import { AuthTokenGuard } from './usecase/authorization-strategy/token.guard';
 import { LocalAuthGuard } from './usecase/do-login-strategy/local-auth.guard';
 import { LoginInputDto, LoginOkDto } from './usecase/login/login.dto';
 import { LogoutUseCase } from './usecase/logout/logout.usecase';

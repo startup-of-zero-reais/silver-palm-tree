@@ -1,6 +1,7 @@
 import { Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MainExceptionFilter } from './@shared/exception-filter/http-exception.filter';
 import {
@@ -12,11 +13,13 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CandidateModule } from './candidate/candidate.module';
 import { CompanyModule } from './company/company.module';
+import { JobModule } from './job/job.module';
 import { RecruiterModule } from './recruiter/recruiter.module';
 
 @Module({
 	imports: [
 		ConfigModule.forRoot({ isGlobal: true }),
+		EventEmitterModule.forRoot(),
 		MongooseModule.forRootAsync({
 			imports: [ConfigModule],
 			useFactory: async (configService: ConfigService) => ({
@@ -28,6 +31,7 @@ import { RecruiterModule } from './recruiter/recruiter.module';
 		CandidateModule,
 		RecruiterModule,
 		CompanyModule,
+		JobModule,
 	],
 	controllers: [AppController],
 	providers: [

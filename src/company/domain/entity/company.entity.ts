@@ -36,10 +36,6 @@ export default class Company extends Entity {
 		this.validate();
 	}
 
-	get id(): string {
-		return this._id;
-	}
-
 	get logo(): string {
 		return this._logo;
 	}

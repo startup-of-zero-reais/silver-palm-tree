@@ -10,4 +10,4 @@ EXPOSE 3000
 
 WORKDIR /home/node/app
 
-CMD ["npm","run", "start:dev"]
+CMD ["npm","run", "start"]
