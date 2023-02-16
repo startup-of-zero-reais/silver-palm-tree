@@ -31,13 +31,25 @@ describe('Domain > Job', () => {
 			new Event(
 				'jobad.created',
 				{ status: Status.INSPECTION, title: 'Programador C#' },
+				new Date(),
 				0,
 			),
-			new Event('jobad.activated', { status: Status.ACTIVATED }, 1),
-			new Event('jobad.updated', { title: 'Programador PHP' }, 2),
+			new Event(
+				'jobad.activated',
+				{ status: Status.ACTIVATED },
+				new Date(),
+				1,
+			),
+			new Event(
+				'jobad.updated',
+				{ title: 'Programador PHP' },
+				new Date(),
+				2,
+			),
 			new Event(
 				'jobad.updated',
 				{ description: 'Descrição da vaga atualizada' },
+				new Date(),
 				3,
 			),
 		];
