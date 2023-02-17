@@ -4,7 +4,12 @@ import { JobAdViewDocument } from './job-ad.model';
 
 export function aggregateCompany(
 	filterQuery: FilterQuery<JobAdViewDocument>,
+	withSearch = false,
 ): PipelineStage[] {
+	const score = () => {
+		return withSearch ? { score: { $meta: 'textScore' } } : {};
+	};
+
 	return [
 		{ $match: filterQuery },
 		{
@@ -34,7 +39,7 @@ export function aggregateCompany(
 		{
 			$project: {
 				companies: 0,
-				score: { $meta: 'textScore' },
+				...score(),
 			},
 		},
 	];

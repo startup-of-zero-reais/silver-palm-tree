@@ -71,7 +71,7 @@ export class JobAdMongoRepository {
 			this.jobAdView.find(filterQuery, projection).countDocuments(),
 
 			this.jobAdView
-				.aggregate(aggregateCompany(filterQuery))
+				.aggregate(aggregateCompany(filterQuery, Boolean(search)))
 				.sort(sorter)
 				.limit(per_page)
 				.skip((page - 1) * per_page),
