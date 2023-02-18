@@ -9,14 +9,7 @@ export class CreateJobUseCase implements UseCaseInterface {
 	constructor(private readonly dispatcher: EventEmitter2) {}
 
 	async execute(input: CreateJobInputDto): Promise<any> {
-		const event = new JobAdCreatedEvent({
-			title: input.title,
-			description: input.description,
-			salary: input.salary,
-			hideSalary: input.hideSalary,
-			owner: input.owner,
-			companyID: input.companyID,
-		});
+		const event = new JobAdCreatedEvent(input);
 
 		await this.dispatcher.emitAsync(JobAdCreatedEvent.action, event);
 

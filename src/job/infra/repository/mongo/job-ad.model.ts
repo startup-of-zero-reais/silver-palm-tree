@@ -25,11 +25,20 @@ export class Job {
 	@Prop()
 	owner?: string;
 
-	@Prop()
+	@Prop({ default: undefined })
 	editors?: string[];
 
 	@Prop()
 	companyID: string;
+
+	@Prop({ default: undefined })
+	contracts?: string[];
+
+	@Prop({ default: undefined })
+	techs?: string[];
+
+	@Prop({ default: undefined })
+	availability?: string;
 
 	@Prop()
 	createdAt?: Date;
@@ -85,11 +94,12 @@ export const JobAdSchema = SchemaFactory.createForClass(JobAd);
 export const JobAdViewSchema = SchemaFactory.createForClass(JobAdView);
 
 JobAdViewSchema.index(
-	{ title: 'text', description: 'text' },
+	{ title: 'text', description: 'text', techs: 'text' },
 	{
 		weights: {
 			title: 5,
-			description: 3,
+			description: 1,
+			techs: 3,
 		},
 		name: 'search_idx',
 	},

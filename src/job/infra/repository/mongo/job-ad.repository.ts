@@ -2,9 +2,10 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, ProjectionType, SortOrder } from 'mongoose';
 import { HttpErrorException } from '@/@shared/exception-filter/http-error.exception';
-import { Status as CompanyStatus } from '@/company/domain/entity/company.entity';
+import { isEmpty } from '@/@shared/helpers/prop-checkers';
 import JobAd, { Status } from '@/job/domain/entity/job.entity';
 import { Event as DomainEvent } from '@/job/domain/events/event';
+import { Filters } from '@/job/domain/filters/filters';
 import PaginationPresenter from '../presenter/pagination.presenter';
 import { aggregateCompany } from './aggregate-company.pipeline-stage';
 import { EventMapper } from './event.mapper';
@@ -39,16 +40,18 @@ export class JobAdMongoRepository {
 		return JobAdMapper.toDomain(job);
 	}
 
-	async paginate(page = 1, per_page = 30, search = '') {
+	async paginate(
+		page = 1,
+		per_page = 30,
+		search = '',
+		filters: Filters = {},
+	) {
 		let filterQuery: FilterQuery<JobAdViewDocument> = {
 			status: { $eq: Status.ACTIVATED },
 		};
 
 		let projection: ProjectionType<JobAdViewDocument> = undefined;
-
-		const sorter: Sorter = {
-			createdAt: 'desc',
-		};
+		const sorter: Sorter = {};
 
 		if (search) {
 			filterQuery = {
@@ -59,13 +62,16 @@ export class JobAdMongoRepository {
 			};
 
 			// project a score field based on textScore search
-			projection = {
-				score: { $meta: 'textScore' },
-			};
+			projection = { score: { $meta: 'textScore' } };
 
 			// add score as sorter, to better search matching
-			Object.assign({ score: { $meta: 'textScore' } });
+			Object.assign(sorter, { score: { $meta: 'textScore' } });
 		}
+
+		this.applyFilters(filterQuery, filters, !!search);
+
+		// as fallback order by createdAt
+		sorter.createdAt = 'desc';
 
 		const [total, jobs] = await Promise.all([
 			this.jobAdView.find(filterQuery, projection).countDocuments(),
@@ -152,7 +158,7 @@ export class JobAdMongoRepository {
 		// sort events ASC by event version (__v)
 		events = events.sort((a, b) => a.__v - b.__v);
 
-		const job = new JobAd(JobAdMapper.toStateFromEntity(viewJob));
+		const job = JobAdMapper.toDomain(viewJob);
 		job.putEvents(...events).compileEvents();
 
 		// materialize state
@@ -174,5 +180,47 @@ export class JobAdMongoRepository {
 				},
 			},
 		]);
+	}
+
+	private applyFilters(
+		query: FilterQuery<JobAdViewDocument>,
+		filters: Filters = {},
+		hasSearch = false,
+	) {
+		if (!isEmpty(filters)) {
+			const additionalFilters: FilterQuery<JobAdViewDocument> = {};
+			if (filters.contracts)
+				additionalFilters.contracts = {
+					$in: filters.contracts.map(
+						(contract) => new RegExp(`^${contract}$`, 'i'),
+					),
+				};
+			if (filters.techs) {
+				additionalFilters.techs = {
+					$in: filters.techs.map(
+						(tech) => new RegExp(`^${tech}$`, 'i'),
+					),
+				};
+			}
+
+			const salary = {};
+			if (filters.minSalary)
+				Object.assign(salary, { $gte: filters.minSalary * 100 });
+			if (filters.maxSalary)
+				Object.assign(salary, { $lte: filters.maxSalary * 100 });
+
+			if (!isEmpty(salary)) Object.assign(additionalFilters, { salary });
+
+			if (filters.availability)
+				additionalFilters.availability = {
+					$regex: new RegExp(`^${filters.availability}$`, 'i'),
+				};
+
+			if (hasSearch && !isEmpty(query.$and)) {
+				query.$and.push(additionalFilters);
+			} else {
+				Object.assign(query, additionalFilters);
+			}
+		}
 	}
 }

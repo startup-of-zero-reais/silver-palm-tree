@@ -18,7 +18,7 @@ export const LoggedRecruiter = createParamDecorator(
 
 		const aud = request.header['x-audience'];
 
-		if (['recruiter', 'both', undefined].includes(aud))
+		if (['recruiter', 'both'].includes(aud))
 			throw new HttpErrorException(
 				'You can not consume this service',
 				HttpStatus.FORBIDDEN,

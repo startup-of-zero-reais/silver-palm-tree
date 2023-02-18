@@ -6,7 +6,7 @@ export class EventMapper {
 	static toDomain(schemaEvent: DbEvent): Event {
 		const event = new Event(
 			schemaEvent.action,
-			schemaEvent.data,
+			JobAdMapper.toDomain(schemaEvent.data),
 			schemaEvent.createdAt,
 			schemaEvent.__v,
 		);

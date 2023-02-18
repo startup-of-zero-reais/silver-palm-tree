@@ -22,6 +22,9 @@ export type State = {
 	editors?: string[];
 	companyID: string;
 	company?: Company;
+	contracts?: string[];
+	techs?: string[];
+	availability: string;
 	createdAt?: Date;
 	updatedAt?: Date;
 	__v?: number;
@@ -56,7 +59,6 @@ export default class JobAd extends Entity {
 
 	get salary(): number {
 		if (
-			this._state.hideSalary ||
 			isNaN(this._state.salary) ||
 			!Number.isSafeInteger(this._state.salary) ||
 			this._state.salary < 0
@@ -92,6 +94,18 @@ export default class JobAd extends Entity {
 
 	get company(): Company {
 		return this._state.company;
+	}
+
+	get contracts(): string[] {
+		return this._state.contracts;
+	}
+
+	get techs(): string[] {
+		return this._state.techs;
+	}
+
+	get availability(): string {
+		return this._state.availability;
 	}
 
 	get lastEditor(): string {
@@ -132,6 +146,9 @@ export default class JobAd extends Entity {
 		if (data.owner) this._state.owner = data.owner;
 		if (data.editors) this.addEditors(...data.editors);
 		if (data.companyID) this._state.companyID = data.companyID;
+		if (data.contracts) this._state.contracts = data.contracts;
+		if (data.availability) this._state.availability = data.availability;
+		if (data.techs) this._state.techs = data.techs;
 	}
 
 	public compileEvents() {

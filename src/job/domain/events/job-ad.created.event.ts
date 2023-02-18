@@ -9,6 +9,9 @@ type Props = {
 	hideSalary?: boolean;
 	owner: string;
 	companyID: string;
+	contracts?: string[];
+	techs?: string[];
+	availability: string;
 	__v?: number;
 };
 
@@ -26,6 +29,9 @@ export class JobAdCreatedEvent extends Event {
 				owner: props.owner,
 				companyID: props.companyID,
 				status: Status.INSPECTION,
+				contracts: props.contracts ?? [],
+				techs: props.techs ?? [],
+				availability: props.availability,
 			}),
 		);
 	}

@@ -14,6 +14,9 @@ export class JobAdMapper {
 			owner: data.owner,
 			editors: data.editors,
 			companyID: data.companyID,
+			contracts: data.contracts,
+			techs: data.techs,
+			availability: data.availability,
 			createdAt: data.createdAt,
 			updatedAt: data.updatedAt,
 			__v: data.__v,
@@ -30,6 +33,7 @@ export class JobAdMapper {
 
 	static toData(data: Partial<DomainJobAd>): Job {
 		const job = new Job();
+
 		if (data.title) job.title = data.title;
 		if (data.description) job.description = data.description;
 		if (data.salary) job.salary = data.salary;
@@ -42,6 +46,9 @@ export class JobAdMapper {
 			job.editors.push(...data.editors);
 		}
 		if (data.companyID) job.companyID = data.companyID;
+		if (data.contracts) job.contracts = data.contracts;
+		if (data.techs) job.techs = data.techs;
+		if (data.availability) job.availability = data.availability;
 
 		return job;
 	}
@@ -59,33 +66,13 @@ export class JobAdMapper {
 		if (data.owner) job.owner = data.owner;
 		if (data.editors) job.editors = data.editors;
 		if (data.companyID) job.companyID = data.companyID;
+		if (data.contracts) job.contracts = data.contracts;
+		if (data.techs) job.techs = data.techs;
+		if (data.availability) job.availability = data.availability;
 		if (data.createdAt) job.createdAt = data.createdAt;
 		if (data.updatedAt) job.updatedAt = data.updatedAt;
 		if (data.version) job.__v = data.version;
 
 		return job;
-	}
-
-	static toStateFromEntity(data: Partial<Job>): State {
-		const salaryConfidentiality = {};
-		if (typeof data.hideSalary !== 'undefined')
-			Object.assign(salaryConfidentiality, {
-				hideSalary: data.hideSalary,
-			});
-
-		return {
-			id: data._id,
-			title: data.title,
-			description: data.description,
-			salary: data.salary,
-			...salaryConfidentiality,
-			status: data.status,
-			owner: data.owner,
-			editors: data.editors,
-			companyID: data.companyID,
-			createdAt: data.createdAt,
-			updatedAt: data.updatedAt,
-			__v: data.__v,
-		};
 	}
 }

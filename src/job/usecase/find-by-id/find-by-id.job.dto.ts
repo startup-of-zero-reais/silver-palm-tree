@@ -32,6 +32,12 @@ export class FindJobByIDOutputDto {
 	editors: string[];
 
 	@Expose()
+	contracts?: string[];
+
+	@Expose()
+	techs?: string[];
+
+	@Expose()
 	createdAt: Date;
 
 	@Expose()

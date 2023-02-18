@@ -6,21 +6,53 @@ import {
 	TransformFnParams,
 	Type,
 } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { TruncateAfter } from '@/@shared/decorator';
+import {
+	GreatherThanOrEqual,
+	LessThanOrEqual,
+} from '@/@shared/decorator/lte-gte.decorator';
 import { PaginationInterface } from '@/@shared/repository/pagination-interface';
+import { Filters } from '@/job/domain/filters/filters';
 
-export class ListJobsInputDTO {
+export class ListJobsInputDTO implements Filters {
+	// PAGINATION
 	@Type(() => Number)
 	@IsNumber()
 	page = 1;
+
 	@Type(() => Number)
 	@IsNumber()
 	per_page = 30;
 
+	// SEARCH
 	@IsOptional()
 	@IsString()
 	search?: string;
+
+	// FILTER
+	@IsOptional()
+	@Transform(({ value }) => value.split(','))
+	@ArrayNotEmpty()
+	contracts?: string[];
+
+	@IsOptional()
+	@Transform(({ value }) => value.split(','))
+	@ArrayNotEmpty()
+	techs?: string[];
+
+	@IsOptional()
+	@LessThanOrEqual('maxSalary')
+	@Type(() => Number)
+	minSalary?: number;
+
+	@IsOptional()
+	@GreatherThanOrEqual('minSalary')
+	@Type(() => Number)
+	maxSalary?: number;
+
+	@IsOptional()
+	availability?: string;
 }
 
 @Exclude()
@@ -75,21 +107,37 @@ export class JobCompanyOutputDTO {
 export class JobOutputDTO {
 	@Expose()
 	id: string;
+
 	@Expose()
 	title: string;
+
 	@Expose()
 	@TruncateAfter(140)
 	description: string;
+
 	@Expose()
 	@Transform(({ obj }) => obj.salaryStr)
 	salary: string;
+
 	@Expose()
 	@Transform(({ obj }) => plainToClass(JobCompanyOutputDTO, obj.company))
 	company: JobCompanyOutputDTO;
+
+	@Expose()
+	contracts?: string[];
+
+	@Expose()
+	techs?: string[];
+
+	@Expose()
+	availability?: string;
+
 	@Expose()
 	createdAt: Date;
+
 	@Expose()
 	updatedAt: Date;
+
 	@Expose()
 	@Transform(({ obj }) => plainToClass(HalJSON, obj))
 	_links: HalJSON;

@@ -1,6 +1,7 @@
 FROM node:18.13.0-alpine3.16
 
 COPY . .
+RUN rm -rf ./scripts
 
 RUN npm install --legacy-peer-deps
 

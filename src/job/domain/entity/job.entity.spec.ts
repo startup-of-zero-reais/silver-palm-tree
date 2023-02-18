@@ -52,6 +52,12 @@ describe('Domain > Job', () => {
 				new Date(),
 				3,
 			),
+			new Event(
+				'jobad.updated',
+				{ techs: ['Golang', 'PHP'] },
+				new Date(),
+				4,
+			),
 		];
 
 		job.putEvents(...events).compileEvents();
@@ -60,5 +66,6 @@ describe('Domain > Job', () => {
 		expect(job.status).toBe(Status.ACTIVATED);
 		expect(job.description).toBe('Descrição da vaga atualizada');
 		expect(job.version).toBe(events.length - 1);
+		expect(job.techs).toEqual(['Golang', 'PHP']);
 	});
 });
