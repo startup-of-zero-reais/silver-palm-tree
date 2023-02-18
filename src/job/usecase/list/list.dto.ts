@@ -112,7 +112,7 @@ export class JobOutputDTO {
 	title: string;
 
 	@Expose()
-	@TruncateAfter(140)
+	@TruncateAfter(250)
 	description: string;
 
 	@Expose()
