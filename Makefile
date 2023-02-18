@@ -12,6 +12,10 @@ usage:
 start:
 	@echo -e "$(OK_COLOR)==> Wait, starting application...$(NO_COLOR)"
 	@docker-compose up -d
+	@sleep 2
+	@ts-node -r tsconfig-paths/register ./scripts/seed-candidates.ts --length=3 --reseed
+	@ts-node -r tsconfig-paths/register ./scripts/seed-recruiters.ts --length=3 --reseed
+	@ts-node -r tsconfig-paths/register ./scripts/seed-jobs.ts --length=100 --reseed
 	@docker logs -f vacancies-app -n 30
 
 stop:
