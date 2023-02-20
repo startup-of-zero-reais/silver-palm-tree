@@ -5,7 +5,7 @@ import { getAuthOf, getRecruiters } from './helpers';
 
 function singleJob() {
 	return {
-		title: faker.commerce.department(),
+		title: faker.company.bsAdjective() + ' ' + faker.commerce.department(),
 		description: faker.random.words(80),
 		salary: +faker.random.numeric(6),
 		hideSalary: faker.datatype.boolean(),
