@@ -19,10 +19,12 @@ export class ListJobsInputDTO implements Filters {
 	// PAGINATION
 	@Type(() => Number)
 	@IsNumber()
+	@Transform(({ value }) => (value <= 0 ? 1 : value))
 	page = 1;
 
 	@Type(() => Number)
 	@IsNumber()
+	@Transform(offset)
 	per_page = 30;
 
 	// SEARCH
@@ -175,4 +177,12 @@ function applyHref(resource: string, key: string) {
 			href: `${process.env.BASE_URL}/${resource}/${param}`,
 		};
 	};
+}
+
+function offset(params: TransformFnParams) {
+	if (params.value < 0) return 1;
+	// enable if per_page = 0 no apply offset
+	if (params.value == 0 || params.value > 1000) return 1000;
+
+	return params.value;
 }

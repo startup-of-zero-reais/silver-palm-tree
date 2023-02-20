@@ -77,10 +77,15 @@ export class JobAdMongoRepository {
 			this.jobAdView.find(filterQuery, projection).countDocuments(),
 
 			this.jobAdView
-				.aggregate(aggregateCompany(filterQuery, Boolean(search)))
-				.sort(sorter)
-				.limit(per_page)
-				.skip((page - 1) * per_page),
+				.aggregate(
+					aggregateCompany(
+						filterQuery,
+						Boolean(search),
+						(page - 1) * per_page,
+						per_page,
+					),
+				)
+				.sort(sorter),
 		]);
 
 		return new PaginationPresenter(

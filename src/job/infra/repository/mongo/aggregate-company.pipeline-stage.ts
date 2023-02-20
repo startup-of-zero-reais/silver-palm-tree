@@ -5,6 +5,8 @@ import { JobAdViewDocument } from './job-ad.model';
 export function aggregateCompany(
 	filterQuery: FilterQuery<JobAdViewDocument>,
 	withSearch = false,
+	page = 1,
+	per_page = 30,
 ): PipelineStage[] {
 	const score = () => {
 		return withSearch ? { score: { $meta: 'textScore' } } : {};
@@ -42,5 +44,7 @@ export function aggregateCompany(
 				...score(),
 			},
 		},
+		{ $skip: page },
+		{ $limit: per_page },
 	];
 }
