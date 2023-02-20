@@ -25,7 +25,7 @@ export default class PaginationPresenter<T> implements PaginationInterface<T> {
 	}
 
 	currentPage(): number {
-		return Math.ceil(this._page - 1 / this._pageSize) + 1;
+		return Math.floor(this._page - 1 / this._pageSize) + 1;
 	}
 
 	perPage(): number {
