@@ -28,6 +28,7 @@ export class ListJobsInputDTO implements Filters {
 	// SEARCH
 	@IsOptional()
 	@IsString()
+	@Transform(({ value }) => decodeURIComponent(value))
 	search?: string;
 
 	// FILTER
