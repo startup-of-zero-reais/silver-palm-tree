@@ -27,9 +27,9 @@ if [[ "${HAS_NVM}" == "" ]]; then
 fi
 
 function callseed {
-	ts-node -r tsconfig-paths/register ./scripts/seed-candidates.ts --length=3 --reseed
-	ts-node -r tsconfig-paths/register ./scripts/seed-recruiters.ts --length=3 --reseed
-	ts-node -r tsconfig-paths/register ./scripts/seed-jobs.ts --length=100 --reseed
+	ts-node -r tsconfig-paths/register ./scripts/seed-candidates.ts --length=3 --reseed || exit 1;
+	ts-node -r tsconfig-paths/register ./scripts/seed-recruiters.ts --length=3 --reseed || exit 1;
+	ts-node -r tsconfig-paths/register ./scripts/seed-jobs.ts --length=100 --reseed || exit 1;
 }
 
 TRYAGAINS=y
@@ -40,6 +40,7 @@ function canseed {
 
 	if [[ "${HAS_NVM}" != "" ]]; then
 		. ~/.nvm/nvm.sh
+		nvm install
 		nvm use
 
 		TS_NODE=$(npm -g list ts-node)

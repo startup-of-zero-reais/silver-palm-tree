@@ -24,6 +24,25 @@ let dbConn: mongoose.Connection = null;
 
 export async function getMongoInstance() {
 	if (dbConn !== null) return dbConn;
-	dbConn = mongoose.createConnection('mongodb://root:root@localhost:27017');
-	return dbConn;
+
+	let attempts = 3;
+
+	const connect = () => {
+		attempts--;
+		dbConn = mongoose.createConnection(
+			'mongodb://root:root@localhost:27017',
+		);
+		return dbConn;
+	};
+
+	try {
+		return connect();
+	} catch (e) {
+		if (attempts > 0) {
+			console.log(`connect fail, trying again more ${attempts} times`);
+			return connect();
+		}
+
+		throw e;
+	}
 }

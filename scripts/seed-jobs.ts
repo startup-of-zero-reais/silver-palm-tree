@@ -41,6 +41,11 @@ async function postJob(job) {
 	const owner = canBeOwner[Math.floor(Math.random() * canBeOwner.length)];
 	const auth = await getAuthOf(owner);
 
+	if (auth === null) {
+		console.log(`can not post job to ${owner.email}`);
+		return;
+	}
+
 	const id = await axios({
 		method: 'POST',
 		url: 'http://localhost:3000/jobs',
@@ -51,7 +56,9 @@ async function postJob(job) {
 		data: JSON.stringify(job),
 	})
 		.then(({ data }) => data.id)
-		.catch((e) => console.log(e.response.data.message));
+		.catch((e) => {
+			console.log(`job was NOT created: ${e.response.data.error}`);
+		});
 
 	if (id) {
 		await axios({
@@ -83,6 +90,7 @@ export async function seedJobs() {
 		]);
 	}
 
+	console.log(`seeding jobs`);
 	await Promise.all(jobs.map(postJob));
 	console.log(`jobs was seed...`);
 	process.exit(0);
