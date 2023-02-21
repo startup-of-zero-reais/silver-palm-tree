@@ -49,7 +49,7 @@ export class JobController {
 	) {
 		if (!recruiter.canInteract())
 			throw new HttpErrorException(
-				'You can not performe the update action',
+				'You can not perform this post action',
 				401,
 			);
 

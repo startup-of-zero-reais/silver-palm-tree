@@ -101,7 +101,14 @@ export class AuthController {
 
 	@MustBeAuth()
 	@Post('logout')
-	async logout(@AuthToken() token: string) {
-		return this.logoutUseCase.execute({ token });
+	async logout(@AuthToken() token: string, @Response() response: eResponse) {
+		response.cookie(authConstants.SESSION_COOKIE, '', {
+			expires: new Date(0),
+			httpOnly: true,
+		});
+
+		return response
+			.status(HttpStatus.OK)
+			.json(await this.logoutUseCase.execute({ token }));
 	}
 }

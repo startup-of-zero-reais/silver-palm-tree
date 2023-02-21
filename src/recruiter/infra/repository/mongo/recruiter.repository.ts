@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PaginationInterface } from '@/@shared/repository/pagination-interface';
 import PaginationPresenter from '@/candidate/infra/repository/presenter/pagination.presenter';
+import { CompanyMapper } from '@/company/infra/repository/mongo/company.mapper';
 import { Recruiter, RecruiterRepositoryInterface } from '@/recruiter/domain';
 import { RecruiterMapper } from './recruiter.mapper';
 import { Recruiter as Entity, RecruiterDocument } from './recruiter.model';
@@ -46,12 +47,20 @@ export default class RecruiterMongoRepository
 	}
 
 	async find(id: string): Promise<Recruiter> {
-		const recruiter = await this.recruiterModel.findOne({ _id: id }).exec();
+		const recruiter = await this.recruiterModel
+			.findOne({ _id: id })
+			.populate('company')
+			.exec();
+
 		return this.toDomain(recruiter);
 	}
 
 	async findByEmail(email: string): Promise<Recruiter> {
-		const recruiter = await this.recruiterModel.findOne({ email }).exec();
+		const recruiter = await this.recruiterModel
+			.findOne({ email })
+			.populate('company')
+			.exec();
+
 		return this.toDomain(recruiter);
 	}
 
@@ -65,6 +74,7 @@ export default class RecruiterMongoRepository
 			await recruiterDb.find().countDocuments().exec(),
 			await recruiterDb
 				.find()
+				.populate('company')
 				.sort({ createdAt: -1 })
 				.limit(per_page)
 				.skip((page - 1) * per_page)
@@ -82,7 +92,7 @@ export default class RecruiterMongoRepository
 	private toDomain(object?: RecruiterDocument): Recruiter {
 		if (!object) return; // return empty if has no recruiter
 
-		return new Recruiter({
+		const recruiter = new Recruiter({
 			id: object._id,
 			name: object.name,
 			email: object.email,
@@ -95,5 +105,10 @@ export default class RecruiterMongoRepository
 			},
 			status: object.status,
 		});
+
+		if (object.company)
+			recruiter.attachCompany(CompanyMapper.toDomain(object.company));
+
+		return recruiter;
 	}
 }

@@ -9,6 +9,7 @@ export class CompanyMapper {
 			description: data.description,
 			logo: data.logo,
 			status: data.status,
+			adminID: data.admin,
 			createdAt: data.createdAt,
 			updatedAt: data.updatedAt,
 		};

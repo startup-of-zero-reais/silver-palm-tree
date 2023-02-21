@@ -39,6 +39,9 @@ export class RecruiterSessionOutputDto extends CommonPropsDto {
 
 	@Expose()
 	companyCNPJ?: string;
+
+	@Expose()
+	companyStatus?: string;
 }
 
 @Exclude()

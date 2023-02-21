@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { CompanyRepositoryInterface } from '../../domain/repository/company.repository.interface';
 import { CreateCompanyUseCase } from './create.company.usecase';
 
@@ -16,6 +17,7 @@ const input = {
 	cnpj: '61.662.803/0001-04',
 	description: 'any_description',
 	logo: 'http://logo.com',
+	admin: faker.datatype.uuid(),
 };
 
 describe('Unit test create company usecase', () => {

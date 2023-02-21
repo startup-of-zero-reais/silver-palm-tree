@@ -25,7 +25,7 @@ export class Recruiter {
 	@Prop({ enum: Status })
 	status: Status;
 
-	@Prop(Company)
+	@Prop({ ref: Company.name })
 	company: Company;
 
 	@Prop()
