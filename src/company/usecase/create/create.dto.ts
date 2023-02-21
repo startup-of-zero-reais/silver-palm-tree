@@ -1,8 +1,11 @@
 import { Exclude, Expose } from 'class-transformer';
-import { IsNotEmpty, IsUrl } from 'class-validator';
+import { IsEmpty, IsNotEmpty, IsUrl } from 'class-validator';
 import { IsCNPJ } from '@/@shared/decorator/cnpj.decorator';
 
 export class CreateCompanyInputDto {
+	@IsEmpty()
+	id?: string;
+
 	@IsNotEmpty()
 	@IsUrl()
 	logo: string;
@@ -13,6 +16,9 @@ export class CreateCompanyInputDto {
 
 	@IsNotEmpty()
 	description: string;
+
+	@IsEmpty()
+	admin: string;
 }
 
 @Exclude()

@@ -16,9 +16,11 @@ export class CompanyFacade implements CompanyFacadeInterface {
 
 	async create(company: Company): Promise<Company> {
 		return await this._createUseCase.execute({
+			id: company.id,
 			cnpj: company.cnpj,
 			description: company.description,
 			logo: company.logo,
+			admin: company.adminID,
 		});
 	}
 

@@ -17,6 +17,7 @@ export type Props = {
 	cnpj: string;
 	description: string;
 	status?: Status;
+	adminID?: string;
 	createdAt?: Date;
 	updatedAt?: Date;
 };
@@ -26,6 +27,7 @@ export default class Company extends Entity {
 	private _cnpj: string;
 	private _description: string;
 	private _status?: Status;
+	private _adminID?: string;
 
 	constructor(props: Props) {
 		super(props.id, props.createdAt, props.updatedAt);
@@ -33,6 +35,7 @@ export default class Company extends Entity {
 		this._cnpj = props.cnpj;
 		this._description = props.description;
 		this._status = props.status || Status.INSPECTION;
+		this._adminID = props.adminID;
 		this.validate();
 	}
 
@@ -52,6 +55,14 @@ export default class Company extends Entity {
 		return this._status;
 	}
 
+	get adminID(): string {
+		return this._adminID;
+	}
+
+	setAdminID(id: string) {
+		this._adminID = id;
+	}
+
 	update(
 		props: Omit<
 			Props,
@@ -68,6 +79,10 @@ export default class Company extends Entity {
 
 	changeStatus(status: Status) {
 		this._status = status;
+	}
+
+	canInteract(): boolean {
+		return this._status == Status.ACTIVATED;
 	}
 
 	validate() {

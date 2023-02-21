@@ -28,6 +28,7 @@ export class CompanyMongoRepository implements CompanyRepositoryInterface {
 			logo: entity.logo,
 			description: entity.description,
 			status: entity.status,
+			admin: entity.adminID,
 		});
 	}
 

@@ -40,17 +40,15 @@ export class CreateRecruiterUseCase implements UseCaseInterface {
 				HttpStatus.FORBIDDEN,
 			);
 
-		let isAdmin = false;
+		let isNewCompany = false;
 		if (!_company && input.company.description && input.company.logo) {
-			company = await this.companyFacade.create(
-				new Company({
-					cnpj: input.company.cnpj,
-					description: input.company.description,
-					logo: input.company.logo,
-				}),
-			);
+			isNewCompany = true;
 
-			isAdmin = true;
+			company = new Company({
+				cnpj: input.company.cnpj,
+				description: input.company.description,
+				logo: input.company.logo,
+			});
 		}
 
 		if (!company) {
@@ -68,11 +66,16 @@ export class CreateRecruiterUseCase implements UseCaseInterface {
 			company: {
 				id: company.id,
 				cnpj: company.cnpj,
-				isAdmin,
+				isAdmin: isNewCompany,
 			},
 		});
 
 		recruiter.encryptPassword();
+
+		if (isNewCompany) {
+			company.setAdminID(recruiter.id);
+			await this.companyFacade.create(company);
+		}
 
 		await this.recruiterRepository.create(recruiter);
 

@@ -14,9 +14,11 @@ export class CreateCompanyUseCase implements UseCaseInterface {
 
 	async execute(input: CreateCompanyInputDto): Promise<Company> {
 		const company = new Company({
+			id: input.id,
 			cnpj: input.cnpj,
 			description: input.description,
 			logo: input.logo,
+			adminID: input.admin,
 		});
 
 		await this.companyRepository.create(company);

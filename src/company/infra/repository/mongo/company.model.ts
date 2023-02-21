@@ -21,6 +21,9 @@ export class Company {
 	@Prop({ enum: Status })
 	status: Status;
 
+	@Prop({ required: true })
+	admin: string;
+
 	@Prop()
 	createdAt: Date;
 

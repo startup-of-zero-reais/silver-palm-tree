@@ -28,9 +28,9 @@ export default class RecruiterMongoRepository
 			password: entity.password,
 			status: entity.status,
 			company: {
-				id: entity.companyID,
+				_id: entity.companyID,
 				cnpj: entity.companyCNPJ,
-				isAdmin: entity.isCompanyAdmin,
+				admin: entity.id,
 			},
 			createdAt: entity.createdAt,
 			updatedAt: entity.updatedAt,
@@ -97,8 +97,9 @@ export default class RecruiterMongoRepository
 			password: object.password,
 			image: object.image,
 			company: {
-				id: object.company.id,
+				id: object.company._id,
 				cnpj: object.company.cnpj,
+				isAdmin: object._id == object.company.admin,
 			},
 			status: object.status,
 		});
