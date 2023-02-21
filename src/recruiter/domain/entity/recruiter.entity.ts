@@ -30,7 +30,6 @@ export default class Recruiter extends BaseUser {
 	private _status: Status;
 	private _companyID: string;
 	private _companyCNPJ: string;
-	private _isCompanyAdmin: boolean;
 	private _company: Company;
 
 	constructor(props: Props) {
@@ -39,7 +38,6 @@ export default class Recruiter extends BaseUser {
 		this._status = props.status;
 		this._companyID = props.company.id;
 		this._companyCNPJ = props.company.cnpj;
-		this._isCompanyAdmin = props.company.isAdmin ?? false;
 	}
 
 	canLogin(): boolean {
@@ -47,7 +45,7 @@ export default class Recruiter extends BaseUser {
 	}
 
 	canInteract(): boolean {
-		if (!this._company || this._company.canInteract()) return false;
+		if (!this._company || !this._company.canInteract()) return false;
 
 		return this._status === Status.ACTIVATED;
 	}
@@ -83,6 +81,10 @@ export default class Recruiter extends BaseUser {
 
 	get companyCNPJ(): string {
 		return this._company?.cnpj ?? this._companyCNPJ;
+	}
+
+	get companyStatus(): string {
+		return this._company?.status ?? 'UNKNOWN';
 	}
 
 	get isCompanyAdmin(): boolean {
