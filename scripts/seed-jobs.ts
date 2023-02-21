@@ -63,7 +63,7 @@ async function postJob(job) {
 	if (id) {
 		await axios({
 			method: 'PATCH',
-			url: `http://localhost:3000/jobs/${id}/activate`,
+			url: `http://localhost:3000/jobs/${id}/activate?root=root`,
 			headers: {
 				'Content-Type': 'application/json',
 				...auth,

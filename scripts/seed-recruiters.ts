@@ -138,6 +138,17 @@ async function postRecruiter(recruiter) {
 		.then(({ data }) => data.id)
 		.catch(() => null);
 
+	await axios({
+		method: 'PATCH',
+		url: `http://localhost:3000/recruiters/${id}?root=root`,
+		headers: { 'Content-Type': 'application/json' },
+		data: JSON.stringify({ status: 'ACTIVATED' }),
+	})
+		.then(() => console.log(`recruiter ${recruiter.name} was ACTIVATED`))
+		.catch(() =>
+			console.log(`can NOT ACTIVATE recruiter ${recruiter.name}`),
+		);
+
 	if (id) {
 		const headers = await getAuthOf(recruiter);
 
