@@ -15,6 +15,8 @@ export async function getAuthOf(recruiter) {
 		.then(({ headers }) => headers['session'])
 		.catch((e) => console.log(e.response.data.message));
 
+	if (!auth) return null;
+
 	return { Authorization: `Bearer ${auth}` };
 }
 

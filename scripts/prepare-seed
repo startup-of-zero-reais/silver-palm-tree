@@ -7,8 +7,13 @@ function install {
 	echo "Installing nvm..."
 	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 
-	source "~/.bashrc"
-	source "~/.zshrc"
+	if [ -f "~/.bashrc" ]; then
+		source "~/.bashrc"
+	fi
+
+	if [ -f "~/.zshrc" ]; then
+		source "~/.zshrc"
+	fi
 }
 
 if [[ "${HAS_NVM}" == "" ]]; then
@@ -54,4 +59,10 @@ function canseed {
 	fi
 }
 
-canseed
+printf "Want to seed database (y/N) - "
+read -n 1 WANT_TO_SEED
+echo ""
+
+if [[ "${WANT_TO_SEED}" == "y" || "${WANT_TO_SEED}" == "Y" ]]; then
+	canseed
+fi

@@ -141,6 +141,11 @@ async function postRecruiter(recruiter) {
 	if (id) {
 		const headers = await getAuthOf(recruiter);
 
+		if (headers == null) {
+			console.log(`Auth failed to recruiter ${recruiter.id}`);
+			return;
+		}
+
 		await axios({
 			method: 'PATCH',
 			url: 'http://localhost:3000/companies',
@@ -161,7 +166,7 @@ async function postRecruiter(recruiter) {
 					`recruiter ${recruiter.name} has company activated`,
 				);
 			})
-			.catch((e) => console.log(e.message));
+			.catch((e) => console.log(`can not activate company ${e.message}`));
 	}
 }
 
