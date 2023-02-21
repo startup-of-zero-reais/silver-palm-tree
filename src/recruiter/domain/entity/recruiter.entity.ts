@@ -78,15 +78,15 @@ export default class Recruiter extends BaseUser {
 	}
 
 	get companyID(): string {
-		return this._companyID;
+		return this._company?.id ?? this._companyID;
 	}
 
 	get companyCNPJ(): string {
-		return this._companyCNPJ;
+		return this._company?.cnpj ?? this._companyCNPJ;
 	}
 
 	get isCompanyAdmin(): boolean {
-		return this._isCompanyAdmin ?? false;
+		return this._company?.adminID == this._id;
 	}
 
 	public attachCompany(company: Company) {
