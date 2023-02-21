@@ -4,6 +4,7 @@ import {
 	Delete,
 	Get,
 	HttpStatus,
+	Param,
 	Patch,
 	Post,
 	Put,
@@ -13,6 +14,7 @@ import {
 import { plainToClass } from 'class-transformer';
 import { Response as eResponse } from 'express';
 import { LoggedRecruiter, MustBeAuth } from '@/@shared/decorator';
+import { HttpErrorException } from '@/@shared/exception-filter/http-error.exception';
 import NotificationError from '@/@shared/notification/notification.error';
 import { Recruiter } from './domain';
 import { CreateInputDto, CreateOutputDto } from './usecase/create/create.dto';
@@ -58,15 +60,21 @@ export class RecruiterController {
 			.json(plainToClass(CreateOutputDto, recruiter));
 	}
 
-	@Patch()
-	@MustBeAuth()
+	@Patch(':id')
 	async updateStatus(
-		@LoggedRecruiter() { id: recruiterID }: Recruiter,
+		@Param('id') recruiterID: string,
+		@Query('root') root: string,
 		@Body() updateStatusRecruiterInputDto: UpdateStatusRecruiterInputDto,
 		@Response() response: eResponse,
 	) {
-		updateStatusRecruiterInputDto.id = recruiterID;
+		if (!root || root !== process.env.ROOT) {
+			throw new HttpErrorException(
+				'You can not consume this service. You are not root',
+				403,
+			);
+		}
 
+		updateStatusRecruiterInputDto.id = recruiterID;
 		const recruiter = await this.updateStatusRecruiterUseCase.execute(
 			updateStatusRecruiterInputDto,
 		);
