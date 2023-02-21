@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { PaginationInterface } from '@/@shared/repository/pagination-interface';
 import PaginationPresenter from '@/candidate/infra/repository/presenter/pagination.presenter';
 import { Recruiter, RecruiterRepositoryInterface } from '@/recruiter/domain';
+import { RecruiterMapper } from './recruiter.mapper';
 import { Recruiter as Entity, RecruiterDocument } from './recruiter.model';
 
 @Injectable()
@@ -40,16 +41,7 @@ export default class RecruiterMongoRepository
 	async update(entity: Recruiter): Promise<void> {
 		await this.recruiterModel.updateOne(
 			{ _id: entity.id },
-			{
-				$set: {
-					name: entity.name,
-					image: entity.image,
-					company: {
-						id: entity.companyID,
-						cnpj: entity.companyCNPJ,
-					},
-				},
-			},
+			{ $set: RecruiterMapper.domainToOrm(entity) },
 		);
 	}
 

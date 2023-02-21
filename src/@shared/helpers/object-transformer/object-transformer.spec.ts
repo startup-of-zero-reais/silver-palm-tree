@@ -19,7 +19,7 @@ describe('Helpers > Object Transformer', () => {
 			user: { email: fakeObj._email },
 		};
 
-		const transformer = new ObjectTransformer<
+		const transformer = ObjectTransformer.transform<
 			typeof fakeObj,
 			typeof expected
 		>(fakeObj);
