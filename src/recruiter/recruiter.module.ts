@@ -1,6 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CompanyModule } from '@/company/company.module';
+import {
+	Company,
+	CompanySchema,
+} from '@/company/infra/repository/mongo/company.model';
 import { RecruiterFacade } from './facade/recruiter.facade';
 import {
 	Recruiter,
@@ -19,6 +23,7 @@ import { UpdateRecruiterUseCase } from './usecase/update/update.recruiter.usecas
 @Module({
 	imports: [
 		MongooseModule.forFeature([
+			{ name: Company.name, schema: CompanySchema },
 			{ name: Recruiter.name, schema: RecruiterSchema },
 		]),
 		CompanyModule,

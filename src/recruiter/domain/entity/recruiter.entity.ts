@@ -3,6 +3,7 @@ import BaseUser, {
 	NotUpdableProps,
 } from '@/@shared/entity/user.base';
 import NotificationError from '@/@shared/notification/notification.error';
+import Company from '@/company/domain/entity/company.entity';
 import RecruiterValidatorFactory from '../factory/recruiter.validator.factory';
 
 export enum Status {
@@ -30,6 +31,7 @@ export default class Recruiter extends BaseUser {
 	private _companyID: string;
 	private _companyCNPJ: string;
 	private _isCompanyAdmin: boolean;
+	private _company: Company;
 
 	constructor(props: Props) {
 		super(props);
@@ -45,6 +47,8 @@ export default class Recruiter extends BaseUser {
 	}
 
 	canInteract(): boolean {
+		if (!this._company || this._company.canInteract()) return false;
+
 		return this._status === Status.ACTIVATED;
 	}
 
@@ -83,5 +87,9 @@ export default class Recruiter extends BaseUser {
 
 	get isCompanyAdmin(): boolean {
 		return this._isCompanyAdmin ?? false;
+	}
+
+	public attachCompany(company: Company) {
+		this._company = company;
 	}
 }
