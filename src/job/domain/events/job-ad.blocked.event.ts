@@ -1,20 +1,16 @@
 import JobAd, { Status } from '../entity/job.entity';
 import { Event } from './event';
+import { Props } from './job-ad.activated.event';
 
-export type Props = {
-	id: string;
-	editor: string;
-};
-
-export class JobAdActivatedEvent extends Event {
-	static action = 'jobad.activated';
+export class JobAdBlockedEvent extends Event {
+	static action = 'jobad.blocked';
 
 	constructor(props: Props) {
 		super(
-			JobAdActivatedEvent.action,
+			JobAdBlockedEvent.action,
 			new JobAd({
 				id: props.id,
-				status: Status.ACTIVATED,
+				status: Status.BLOCKED,
 				editors: [props.editor],
 			}),
 		);

@@ -38,6 +38,9 @@ export class FindJobByIDOutputDto {
 	techs?: string[];
 
 	@Expose()
+	availability: string;
+
+	@Expose()
 	createdAt: Date;
 
 	@Expose()

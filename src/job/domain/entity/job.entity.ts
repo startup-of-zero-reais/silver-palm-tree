@@ -3,9 +3,17 @@ import Company from '@/company/domain/entity/company.entity';
 import { Event } from '../events/event';
 
 export enum Status {
+	/** `INSPECTION` means the job is recently added. It needs a inspection */
 	'INSPECTION' = 'INSPECTION',
+	/** `RE_INSPECTION` means the job was `ACTIVATED` but was updated and needs a new inspection */
+	'RE_INSPECTION' = 'RE_INSPECTION',
+	/** `ACTIVATED` means the job was inspectioned and activated */
 	'ACTIVATED' = 'ACTIVATED',
+	/** `DEACTIVATED` means the job was deactivated manually by the owner or editors */
 	'DEACTIVATED' = 'DEACTIVATED',
+	/** `EXPIRED` means the job was pass the lifecicle */
+	'EXPIRED' = 'EXPIRED',
+	/** `BLOCKED` means the job not follows the quality gate from the platform */
 	'BLOCKED' = 'BLOCKED',
 }
 

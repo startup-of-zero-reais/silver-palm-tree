@@ -14,6 +14,7 @@ import { FindJobByIDUseCase } from './usecase/find-by-id/find-by-id.job.usecase'
 import { ListJobsUseCase } from './usecase/list/list.usecase';
 import { RefreshJobUseCase } from './usecase/refresh/refresh.usecase';
 import { UpdateJobStatusUseCase } from './usecase/update-job-status/update-job-status.usecase';
+import { UpdateUseCase } from './usecase/update/update.usecase';
 
 @Module({
 	imports: [
@@ -31,6 +32,7 @@ import { UpdateJobStatusUseCase } from './usecase/update-job-status/update-job-s
 		// services
 		CreateJobUseCase,
 		FindJobByIDUseCase,
+		UpdateUseCase,
 		UpdateJobStatusUseCase,
 		ListJobsUseCase,
 		RefreshJobUseCase,
