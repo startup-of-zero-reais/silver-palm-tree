@@ -23,26 +23,26 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-namespace': 'off',
     '@typescript-eslint/no-var-requires': 'off',
+	'@typescript-eslint/ban-ts-comment': 'off',
 
-    
-		'import-helpers/order-imports': [
-			'error',
-			{
-				newlinesBetween: 'never',
-				groups: [
-					'module',
-					'/^@\\/.+/',
-					'/^@\\/presentation/',
-					'/^@\\/infra/',
-					'/^@\\/data/',
-					'/^@\\/domain/',
-					'sibling',
-					'parent',
-					'index',
-					'/\\.+/'
-				],
-				alphabetize: { order: 'asc', ignoreCase: true }
-			}
-		]
+	'import-helpers/order-imports': [
+		'error',
+		{
+			newlinesBetween: 'never',
+			groups: [
+				'module',
+				'/^@\\/.+/',
+				'/^@\\/presentation/',
+				'/^@\\/infra/',
+				'/^@\\/data/',
+				'/^@\\/domain/',
+				'sibling',
+				'parent',
+				'index',
+				'/\\.+/'
+			],
+			alphabetize: { order: 'asc', ignoreCase: true }
+		}
+	]
   },
 };
