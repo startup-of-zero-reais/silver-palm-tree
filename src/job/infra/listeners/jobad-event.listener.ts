@@ -30,7 +30,6 @@ export class JobAdEventListener {
 			| JobAdBlockedEvent
 			| JobAdUpdatedEvent,
 	) {
-		console.log(event.action());
 		await this.repository.putEvent(event);
 	}
 }
