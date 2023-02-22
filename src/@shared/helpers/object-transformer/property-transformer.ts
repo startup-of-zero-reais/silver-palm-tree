@@ -1,4 +1,5 @@
 import { set, get } from 'lodash';
+import { ObjectTransformer } from './object-transformer';
 import { DotKeys } from './typings';
 
 export class PropertyTransformer<T, To> {
@@ -10,7 +11,7 @@ export class PropertyTransformer<T, To> {
 		private readonly _objTransformer,
 	) {}
 
-	public to(newPropName: DotKeys<To>) {
+	public to(newPropName: DotKeys<To>): ObjectTransformer<T, To> {
 		const value = get(
 			this._originalProp.value,
 			this._originalProp.propName,

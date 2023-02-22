@@ -12,7 +12,12 @@ type KeyOf<T> = Extract<keyof T, string>;
  * ["name"] | ["user", "email"]
  * ```
  */
-type PathsToStringProps<T> = T extends string
+type PathsToStringProps<T> = T extends
+	| string
+	| number
+	| boolean
+	| Date
+	| Array<any>
 	? []
 	: {
 			[K in KeyOf<T>]: [K, ...PathsToStringProps<T[K]>];

@@ -48,4 +48,8 @@ export class CreateJobInputDto {
 	@IsString()
 	@IsNotEmpty()
 	availability: string;
+
+	@IsNotEmpty()
+	@IsString()
+	location?: string;
 }

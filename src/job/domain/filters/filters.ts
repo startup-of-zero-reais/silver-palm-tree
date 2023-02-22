@@ -4,4 +4,5 @@ export interface Filters {
 	minSalary?: number;
 	maxSalary?: number;
 	availability?: string;
+	location?: string;
 }

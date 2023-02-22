@@ -41,6 +41,9 @@ export class Job {
 	availability?: string;
 
 	@Prop()
+	location?: string;
+
+	@Prop()
 	createdAt?: Date;
 
 	@Prop()

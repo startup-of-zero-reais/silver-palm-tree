@@ -39,5 +39,6 @@ import { UpdateUseCase } from './usecase/update/update.usecase';
 		// event listeners
 		JobAdEventListener,
 	],
+	exports: [MongooseModule],
 })
 export class JobModule {}

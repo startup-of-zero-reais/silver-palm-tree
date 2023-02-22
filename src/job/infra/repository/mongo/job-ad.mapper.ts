@@ -1,32 +1,38 @@
+/* eslint-disable prettier/prettier */
+import { ObjectTransformer } from '@/@shared/helpers';
 import JobAd, { State } from '@/job/domain/entity/job.entity';
 import DomainJobAd from '@/job/domain/entity/job.entity';
 import { Job, JobAdView } from './job-ad.model';
 
 export class JobAdMapper {
 	static toDomain(data: Partial<JobAdView>): JobAd {
-		const state: State = {
-			id: data._id,
-			title: data.title,
-			description: data.description,
-			salary: data.salary,
-			hideSalary: data.hideSalary,
-			status: data.status,
-			owner: data.owner,
-			editors: data.editors,
-			companyID: data.companyID,
-			contracts: data.contracts,
-			techs: data.techs,
-			availability: data.availability,
-			createdAt: data.createdAt,
-			updatedAt: data.updatedAt,
-			__v: data.__v,
-		} as any;
+		const state = ObjectTransformer.transform<Partial<JobAdView>, State>(
+			data,
+		)
+			.property('_id').to('id')
+			.property('title').to('title')
+			.property('description').to('description')
+			.property('salary').to('salary')
+			.property('hideSalary').to('hideSalary')
+			.property('status').to('status')
+			.property('owner').to('owner')
+			.property('companyID').to('companyID')
+			.property('availability').to('availability')
+			.property('createdAt').to('createdAt')
+			.property('updatedAt').to('updatedAt')
+			.property('editors').to('editors')
+			.property('techs').to('techs')
+			.property('contracts').to('contracts')
+			.property('location').to('location')
+			.property('__v').to('__v')
+			.transformed();
 
 		const jobad = new JobAd(state);
 
 		if ('company' in data) {
 			jobad.attachCompany(data.company as any);
 		}
+
 
 		return jobad;
 	}
@@ -49,6 +55,7 @@ export class JobAdMapper {
 		if (data.contracts) job.contracts = data.contracts;
 		if (data.techs) job.techs = data.techs;
 		if (data.availability) job.availability = data.availability;
+		if (data.location) job.location = data.location;
 
 		return job;
 	}
@@ -71,6 +78,7 @@ export class JobAdMapper {
 		if (data.availability) job.availability = data.availability;
 		if (data.createdAt) job.createdAt = data.createdAt;
 		if (data.updatedAt) job.updatedAt = data.updatedAt;
+		if (data.location) job.location = data.location;
 		if (data.version) job.__v = data.version;
 
 		return job;

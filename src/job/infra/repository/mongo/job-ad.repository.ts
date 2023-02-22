@@ -211,6 +211,11 @@ export class JobAdMongoRepository {
 					),
 				};
 			}
+			if (filters.location) {
+				additionalFilters.location = {
+					$regex: new RegExp(`^${filters.location}$`, 'i'),
+				};
+			}
 
 			const salary = {};
 			if (filters.minSalary)

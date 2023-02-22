@@ -4,6 +4,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MainExceptionFilter } from './@shared/exception-filter/http-exception.filter';
+import { HttpClient } from './@shared/protocol/http/http.client';
 import {
 	CacheManager,
 	cacheTicker,
@@ -14,6 +15,7 @@ import { AuthModule } from './auth/auth.module';
 import { CandidateModule } from './candidate/candidate.module';
 import { CompanyModule } from './company/company.module';
 import { JobModule } from './job/job.module';
+import { LocationsModule } from './locations/locations.module';
 import { RecruiterModule } from './recruiter/recruiter.module';
 
 @Module({
@@ -32,6 +34,7 @@ import { RecruiterModule } from './recruiter/recruiter.module';
 		RecruiterModule,
 		CompanyModule,
 		JobModule,
+		LocationsModule,
 	],
 	controllers: [AppController],
 	providers: [

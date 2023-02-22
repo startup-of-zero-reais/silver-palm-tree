@@ -33,6 +33,7 @@ export type State = {
 	contracts?: string[];
 	techs?: string[];
 	availability: string;
+	location?: string;
 	createdAt?: Date;
 	updatedAt?: Date;
 	__v?: number;
@@ -116,6 +117,10 @@ export default class JobAd extends Entity {
 		return this._state.availability;
 	}
 
+	get location(): string {
+		return this._state.location;
+	}
+
 	get lastEditor(): string {
 		return this._state.editors.at(-1);
 	}
@@ -157,6 +162,7 @@ export default class JobAd extends Entity {
 		if (data.contracts) this._state.contracts = data.contracts;
 		if (data.availability) this._state.availability = data.availability;
 		if (data.techs) this._state.techs = data.techs;
+		if (data.location) this._state.location = data.location;
 	}
 
 	public compileEvents() {

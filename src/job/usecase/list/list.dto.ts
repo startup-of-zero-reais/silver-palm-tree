@@ -56,6 +56,10 @@ export class ListJobsInputDTO implements Filters {
 
 	@IsOptional()
 	availability?: string;
+
+	@IsOptional()
+	@Transform(({ value }) => decodeURIComponent(value))
+	location?: string;
 }
 
 @Exclude()
@@ -134,6 +138,9 @@ export class JobOutputDTO {
 
 	@Expose()
 	availability?: string;
+
+	@Expose()
+	location?: string;
 
 	@Expose()
 	createdAt: Date;

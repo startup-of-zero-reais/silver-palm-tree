@@ -1,3 +1,4 @@
+import { Location } from '@/locations/domain/location.entity';
 import JobAd, { Status } from '../entity/job.entity';
 import { Event } from './event';
 
@@ -12,6 +13,7 @@ type Props = {
 	contracts?: string[];
 	techs?: string[];
 	availability: string;
+	location?: string;
 	__v?: number;
 };
 
@@ -32,6 +34,7 @@ export class JobAdCreatedEvent extends Event {
 				contracts: props.contracts ?? [],
 				techs: props.techs ?? [],
 				availability: props.availability,
+				location: props.location,
 			}),
 		);
 	}
