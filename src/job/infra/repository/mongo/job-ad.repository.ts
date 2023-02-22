@@ -46,6 +46,10 @@ export class JobAdMongoRepository {
 		search = '',
 		filters: Filters = {},
 	) {
+		// ensureIndexes grants the indexes were created
+		// on query jobs
+		await this.jobAdView.ensureIndexes();
+
 		let filterQuery: FilterQuery<JobAdViewDocument> = {
 			status: { $eq: Status.ACTIVATED },
 		};
