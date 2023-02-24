@@ -22,11 +22,11 @@ export class ListLocationOutputDTO {
 
 	@Expose()
 	@Transform(applyHref)
-	_links: any[];
+	_links: any;
 }
 
 function applyHref(params: TransformFnParams) {
 	const searchParam = new URLSearchParams();
 	searchParam.set('location', params.obj.name);
-	return [{ jobs: `${process.env.BASE_URL}/jobs?${searchParam.toString()}` }];
+	return { jobs: `${process.env.BASE_URL}/jobs?${searchParam.toString()}` };
 }
