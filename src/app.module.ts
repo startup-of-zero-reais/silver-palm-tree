@@ -17,6 +17,7 @@ import { CompanyModule } from './company/company.module';
 import { JobModule } from './job/job.module';
 import { LocationsModule } from './locations/locations.module';
 import { RecruiterModule } from './recruiter/recruiter.module';
+import { FiltersModule } from './filters/filters.module';
 
 @Module({
 	imports: [
@@ -35,6 +36,7 @@ import { RecruiterModule } from './recruiter/recruiter.module';
 		CompanyModule,
 		JobModule,
 		LocationsModule,
+		FiltersModule,
 	],
 	controllers: [AppController],
 	providers: [
