@@ -19,7 +19,13 @@ async function bootstrap() {
 			'http://localhost:3001',
 		],
 		credentials: true,
-		allowedHeaders: ['x-timestamp', 'x-hash', 'authorization'],
+		allowedHeaders: [
+			'x-timestamp',
+			'x-hash',
+			'authorization',
+			'content-type',
+			'accept',
+		],
 	});
 	app.use(helmet());
 
