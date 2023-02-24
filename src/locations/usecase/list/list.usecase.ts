@@ -19,6 +19,7 @@ export class ListUseCase implements UseCaseInterface {
 			{ $group: { _id: '$location' } },
 			{ $match: { _id: { $ne: null } } },
 			{ $replaceRoot: { newRoot: { name: '$_id' } } },
+			{ $sort: { name: 1 } },
 		]);
 
 		return result;
