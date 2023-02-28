@@ -20,6 +20,6 @@ export class FindCompanyOutputDto {
 	@Expose()
 	description: string;
 
-	@Expose()
+	@Expose({ until: 1 })
 	status: string;
 }

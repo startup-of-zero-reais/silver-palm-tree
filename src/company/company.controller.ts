@@ -3,6 +3,7 @@ import {
 	Controller,
 	Get,
 	HttpStatus,
+	Param,
 	Patch,
 	Post,
 	Put,
@@ -101,6 +102,16 @@ export class CompanyController {
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.json({ error: e.message });
 		}
+	}
+
+	@Get(':id')
+	async getCompany(@Param('id') companyID: string) {
+		const input = new FindCompanyInputDto();
+		input.id = companyID;
+
+		const company = await this.findCompanyUseCase.execute(input);
+
+		return plainToClass(FindCompanyOutputDto, company, { version: 1.1 });
 	}
 
 	@Patch()
