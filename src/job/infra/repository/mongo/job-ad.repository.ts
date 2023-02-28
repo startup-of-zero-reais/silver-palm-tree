@@ -31,13 +31,22 @@ export class JobAdMongoRepository {
 
 	async getJob(jobAd: { id: string }): Promise<JobAd> {
 		await this.materializeView(jobAd.id);
-		const job = await this.jobAdView.findById(jobAd.id).exec();
+
+		const jobs = await this.jobAdView
+			.aggregate(aggregateCompany({ _id: jobAd.id }))
+			.exec();
+
+		if (jobs.length === 0) {
+			return null;
+		}
+
+		const job = jobs[0];
 
 		if (!job) {
 			return null;
 		}
 
-		return JobAdMapper.toDomain(job);
+		return JobAdMapper.toDomain(job).attachCompany(job.company);
 	}
 
 	async paginate(

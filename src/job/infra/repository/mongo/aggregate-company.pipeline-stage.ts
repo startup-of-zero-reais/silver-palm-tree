@@ -12,6 +12,14 @@ export function aggregateCompany(
 		return withSearch ? { score: { $meta: 'textScore' } } : {};
 	};
 
+	const skip = () => {
+		if (page > 1) {
+			return per_page * (page - 1);
+		}
+
+		return 0;
+	};
+
 	return [
 		{ $match: filterQuery },
 		{
@@ -44,7 +52,7 @@ export function aggregateCompany(
 				...score(),
 			},
 		},
-		{ $skip: page },
+		{ $skip: skip() },
 		{ $limit: per_page },
 	];
 }
