@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { JobFacade } from './facade/job.facade';
 import { JobAdEventListener } from './infra/listeners/jobad-event.listener';
 import {
 	JobAd,
@@ -38,7 +39,9 @@ import { UpdateUseCase } from './usecase/update/update.usecase';
 		RefreshJobUseCase,
 		// event listeners
 		JobAdEventListener,
+		// facade
+		JobFacade,
 	],
-	exports: [MongooseModule],
+	exports: [MongooseModule, JobAdMongoRepository, JobFacade],
 })
 export class JobModule {}

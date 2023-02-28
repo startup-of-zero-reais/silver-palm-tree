@@ -18,6 +18,7 @@ import { JobModule } from './job/job.module';
 import { LocationsModule } from './locations/locations.module';
 import { RecruiterModule } from './recruiter/recruiter.module';
 import { FiltersModule } from './filters/filters.module';
+import { ApplyModule } from './apply/apply.module';
 
 @Module({
 	imports: [
@@ -37,6 +38,7 @@ import { FiltersModule } from './filters/filters.module';
 		JobModule,
 		LocationsModule,
 		FiltersModule,
+		ApplyModule,
 	],
 	controllers: [AppController],
 	providers: [
