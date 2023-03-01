@@ -29,7 +29,7 @@ export class JobAdCreatedEvent extends Event {
 				salary: props.salary,
 				hideSalary: props.hideSalary ?? false,
 				owner: props.owner,
-				companyID: props.companyID,
+				company: { _id: props.companyID } as any,
 				status: Status.INSPECTION,
 				contracts: props.contracts ?? [],
 				techs: props.techs ?? [],

@@ -11,14 +11,8 @@ export class Apply {
 	@Prop({ type: mongoose.Types.ObjectId })
 	_id?: string;
 
-	@Prop({ required: true })
-	jobID: string;
-
 	@Prop({ ref: JobAdView.name })
 	job: JobAdView;
-
-	@Prop({ required: true })
-	candidateID: string;
 
 	@Prop({ ref: Candidate.name })
 	candidate: Candidate;

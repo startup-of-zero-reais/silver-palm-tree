@@ -25,10 +25,10 @@ export class Candidate {
 	@Prop()
 	password: string;
 
-	@Prop([Techs])
+	@Prop({ ref: Techs.name, default: undefined })
 	techs: Techs[];
 
-	@Prop([ProfessionalExperience])
+	@Prop({ ref: ProfessionalExperience.name, default: undefined })
 	professionalExperiences: ProfessionalExperience[];
 
 	@Prop()

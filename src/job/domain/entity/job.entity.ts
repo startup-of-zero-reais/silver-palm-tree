@@ -28,7 +28,6 @@ export type State = {
 	status: Status;
 	owner: string;
 	editors?: string[];
-	companyID: string;
 	company?: Company;
 	contracts?: string[];
 	techs?: string[];
@@ -97,10 +96,6 @@ export default class JobAd extends Entity {
 		return this._state.editors ?? [];
 	}
 
-	get companyID(): string {
-		return this._state.companyID;
-	}
-
 	get company(): Company {
 		return this._state.company;
 	}
@@ -156,9 +151,9 @@ export default class JobAd extends Entity {
 		if (data.salary) this._state.salary = data.salary;
 		if (typeof data.isSalaryHidden === 'boolean')
 			this._state.hideSalary = data.isSalaryHidden ?? false;
+		if (data.company) this._state.company = data.company;
 		if (data.owner) this._state.owner = data.owner;
 		if (data.editors) this.addEditors(...data.editors);
-		if (data.companyID) this._state.companyID = data.companyID;
 		if (data.contracts) this._state.contracts = data.contracts;
 		if (data.availability) this._state.availability = data.availability;
 		if (data.techs) this._state.techs = data.techs;

@@ -40,8 +40,6 @@ export default class Candidate extends Entity {
 		this._techs = props.techs;
 		this._password = props.password;
 		this._professionalExperience = props.professionalExperiences;
-
-		this.validate();
 	}
 
 	validate() {

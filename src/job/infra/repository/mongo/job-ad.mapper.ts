@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { ObjectTransformer } from '@/@shared/helpers';
+import Company from '@/company/domain/entity/company.entity';
+import { CompanyMapper } from '@/company/infra/repository/mongo/company.mapper';
 import JobAd, { State } from '@/job/domain/entity/job.entity';
-import DomainJobAd from '@/job/domain/entity/job.entity';
-import { Job, JobAdView } from './job-ad.model';
+import { Job as JobEntity, JobAdView } from './job-ad.model';
 
 export class JobAdMapper {
 	static toDomain(data: Partial<JobAdView>): JobAd {
@@ -16,7 +17,6 @@ export class JobAdMapper {
 			.property('hideSalary').to('hideSalary')
 			.property('status').to('status')
 			.property('owner').to('owner')
-			.property('companyID').to('companyID')
 			.property('availability').to('availability')
 			.property('createdAt').to('createdAt')
 			.property('updatedAt').to('updatedAt')
@@ -29,57 +29,59 @@ export class JobAdMapper {
 
 		const jobad = new JobAd(state);
 
-		if ('company' in data) {
-			jobad.attachCompany(data.company as any);
+		if ('company' in data && data.company) {
+			const company = CompanyMapper.toDomain(data.company)
+			jobad.attachCompany(company);
 		}
-
 
 		return jobad;
 	}
 
-	static toData(data: Partial<DomainJobAd>): Job {
-		const job = new Job();
+	static toData(data: Partial<JobAd>): JobEntity {
+		const job = ObjectTransformer.transform<Partial<JobAd>, JobEntity>(data)
+			.property('title').to('title')
+			.property('description').to('description')
+			.property('salary').to('salary')
+			.property('isSalaryHidden').to('hideSalary')
+			.property('status').to('status')
+			.property('owner').to('owner')
+			.property('contracts').to('contracts')
+			.property('techs').to('techs')
+			.property('availability').to('availability')
+			.property('location').to('location')
+			.transformed()
 
-		if (data.title) job.title = data.title;
-		if (data.description) job.description = data.description;
-		if (data.salary) job.salary = data.salary;
-		if (typeof data.isSalaryHidden !== 'undefined')
-			job.hideSalary = data.isSalaryHidden;
-		if (data.status) job.status = data.status;
-		if (data.owner) job.owner = data.owner;
+		if ('company' in data) {
+			job.company = data.company instanceof Company
+				? CompanyMapper.toEntity(data.company)
+				: data.company as any;
+		}
+
 		if (data.editors) {
 			if (!job.editors) job.editors = [];
 			job.editors.push(...data.editors);
 		}
-		if (data.companyID) job.companyID = data.companyID;
-		if (data.contracts) job.contracts = data.contracts;
-		if (data.techs) job.techs = data.techs;
-		if (data.availability) job.availability = data.availability;
-		if (data.location) job.location = data.location;
 
 		return job;
 	}
 
-	static toState(data: Partial<DomainJobAd>): Job {
-		const job = new Job();
+	static toState(data: Partial<JobAd>): JobEntity {
+		const job = ObjectTransformer.transform<Partial<JobAd>, JobEntity>(data)
+			.property('title').to('title')
+			.property('description').to('description')
+			.property('salary').to('salary')
+			.property('isSalaryHidden').to('hideSalary')
+			.property('status').to('status')
+			.property('owner').to('owner')
+			.property('editors').to('editors')
+			.property('contracts').to('contracts')
+			.property('techs').to('techs')
+			.property('availability').to('availability')
+			.property('location').to('location')
+			.property('version').to('__v')
+			.property('company.id').to('company._id')
+			.transformed()
 
-		if (data.id) job._id = data.id;
-		if (data.title) job.title = data.title;
-		if (data.description) job.description = data.description;
-		if (data.salary) job.salary = data.salary;
-		if (typeof data.isSalaryHidden !== 'undefined')
-			job.hideSalary = data.isSalaryHidden;
-		if (data.status) job.status = data.status;
-		if (data.owner) job.owner = data.owner;
-		if (data.editors) job.editors = data.editors;
-		if (data.companyID) job.companyID = data.companyID;
-		if (data.contracts) job.contracts = data.contracts;
-		if (data.techs) job.techs = data.techs;
-		if (data.availability) job.availability = data.availability;
-		if (data.createdAt) job.createdAt = data.createdAt;
-		if (data.updatedAt) job.updatedAt = data.updatedAt;
-		if (data.location) job.location = data.location;
-		if (data.version) job.__v = data.version;
 
 		return job;
 	}

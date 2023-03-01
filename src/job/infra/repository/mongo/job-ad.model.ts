@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
+import { Company } from '@/company/infra/repository/mongo/company.model';
 import { Status } from '@/job/domain/entity/job.entity';
 
 @Schema()
@@ -28,8 +29,8 @@ export class Job {
 	@Prop({ default: undefined })
 	editors?: string[];
 
-	@Prop()
-	companyID: string;
+	@Prop({ ref: Company.name })
+	company: Company;
 
 	@Prop({ default: undefined })
 	contracts?: string[];

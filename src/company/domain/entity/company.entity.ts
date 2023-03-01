@@ -36,7 +36,6 @@ export default class Company extends Entity {
 		this._description = props.description;
 		this._status = props.status || Status.INSPECTION;
 		this._adminID = props.adminID;
-		this.validate();
 	}
 
 	get logo(): string {

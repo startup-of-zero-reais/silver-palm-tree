@@ -26,7 +26,7 @@ export function aggregateCompany(
 			$lookup: {
 				from: 'companies',
 				as: 'companies',
-				localField: 'companyID',
+				localField: 'company._id',
 				foreignField: '_id',
 			},
 		},

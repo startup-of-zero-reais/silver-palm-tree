@@ -45,10 +45,12 @@ export class Apply extends Entity {
 
 	public attachJob(job: JobAd) {
 		this._state.job = job;
+		return this;
 	}
 
 	public attachCandidate(candidate: Candidate) {
 		this._state.candidate = candidate;
+		return this;
 	}
 
 	public startApply() {
