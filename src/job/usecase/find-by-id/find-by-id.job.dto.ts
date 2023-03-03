@@ -68,6 +68,9 @@ export class FindJobByIDOutputDto {
 	availability: string;
 
 	@Expose()
+	location: string;
+
+	@Expose()
 	createdAt: Date;
 
 	@Expose()
