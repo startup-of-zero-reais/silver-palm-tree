@@ -24,6 +24,8 @@ export class JobAdMapper {
 			.property('techs').to('techs')
 			.property('contracts').to('contracts')
 			.property('location').to('location')
+			.property('createdAt').to('createdAt')
+			.property('updatedAt').to('updatedAt')
 			.property('__v').to('__v')
 			.transformed();
 
@@ -49,6 +51,8 @@ export class JobAdMapper {
 			.property('techs').to('techs')
 			.property('availability').to('availability')
 			.property('location').to('location')
+			.property('createdAt').to('createdAt')
+			.property('updatedAt').to('updatedAt')
 			.transformed()
 
 		if ('company' in data) {
@@ -80,6 +84,8 @@ export class JobAdMapper {
 			.property('location').to('location')
 			.property('version').to('__v')
 			.property('company.id').to('company._id')
+			.property('createdAt').to('createdAt')
+			.property('updatedAt').to('updatedAt')
 			.transformed()
 
 
