@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { HttpErrorException } from '@/@shared/exception-filter/http-error.exception';
 import UseCaseInterface from '@/@shared/usecase/use-case.interface';
 import Candidate from '@/candidate/domain/entity/candidate.entity';
 import { CandidateRepositoryInterface } from '@/candidate/domain/repository/candidate.repository.interface';
@@ -18,7 +19,7 @@ export default class FindCandidateByEmailUsecase implements UseCaseInterface {
 		);
 
 		if (!candidate) {
-			throw new Error('Candidate not found');
+			throw new HttpErrorException('Candidate not found', 404);
 		}
 
 		return candidate;

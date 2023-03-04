@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { HttpErrorException } from '@/@shared/exception-filter/http-error.exception';
 import { Session } from '@/auth/domain';
 import { SessionMongoRepository } from '@/auth/infra/repository/mongo/session.repository';
 import { LoginOkDto } from '../login/login.dto';
@@ -17,7 +18,7 @@ export class ManageSessionToken {
 		const type = getTypeFrom(user);
 
 		if (type === 'unknown') {
-			throw new Error('can not identify user type');
+			throw new HttpErrorException('can not identify user type', 422);
 		}
 
 		const recruiterID = user.recruiter?.id || 'None';

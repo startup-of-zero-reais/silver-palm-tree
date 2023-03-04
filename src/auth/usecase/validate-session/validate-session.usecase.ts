@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { HttpErrorException } from '@/@shared/exception-filter/http-error.exception';
 import UseCaseInterface from '@/@shared/usecase/use-case.interface';
 import { Candidate } from '@/candidate/domain';
 import CandidateFacade from '@/candidate/facade/candidate.facade';
@@ -26,7 +27,11 @@ export class ValidateSessionUseCase implements UseCaseInterface {
 		const session = await this.execute(token);
 
 		if (typeof session === 'boolean') {
-			return done(new Error('Invalid session'), null, null);
+			return done(
+				new HttpErrorException('Invalid session', 403),
+				null,
+				null,
+			);
 		}
 
 		return done(null, session, null);

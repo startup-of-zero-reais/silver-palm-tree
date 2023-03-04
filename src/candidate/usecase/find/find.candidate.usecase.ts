@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { HttpErrorException } from '@/@shared/exception-filter/http-error.exception';
 import UseCaseInterface from '@/@shared/usecase/use-case.interface';
 import { Candidate, CandidateRepositoryInterface } from '@/candidate/domain';
 import CandidateMongoRepository from '@/candidate/infra/repository/mongo/candidate.repository';
@@ -15,7 +16,7 @@ export default class FindCandidateUsecase implements UseCaseInterface {
 		const candidate = await this.candidateRepository.find(input.id);
 
 		if (!candidate) {
-			throw new Error('Candidate not found');
+			throw new HttpErrorException('Candidate not found', 404);
 		}
 
 		return candidate;
