@@ -27,6 +27,7 @@ if [[ "${HAS_NVM}" == "" ]]; then
 fi
 
 function callseed {
+	sleep 10
 	ts-node -r tsconfig-paths/register ./scripts/seed-candidates.ts --length=3 --reseed || exit 1;
 	ts-node -r tsconfig-paths/register ./scripts/seed-recruiters.ts --length=3 --reseed || exit 1;
 	ts-node -r tsconfig-paths/register ./scripts/seed-jobs.ts --length=100 --reseed || exit 1;

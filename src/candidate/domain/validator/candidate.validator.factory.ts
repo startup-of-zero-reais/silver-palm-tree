@@ -13,15 +13,6 @@ export default class CandidateYupValidator
 					email: yup.string().email().required(),
 					image: yup.string().url().required(),
 					phone: yup.string().required(),
-					techs: yup
-						.array()
-						.of(
-							yup.object().shape({
-								tech: yup.string().min(2).max(255).required(),
-							}),
-						)
-						.min(1),
-					professionalExperiences: yup.array().min(1),
 				})
 				.validateSync(
 					{
@@ -29,8 +20,6 @@ export default class CandidateYupValidator
 						email: entity.email,
 						image: entity.image,
 						phone: entity.phone,
-						techs: entity.techs,
-						professionalExperiences: entity.professionalExperiences,
 					},
 					{ abortEarly: false },
 				);
