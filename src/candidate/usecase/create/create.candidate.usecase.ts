@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { HttpErrorException } from '@/@shared/exception-filter/http-error.exception';
 import {
 	Candidate,
 	CandidateFactory,
@@ -26,7 +27,10 @@ export default class CreateCandidateUseCase {
 		} = input;
 
 		if (await this.candidateAlreadyExists(email)) {
-			throw new Error('Candidate with this email already registered');
+			throw new HttpErrorException(
+				'Candidate with this email already registered',
+				409,
+			);
 		}
 
 		const candidate = CandidateFactory.create(

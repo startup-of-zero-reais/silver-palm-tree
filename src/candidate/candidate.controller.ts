@@ -3,7 +3,6 @@ import {
 	Controller,
 	Get,
 	HttpStatus,
-	Param,
 	Post,
 	Put,
 	Query,
@@ -90,25 +89,13 @@ export class CandidateController {
 		@Body() createCandidateDto: CreateCandidateInputDto,
 		@Response() response: eResponse,
 	) {
-		try {
-			const output = await this.createCandidateUseCase.execute(
-				createCandidateDto,
-			);
+		const output = await this.createCandidateUseCase.execute(
+			createCandidateDto,
+		);
 
-			return response
-				.status(HttpStatus.CREATED)
-				.json(plainToClass(CreateCandidateOutputDto, output));
-		} catch (error) {
-			if (error instanceof NotificationError) {
-				return response
-					.status(HttpStatus.UNPROCESSABLE_ENTITY)
-					.json(error);
-			}
-
-			return response
-				.status(HttpStatus.INTERNAL_SERVER_ERROR)
-				.json({ error: error.message });
-		}
+		return response
+			.status(HttpStatus.CREATED)
+			.json(plainToClass(CreateCandidateOutputDto, output));
 	}
 
 	@Put()
