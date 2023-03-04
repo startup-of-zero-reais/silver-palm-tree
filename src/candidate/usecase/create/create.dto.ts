@@ -30,6 +30,7 @@ export class CreateCandidateInputDto {
 	@IsEmail()
 	email: string;
 
+	@IsOptional()
 	@IsUrl()
 	@IsNotEmpty()
 	image: string;
