@@ -31,7 +31,10 @@ export class CreateRecruiterUseCase implements UseCaseInterface {
 		let company: Company = _company;
 
 		if (recruiterAlreadyExists) {
-			throw new Error('Recruiter with this email already exists');
+			throw new HttpErrorException(
+				'Recruiter with this email already exists',
+				409,
+			);
 		}
 
 		if (company && (input.company.description || input.company.logo))
