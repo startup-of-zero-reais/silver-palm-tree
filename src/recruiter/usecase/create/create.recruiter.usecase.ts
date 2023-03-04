@@ -55,7 +55,7 @@ export class CreateRecruiterUseCase implements UseCaseInterface {
 		}
 
 		if (!company) {
-			throw new Error('Company not found');
+			throw new HttpErrorException('Company not found', 404);
 		}
 
 		const { name, email, image, password } = input;
