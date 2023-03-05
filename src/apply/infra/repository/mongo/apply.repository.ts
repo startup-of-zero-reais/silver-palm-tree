@@ -50,8 +50,10 @@ export class ApplyMongoRepository {
 		const entity = ApplyMapper.toMongo(apply);
 
 		const result = await this.repository.findOne({
-			jobID: entity.job._id,
-			candidateID: entity.candidate._id,
+			$and: [
+				{ job: { _id: apply.jobID } },
+				{ candidateID: entity.candidate._id },
+			],
 		});
 
 		if (!result) return null;
