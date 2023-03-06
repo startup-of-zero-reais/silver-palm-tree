@@ -16,6 +16,13 @@ import { Response as eResponse } from 'express';
 import { LoggedRecruiter, MustBeAuth } from '@/@shared/decorator';
 import { HttpErrorException } from '@/@shared/exception-filter/http-error.exception';
 import NotificationError from '@/@shared/notification/notification.error';
+import { Status } from '@/job/domain/entity/job.entity';
+import { JobFacade } from '@/job/facade/job.facade';
+import {
+	ListJobsInputDTO,
+	ListJobsOutputDTO,
+} from '@/job/usecase/list/list.dto';
+import { ListJobsUseCase } from '@/job/usecase/list/list.usecase';
 import { Recruiter } from './domain';
 import { CreateInputDto, CreateOutputDto } from './usecase/create/create.dto';
 import { CreateRecruiterUseCase } from './usecase/create/create.recruiter.usecase';
@@ -47,6 +54,7 @@ export class RecruiterController {
 		private readonly listRecruiterUseCase: ListRecruiterUseCase,
 		private readonly deleteRecruiterUseCase: DeleteRecruiterUseCase,
 		private readonly updateStatusRecruiterUseCase: UpdateStatusRecruiterUseCase,
+		private readonly listRecruiterJobsUseCase: JobFacade,
 	) {}
 
 	@Post()
@@ -169,5 +177,24 @@ export class RecruiterController {
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.json({ error: e.message });
 		}
+	}
+
+	@Get('jobs')
+	@MustBeAuth()
+	async getJobs(
+		@LoggedRecruiter() recruiter: Recruiter,
+		@Query('page') page = 1,
+		@Query('per_page') per_page = 30,
+	) {
+		const search = new ListJobsInputDTO();
+
+		search.page = page;
+		search.per_page = per_page;
+		search.recruiter = recruiter.id;
+		// all status
+		search.status = Object.keys(Status) as Status[];
+
+		const result = await this.listRecruiterJobsUseCase.getJobs(search);
+		return plainToClass(ListJobsOutputDTO, result);
 	}
 }

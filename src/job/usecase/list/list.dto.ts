@@ -6,7 +6,13 @@ import {
 	TransformFnParams,
 	Type,
 } from 'class-transformer';
-import { ArrayNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+	ArrayNotEmpty,
+	IsEmpty,
+	IsNumber,
+	IsOptional,
+	IsString,
+} from 'class-validator';
 import { TruncateAfter } from '@/@shared/decorator';
 import {
 	GreatherThanOrEqual,
@@ -14,6 +20,7 @@ import {
 } from '@/@shared/decorator/lte-gte.decorator';
 import { PaginationInterface } from '@/@shared/repository/pagination-interface';
 import { Meta, ToMeta } from '@/@shared/repository/presenter/meta.dto';
+import { Status } from '@/job/domain/entity/job.entity';
 import { Filters } from '@/job/domain/filters/filters';
 
 export class ListJobsInputDTO implements Filters {
@@ -33,6 +40,10 @@ export class ListJobsInputDTO implements Filters {
 	@IsString()
 	@Transform(({ value }) => decodeURIComponent(value))
 	search?: string;
+
+	@IsEmpty()
+	@Transform(({ value }) => decodeURIComponent(value).split(','))
+	status?: Status[];
 
 	// FILTER
 	@IsOptional()
@@ -61,6 +72,9 @@ export class ListJobsInputDTO implements Filters {
 	@IsOptional()
 	@Transform(({ value }) => decodeURIComponent(value))
 	location?: string;
+
+	@IsEmpty()
+	recruiter?: string;
 }
 
 @Exclude()
@@ -113,6 +127,9 @@ export class JobOutputDTO {
 
 	@Expose()
 	location?: string;
+
+	@Expose()
+	status?: Status;
 
 	@Expose()
 	createdAt: Date;

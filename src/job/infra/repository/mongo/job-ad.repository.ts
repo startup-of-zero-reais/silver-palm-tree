@@ -3,10 +3,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, ProjectionType, SortOrder } from 'mongoose';
 import { HttpErrorException } from '@/@shared/exception-filter/http-error.exception';
 import { isEmpty } from '@/@shared/helpers/prop-checkers';
+import PaginationPresenter from '@/@shared/repository/presenter/pagination.presenter';
 import JobAd, { Status } from '@/job/domain/entity/job.entity';
 import { Event as DomainEvent } from '@/job/domain/events/event';
 import { Filters } from '@/job/domain/filters/filters';
-import PaginationPresenter from '../presenter/pagination.presenter';
 import { aggregateCompany } from './aggregate-company.pipeline-stage';
 import { EventMapper } from './event.mapper';
 import { JobAdMapper } from './job-ad.mapper';
@@ -54,8 +54,10 @@ export class JobAdMongoRepository {
 		// on query jobs
 		await this.jobAdView.ensureIndexes();
 
+		if (!filters.status) filters.status = [Status.ACTIVATED];
+
 		let filterQuery: FilterQuery<JobAdViewDocument> = {
-			status: { $eq: Status.ACTIVATED },
+			status: { $in: filters.status },
 		};
 
 		let projection: ProjectionType<JobAdViewDocument> = undefined;
@@ -64,7 +66,7 @@ export class JobAdMongoRepository {
 		if (search) {
 			filterQuery = {
 				$and: [
-					{ status: Status.ACTIVATED },
+					{ status: { $in: filters.status } },
 					{ $text: { $search: search } },
 				],
 			};
@@ -220,6 +222,12 @@ export class JobAdMongoRepository {
 					$regex: new RegExp(`^${filters.location}$`, 'i'),
 				};
 			}
+
+			if (filters.recruiter)
+				additionalFilters.$or = [
+					{ owner: filters.recruiter },
+					{ editors: { $in: [filters.recruiter] } },
+				];
 
 			const salary = {};
 			if (filters.minSalary)

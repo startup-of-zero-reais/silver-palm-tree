@@ -5,6 +5,8 @@ import {
 	Company,
 	CompanySchema,
 } from '@/company/infra/repository/mongo/company.model';
+import { JobFacade } from '@/job/facade/job.facade';
+import { JobModule } from '@/job/job.module';
 import { RecruiterFacade } from './facade/recruiter.facade';
 import {
 	Recruiter,
@@ -27,6 +29,7 @@ import { UpdateRecruiterUseCase } from './usecase/update/update.recruiter.usecas
 			{ name: Recruiter.name, schema: RecruiterSchema },
 		]),
 		CompanyModule,
+		JobModule,
 	],
 	providers: [
 		// repositories
