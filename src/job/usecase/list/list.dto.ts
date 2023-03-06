@@ -148,7 +148,7 @@ function itemToData(pagination: PaginationInterface<any>) {
 
 function applyHref({ obj }: TransformFnParams) {
 	return {
-		self: { href: `${process.env.BASE_URL}/companies/${obj.id}` },
+		self: { href: `${process.env.BASE_URL}/jobs/${obj.id}` },
 		company: {
 			href: `${process.env.BASE_URL}/companies/${obj.company.id}`,
 		},
