@@ -3,6 +3,7 @@ import {
 	Controller,
 	Get,
 	HttpStatus,
+	Param,
 	Post,
 	Put,
 	Query,
@@ -61,6 +62,15 @@ export class CandidateController {
 				message: error.response.message,
 			});
 		}
+	}
+
+	@Get(':id')
+	async findById(@Param('id') candidateId: string) {
+		const output = await this.findCandidateUseCase.execute({
+			id: candidateId,
+		});
+
+		return plainToClass(FindOutputDto, output);
 	}
 
 	@Get()

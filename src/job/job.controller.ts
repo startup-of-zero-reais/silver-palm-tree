@@ -14,6 +14,11 @@ import { LoggedRecruiter, MustBeAuth } from '@/@shared/decorator';
 import { HttpErrorException } from '@/@shared/exception-filter/http-error.exception';
 import { Recruiter } from '@/recruiter/domain';
 import { Status } from './domain/entity/job.entity';
+import {
+	AppliesInputDto,
+	AppliesOutputDto,
+} from './usecase/applies/applies.dto';
+import { AppliesUseCase } from './usecase/applies/applies.usecase';
 import { CreateJobInputDto } from './usecase/create/create.dto';
 import { CreateJobUseCase } from './usecase/create/create.usecase';
 import {
@@ -39,6 +44,7 @@ export class JobController {
 		private readonly updateJobStatusUseCase: UpdateJobStatusUseCase,
 		private readonly listJobUseCase: ListJobsUseCase,
 		private readonly refreshJobUseCase: RefreshJobUseCase,
+		private readonly appliesJobUseCase: AppliesUseCase,
 	) {}
 
 	@Post()
@@ -155,6 +161,19 @@ export class JobController {
 		input.status = Status.BLOCKED;
 
 		return this.updateJobStatusUseCase.execute(input);
+	}
+
+	@Get(':id/applies')
+	@MustBeAuth()
+	async myApplies(
+		@LoggedRecruiter() recruiter: Recruiter,
+		@Param('id') id: string,
+	) {
+		const input = new AppliesInputDto();
+		input.id = id;
+		input.recruiterId = recruiter.id;
+		const candidates = await this.appliesJobUseCase.execute(input);
+		return plainToClass(AppliesOutputDto, candidates);
 	}
 
 	@Patch(':id/refresh')

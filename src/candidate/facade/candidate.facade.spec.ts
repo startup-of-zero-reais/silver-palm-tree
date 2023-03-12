@@ -5,6 +5,7 @@ import {
 	ProfessionalExperience,
 } from '@/candidate/domain';
 import FindCandidateByEmailUsecase from '../usecase/find-by-email/find-by-email.candidate.usecase';
+import { FindByIdsUseCase } from '../usecase/find-by-ids/find-by-ids.candidate.usecase';
 import FindCandidateUsecase from '../usecase/find/find.candidate.usecase';
 import CandidateFacade from './candidate.facade';
 
@@ -41,6 +42,7 @@ const MockRepository = () => {
 		create: jest.fn(),
 		update: jest.fn(),
 		delete: jest.fn(),
+		findByIds: jest.fn(),
 	};
 };
 
@@ -55,9 +57,12 @@ describe('Candidate test', () => {
 		const candidateByEmailUseCase = new FindCandidateByEmailUsecase(
 			candidateRepository,
 		);
+		const candidateByIds = new FindByIdsUseCase(candidateRepository);
+
 		const candidateFacade = new CandidateFacade(
 			candidateUseCase,
 			candidateByEmailUseCase,
+			candidateByIds,
 		);
 
 		const input = 'foo@bar.com';

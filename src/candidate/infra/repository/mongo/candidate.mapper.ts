@@ -25,4 +25,8 @@ export class CandidateMapper {
 
 		return new Candidate(props);
 	}
+
+	static arrayToDomain(array: CandidateEntity[]): Candidate[] {
+		return array.map(CandidateMapper.toDomain);
+	}
 }

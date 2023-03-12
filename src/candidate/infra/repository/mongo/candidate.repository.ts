@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { PaginationInterface } from '@/@shared/repository/pagination-interface';
 import { Candidate, CandidateRepositoryInterface } from '@/candidate/domain';
 import PaginationPresenter from '../presenter/pagination.presenter';
+import { CandidateMapper } from './candidate.mapper';
 import { Candidate as Entity, CandidateDocument } from './candidate.model';
 import { ProfessionalExperienceMapper } from './professional-experience.mapper';
 import { TechsMapper } from './techs.mapper';
@@ -16,6 +17,14 @@ export default class CandidateMongoRepository
 		@InjectModel(Entity.name)
 		private candidateModel: Model<CandidateDocument>,
 	) {}
+
+	async findByIds(ids: string[]): Promise<Candidate[]> {
+		const candidates = await this.candidateModel.find({
+			_id: { $in: ids },
+		});
+
+		return CandidateMapper.arrayToDomain(candidates);
+	}
 
 	delete(id: string): Promise<void> {
 		throw new Error('Method not implemented.');

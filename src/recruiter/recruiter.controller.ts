@@ -22,7 +22,6 @@ import {
 	ListJobsInputDTO,
 	ListJobsOutputDTO,
 } from '@/job/usecase/list/list.dto';
-import { ListJobsUseCase } from '@/job/usecase/list/list.usecase';
 import { Recruiter } from './domain';
 import { CreateInputDto, CreateOutputDto } from './usecase/create/create.dto';
 import { CreateRecruiterUseCase } from './usecase/create/create.recruiter.usecase';
